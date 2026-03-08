@@ -3,6 +3,7 @@ import { Geist, Geist_Mono, Figtree } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
 import { cn } from "@/lib/utils";
+import Footer from "@/components/Footer";
 
 const figtree = Figtree({subsets:['latin'],variable:'--font-sans'});
 
@@ -29,11 +30,12 @@ export default function RootLayout({
   return (
     <html lang="en" className={cn("font-sans", figtree.variable)}>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-200`}
       >
       
         <Navbar />
        <main className="pt-32">{children}</main>
+       <Footer />
       </body>
     </html>
   );
