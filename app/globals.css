@@ -4,6 +4,14 @@
 
 @custom-variant dark (&:is(.dark *));
 
+html {
+  scroll-behavior: smooth;
+}
+
+section {
+  scroll-margin-top: 120px;
+}
+
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);

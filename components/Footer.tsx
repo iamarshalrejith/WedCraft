@@ -2,8 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { FaInstagram, FaFacebook, FaXTwitter } from "react-icons/fa6";
-import {Mail} from "lucide-react"
+import { Instagram, Facebook, Twitter, Mail } from "lucide-react";
 import React from "react";
 
 const Footer = () => {
@@ -15,12 +14,19 @@ const Footer = () => {
     { name: "Contact", path: "/contact" },
   ];
 
+  const socialLinks = [
+    { icon: Instagram, href: "#" },
+    { icon: Facebook, href: "#" },
+    { icon: Twitter, href: "#" },
+    { icon: Mail, href: "mailto:hello@wedcraft.in" },
+  ];
+
   return (
-    <footer className="bg-gray-100 border-t mt-24">
-      <div className="max-w-7xl mx-auto px-6 py-14">
+    <footer className="border-t mt-24" id="contact">
+      <div className="max-w-7xl mx-auto px-6 py-16">
 
         {/* Top Section */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-10">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
 
           {/* Logo + Description */}
           <div>
@@ -34,7 +40,7 @@ const Footer = () => {
               />
             </Link>
 
-            <p className="mt-4 text-gray-600 text-sm leading-relaxed">
+            <p className="mt-4 text-gray-600 text-sm leading-relaxed max-w-sm">
               Create beautiful digital wedding invitations effortlessly.
               Browse templates, customize your design, and share your special
               day with loved ones.
@@ -47,12 +53,12 @@ const Footer = () => {
               Quick Links
             </h3>
 
-            <ul className="space-y-3 text-gray-600">
+            <ul className="space-y-3 text-sm text-gray-600">
               {navItems.map((item) => (
                 <li key={item.path}>
                   <Link
                     href={item.path}
-                    className="hover:text-black transition"
+                    className="hover:text-black transition-colors"
                   >
                     {item.name}
                   </Link>
@@ -67,39 +73,41 @@ const Footer = () => {
               Contact
             </h3>
 
-            <p className="text-gray-600 text-sm mb-4">
+            <p className="text-gray-600 text-sm mb-5">
               Have questions? Reach out to us anytime.
             </p>
 
-            <div className="flex items-center gap-4">
-              
+            <div className="flex gap-3">
+              {socialLinks.map((s, i) => {
+                const Icon = s.icon;
 
-              <a className="text-gray-600 hover:text-black">
-                 <FaInstagram size={20} />
-              </a>
-
-            
-
-              <a className="text-gray-600 hover:text-black">
-                <Mail size={20} />
-              </a>
+                return (
+                  <a
+                    key={i}
+                    href={s.href}
+                    className="w-9 h-9 flex items-center justify-center rounded-lg bg-white border border-gray-200 text-gray-600 hover:text-black hover:border-gray-300 transition"
+                  >
+                    <Icon size={18} />
+                  </a>
+                );
+              })}
             </div>
           </div>
         </div>
 
         {/* Bottom Section */}
-        <div className="border-t mt-10 pt-6 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
+        <div className="border-t mt-12 pt-6 flex flex-col md:flex-row justify-between items-center text-sm text-gray-500">
 
           <p>
             © {new Date().getFullYear()} WedCraft. All rights reserved.
           </p>
 
           <div className="flex gap-6 mt-3 md:mt-0">
-            <Link href="/privacy" className="hover:text-black">
+            <Link href="/privacy" className="hover:text-black transition">
               Privacy Policy
             </Link>
 
-            <Link href="/terms" className="hover:text-black">
+            <Link href="/terms" className="hover:text-black transition">
               Terms of Service
             </Link>
           </div>
