@@ -4,8 +4,10 @@ import "./globals.css";
 import Navbar from "@/components/Navbar";
 import { cn } from "@/lib/utils";
 import Footer from "@/components/Footer";
+import { AuthProvider } from "@/context/AuthContext";
+import ScrollToTop from "@/components/ScrollToTop";
 
-const figtree = Figtree({subsets:['latin'],variable:'--font-sans'});
+const figtree = Figtree({ subsets: ["latin"], variable: "--font-sans" });
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -32,10 +34,12 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-200`}
       >
-      
-        <Navbar />
-       <main className="pt-32">{children}</main>
-       <Footer />
+        <AuthProvider>
+          <ScrollToTop />
+          <Navbar />
+          <main className="pt-32">{children}</main>
+          <Footer />
+        </AuthProvider>
       </body>
     </html>
   );

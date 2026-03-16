@@ -2,13 +2,18 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { LogIn, Menu, X } from "lucide-react";
-import React, { useState } from "react";
+import { Menu, X, LogIn, LogOut, LayoutDashboard, ShieldCheck, ChevronDown } from "lucide-react";
+import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
+import { useAuth } from "@/context/AuthContext";
 
 const Navbar = () => {
   const pathname = usePathname();
+  const isHome = pathname === "/";
   const [menuOpen, setMenuOpen] = useState(false);
+  const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const userMenuRef = useRef<HTMLDivElement>(null);
+  const { user, loading, logout } = useAuth();
 
   const navItems = [
     { name: "Home", path: "/" },
@@ -18,42 +23,34 @@ const Navbar = () => {
     { name: "Contact", path: "/#contact" },
   ];
 
+  useEffect(() => {
+    const handler = (e: MouseEvent) => {
+      if (userMenuRef.current && !userMenuRef.current.contains(e.target as Node)) {
+        setUserMenuOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handler);
+    return () => document.removeEventListener("mousedown", handler);
+  }, []);
+
+  const avatarInitials = user?.name
+    ? user.name.split(" ").map((n) => n[0]).join("").toUpperCase().slice(0, 2)
+    : "U";
+
   return (
     <header className="fixed top-0 w-full h-32 bg-gray-100 z-50">
-      <div className="max-w-7xl mx-auto flex items-center justify-between px-6 relative">
-
-        {/* Logo */}
+      <div className="max-w-7xl mx-auto flex items-center justify-between px-6 relative h-full">
         <Link href="/" className="flex items-center gap-2 cursor-pointer">
-          <Image
-            src="/images/logo.png"
-            alt="WedCraft Logo"
-            width={144}
-            height={40}
-            className="w-32 md:w-36"
-          />
+          <Image src="/images/logo.png" alt="WedCraft Logo" width={144} height={40} className="w-32 md:w-36" />
         </Link>
 
-        {/* Desktop Navigation */}
         <nav className="hidden md:flex flex-1 justify-center">
-          <ul
-            className="flex items-center gap-2 md:gap-3 px-3 md:px-4 py-1.5 md:py-2
-            bg-white/20 backdrop-blur-xl border border-white/30 
-            rounded-full shadow-lg text-gray-700 text-sm md:text-base font-medium"
-          >
+          <ul className="flex items-center gap-2 md:gap-3 px-3 md:px-4 py-1.5 md:py-2 bg-white/20 backdrop-blur-xl border border-white/30 rounded-full shadow-lg text-gray-700 text-sm md:text-base font-medium">
             {navItems.map((item) => {
               const isActive = pathname === item.path;
-
               return (
                 <li key={item.path}>
-                  <Link
-                    href={item.path}
-                    className={`px-3 md:px-4 py-1.5 md:py-2 rounded-full transition text-sm md:text-base
-                    ${
-                      isActive
-                        ? "bg-black text-white"
-                        : "hover:bg-white/40 hover:text-black"
-                    }`}
-                  >
+                  <Link href={item.path} className={`px-3 md:px-4 py-1.5 md:py-2 rounded-full transition text-sm md:text-base ${isActive ? "bg-black text-white" : "hover:bg-white/40 hover:text-black"}`}>
                     {item.name}
                   </Link>
                 </li>
@@ -62,81 +59,95 @@ const Navbar = () => {
           </ul>
         </nav>
 
-        {/* Right Side */}
-        <div className="flex items-center gap-4">
-
-          {/* Login (desktop only) */}
-          <button className="hidden md:flex text-gray-700 hover:text-black cursor-pointer">
-            <LogIn />
+        <div className="flex items-center gap-3">
+          {loading ? (
+            <div className="w-8 h-8 rounded-full bg-gray-200 animate-pulse" />
+          ) : user ? (
+            <div className="relative" ref={userMenuRef}>
+              <button onClick={() => setUserMenuOpen(!userMenuOpen)} className="hidden md:flex items-center gap-2 bg-white border border-gray-200 rounded-full px-3 py-1.5 hover:border-gray-300 transition-colors">
+                {user.avatarUrl ? (
+                  <Image src={user.avatarUrl} alt={user.name} width={24} height={24} className="w-6 h-6 rounded-full object-cover" />
+                ) : (
+                  <div className="w-6 h-6 rounded-full bg-black text-white text-xs flex items-center justify-center font-semibold">{avatarInitials}</div>
+                )}
+                <span className="text-sm font-medium text-gray-800 max-w-[100px] truncate">{user.name.split(" ")[0]}</span>
+                <ChevronDown size={14} className="text-gray-500" />
+              </button>
+              {userMenuOpen && (
+                <div className="absolute right-0 top-full mt-2 w-52 bg-white rounded-xl shadow-lg border border-gray-200 py-1 z-50">
+                  <div className="px-4 py-2.5 border-b">
+                    <p className="text-sm font-semibold text-gray-900 truncate">{user.name}</p>
+                    <p className="text-xs text-gray-400 truncate">{user.email}</p>
+                  </div>
+                  <Link href="/dashboard" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-2.5 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
+                    <LayoutDashboard size={14} /> My Dashboard
+                  </Link>
+                  {user.role === "admin" && (
+                    <Link href="/admin" onClick={() => setUserMenuOpen(false)} className="flex items-center gap-2.5 px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
+                      <ShieldCheck size={14} /> Admin Panel
+                    </Link>
+                  )}
+                  <button onClick={() => { setUserMenuOpen(false); logout(); }} className="w-full flex items-center gap-2.5 px-4 py-2 text-sm text-red-600 hover:bg-red-50">
+                    <LogOut size={14} /> Sign Out
+                  </button>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div className="hidden md:flex items-center gap-2">
+              <Link href="/auth/login" className="flex items-center gap-1.5 text-sm font-medium text-gray-700 hover:text-black px-3 py-2 transition-colors">
+                <LogIn size={16} /> Login
+              </Link>
+              <Link href="/auth/signup" className="bg-black text-white px-4 py-2 rounded-lg text-sm font-medium hover:bg-gray-800 transition-colors">
+                Sign Up
+              </Link>
+            </div>
+          )}
+          {isHome && (
+  <Link
+    href="/#featured"
+    className="hidden lg:block bg-black text-white px-5 py-2 rounded-lg hover:bg-gray-800 transition text-sm font-medium"
+  >
+    Browse Templates
+  </Link>
+)}
+          <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)}>
+            {menuOpen ? <X size={28} className="text-gray-300 bg-black rounded-lg p-2" /> : <Menu size={28} className="text-gray-700" />}
           </button>
-
-          {/* Browse Templates (desktop) */}
-          <Link
-            href="/#featured"
-            className="hidden lg:block bg-black text-white px-5 py-2 rounded-lg hover:bg-gray-800 transition cursor-pointer"
-          >
-            Browse Templates
-          </Link>
-
-          {/* Mobile Menu Button */}
-          <button
-            className="md:hidden"
-            onClick={() => setMenuOpen(!menuOpen)}
-          >
-            {menuOpen ? (
-              <X size={28} className="text-gray-300 bg-black rounded-lg p-2" />
-            ) : (
-              <Menu size={28} className="text-gray-700" />
-            )}
-          </button>
-
         </div>
       </div>
 
-      {/* Mobile / Tablet Menu */}
       {menuOpen && (
         <div className="lg:hidden px-6 pb-6">
           <ul className="flex flex-col gap-4 bg-white shadow-lg rounded-xl p-6">
-
-            {navItems.map((item) => {
-              const isActive = pathname === item.path;
-
-              return (
-                <li key={item.path}>
-                  <Link
-                    href={item.path}
-                    onClick={() => setMenuOpen(false)}
-                    className={`block py-2 font-medium
-                    ${
-                      isActive
-                        ? "text-black"
-                        : "text-gray-600 hover:text-black"
-                    }`}
-                  >
-                    {item.name}
-                  </Link>
-                </li>
-              );
-            })}
-
-            {/* Mobile Buttons */}
-            <div className="flex items-center gap-4 pt-4 border-t">
-
-              <button className="text-gray-700 hover:text-black flex items-center gap-2">
-                <LogIn size={18} />
-                Login
-              </button>
-
-              <Link
-                href="/#featured"
-                onClick={() => setMenuOpen(false)}
-                className="bg-black text-white px-4 py-2 rounded-lg"
-              >
-                Browse Templates
-              </Link>
-
+            {navItems.map((item) => (
+              <li key={item.path}>
+                <Link href={item.path} onClick={() => setMenuOpen(false)} className={`block py-2 font-medium ${pathname === item.path ? "text-black" : "text-gray-600 hover:text-black"}`}>
+                  {item.name}
+                </Link>
+              </li>
+            ))}
+            <div className="flex flex-col gap-3 pt-4 border-t">
+              {user ? (
+                <>
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 rounded-full bg-black text-white text-xs flex items-center justify-center font-semibold">{avatarInitials}</div>
+                    <div>
+                      <p className="text-sm font-medium text-gray-900">{user.name}</p>
+                      <p className="text-xs text-gray-400">{user.email}</p>
+                    </div>
+                  </div>
+                  <Link href="/dashboard" onClick={() => setMenuOpen(false)} className="text-sm text-gray-700 flex items-center gap-2"><LayoutDashboard size={14} /> My Dashboard</Link>
+                  {user.role === "admin" && <Link href="/admin" onClick={() => setMenuOpen(false)} className="text-sm text-gray-700 flex items-center gap-2"><ShieldCheck size={14} /> Admin Panel</Link>}
+                  <button onClick={logout} className="text-sm text-red-600 flex items-center gap-2"><LogOut size={14} /> Sign Out</button>
+                </>
+              ) : (
+                <div className="flex items-center gap-3">
+                  <Link href="/auth/login" onClick={() => setMenuOpen(false)} className="text-gray-700 hover:text-black flex items-center gap-2 text-sm font-medium"><LogIn size={16} /> Login</Link>
+                  <Link href="/auth/signup" onClick={() => setMenuOpen(false)} className="bg-black text-white px-4 py-2 rounded-lg text-sm font-medium">Sign Up</Link>
+                </div>
+              )}
             </div>
-
           </ul>
         </div>
       )}

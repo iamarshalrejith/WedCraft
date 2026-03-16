@@ -75,8 +75,8 @@ function DashboardContent() {
     return (
       <div className="min-h-[60vh] flex flex-col items-center justify-center text-center px-4">
         <div className="text-4xl mb-4">😕</div>
-        <h2 className="text-xl font-bold text-gray-900 mb-2">Invite not found</h2>
-        <p className="text-gray-500 mb-6">{error}</p>
+        <h2 className="text-xl font-bold text-gray-900 mb-2">Your Invitations Will Appear Here</h2>
+        <p className="text-gray-500 mb-6">Create one to get started.</p>
         <Link href="/" className="bg-black text-white px-5 py-2.5 rounded-xl text-sm font-medium">
           Go Home
         </Link>
