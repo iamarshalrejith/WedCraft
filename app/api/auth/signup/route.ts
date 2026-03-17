@@ -1,27 +1,18 @@
 import { NextRequest, NextResponse } from "next/server";
-import { userStore, hashPassword, encodeSession, StoredUser } from "@/lib/auth";
-import { SESSION_COOKIE } from "@/lib/auth";
+import { findUserByEmail, createUser, hashPassword, encodeSession, SESSION_COOKIE, StoredUser } from "@/lib/auth";
 
 export async function POST(req: NextRequest) {
   try {
     const { name, email, password } = await req.json();
+    if (!name || !email || !password) return NextResponse.json({ error: "All fields are required" }, { status: 400 });
+    if (password.length < 6) return NextResponse.json({ error: "Password must be at least 6 characters" }, { status: 400 });
 
-    if (!name || !email || !password) {
-      return NextResponse.json({ error: "All fields are required" }, { status: 400 });
-    }
-
-    if (password.length < 6) {
-      return NextResponse.json({ error: "Password must be at least 6 characters" }, { status: 400 });
-    }
-
-    if (userStore.has(email)) {
-      return NextResponse.json({ error: "Email already registered" }, { status: 409 });
-    }
+    const existing = await findUserByEmail(email);
+    if (existing) return NextResponse.json({ error: "Email already registered" }, { status: 409 });
 
     const newUser: StoredUser = {
       id: crypto.randomUUID(),
-      email,
-      name,
+      email, name,
       provider: "email",
       role: "user",
       passwordHash: hashPassword(password),
@@ -29,31 +20,20 @@ export async function POST(req: NextRequest) {
       purchases: [],
     };
 
-    userStore.set(email, newUser);
+    await createUser(newUser);
 
-    const sessionToken = encodeSession({
-      id: newUser.id,
-      email: newUser.email,
-      name: newUser.name,
-      role: newUser.role,
-    });
-
-    const res = NextResponse.json({
-      success: true,
-      user: { id: newUser.id, email: newUser.email, name: newUser.name, role: newUser.role },
-    });
-
-    res.cookies.set(SESSION_COOKIE, sessionToken, {
+    const token = encodeSession({ id: newUser.id, email, name, role: "user" });
+    const res = NextResponse.json({ success: true, user: { id: newUser.id, email, name, role: "user" } });
+    res.cookies.set(SESSION_COOKIE, token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
       sameSite: "lax",
-      maxAge: 60 * 60 * 24 * 7, // 7 days
+      maxAge: 604800,
       path: "/",
     });
-
     return res;
   } catch (err) {
-    console.error("signup error:", err);
+    console.error("signup:", err);
     return NextResponse.json({ error: "Internal server error" }, { status: 500 });
   }
 }

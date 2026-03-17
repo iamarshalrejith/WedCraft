@@ -5,6 +5,7 @@ import { CoupleDetails } from "@/types/invite";
 import { formatWeddingDate } from "@/lib/invite-utils";
 import { motion, useInView } from "framer-motion";
 import { MapPin, Phone, Calendar, Clock, Waves } from "lucide-react";
+import RSVPForm from "@/components/rsvp/RSVPForm";
 
 interface AzureShoreProps {
   couple: CoupleDetails;
@@ -478,28 +479,36 @@ export default function AzureShore({ couple }: AzureShoreProps) {
               Let us know you&apos;re coming.
             </p>
 
+            <div style={{ textAlign: "left", marginBottom: 20, width: "100%" }}>
+              <RSVPForm
+                inviteSlug={couple.groomName.toLowerCase().replace(/\s+/g,"-") + "-weds-" + couple.brideName.toLowerCase().replace(/\s+/g,"-")}
+                coupleName={`${couple.groomName} & ${couple.brideName}`}
+                accentColor="#0D9488"
+                theme="dark"
+              />
+            </div>
+
             {couple.phone && (
               <button
                 onClick={handleWhatsAppRSVP}
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
-                  gap: 10,
-                  padding: "15px 36px",
-                  background: "linear-gradient(135deg, #0D9488 0%, #0F766E 100%)",
+                  gap: 8,
+                  padding: "9px 20px",
+                  background: "transparent",
                   borderRadius: 50,
-                  border: "none",
-                  color: "#fff",
+                  border: "1px solid rgba(127,219,202,0.3)",
+                  color: "#7FDBCA",
                   fontFamily: "'Josefin Sans', sans-serif",
-                  fontSize: 12,
-                  letterSpacing: "0.2em",
+                  fontSize: 11,
+                  letterSpacing: "0.15em",
                   textTransform: "uppercase" as const,
                   cursor: "pointer",
-                  boxShadow: "0 8px 24px rgba(13,148,136,0.3)",
                 }}
               >
-                <Phone size={14} />
-                RSVP via WhatsApp
+                <Phone size={12} />
+                Also WhatsApp us
               </button>
             )}
 

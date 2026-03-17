@@ -5,6 +5,7 @@ import { CoupleDetails } from "@/types/invite";
 import { formatWeddingDate } from "@/lib/invite-utils";
 import { motion, useInView } from "framer-motion";
 import { MapPin, Phone, Calendar, Clock } from "lucide-react";
+import RSVPForm from "@/components/rsvp/RSVPForm";
 
 interface EternalBloomProps {
   couple: CoupleDetails;
@@ -415,10 +416,19 @@ export default function EternalBloom({ couple }: EternalBloomProps) {
             <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 28, color: "#5C3D2E", marginBottom: 12 }}>
               Will you join us?
             </h2>
-            <p style={{ fontFamily: "'Lato', sans-serif", fontSize: 14, color: "#A0816E", lineHeight: 1.8, marginBottom: 32 }}>
+            <p style={{ fontFamily: "'Lato', sans-serif", fontSize: 14, color: "#A0816E", lineHeight: 1.8, marginBottom: 28 }}>
               Your presence would mean the world to us.<br />
               Please let us know you&apos;re coming.
             </p>
+
+            <div style={{ textAlign: "left", marginBottom: 20 }}>
+              <RSVPForm
+                inviteSlug={couple.groomName.toLowerCase().replace(/\s+/g,"-") + "-weds-" + couple.brideName.toLowerCase().replace(/\s+/g,"-")}
+                coupleName={`${couple.groomName} & ${couple.brideName}`}
+                accentColor="#C47860"
+                theme="light"
+              />
+            </div>
 
             {couple.phone && (
               <button
@@ -426,22 +436,20 @@ export default function EternalBloom({ couple }: EternalBloomProps) {
                 style={{
                   display: "inline-flex",
                   alignItems: "center",
-                  gap: 10,
-                  padding: "15px 36px",
-                  background: "linear-gradient(135deg, #D4917A 0%, #C47860 100%)",
+                  gap: 8,
+                  padding: "9px 20px",
+                  background: "transparent",
                   borderRadius: 50,
-                  border: "none",
-                  color: "#fff",
+                  border: "1px solid rgba(196,120,96,0.4)",
+                  color: "#C47860",
                   fontFamily: "'Lato', sans-serif",
-                  fontSize: 13,
-                  letterSpacing: "0.12em",
-                  textTransform: "uppercase" as const,
+                  fontSize: 12,
+                  letterSpacing: "0.1em",
                   cursor: "pointer",
-                  boxShadow: "0 8px 24px rgba(196,120,96,0.3)",
                 }}
               >
-                <Phone size={15} />
-                RSVP via WhatsApp
+                <Phone size={12} />
+                Also WhatsApp us
               </button>
             )}
 

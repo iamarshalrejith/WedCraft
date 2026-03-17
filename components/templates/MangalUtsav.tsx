@@ -5,6 +5,7 @@ import { CoupleDetails } from "@/types/invite";
 import { formatWeddingDate } from "@/lib/invite-utils";
 import { motion, useInView } from "framer-motion";
 import { MapPin, Phone, Heart } from "lucide-react";
+import RSVPForm from "@/components/rsvp/RSVPForm";
 
 interface MangalUtsavProps {
   couple: CoupleDetails;
@@ -425,27 +426,35 @@ export default function MangalUtsav({ couple }: MangalUtsavProps) {
           Your presence would make our day<br />truly complete and memorable
         </p>
 
+        <div className="w-full max-w-md mx-auto mb-6">
+          <RSVPForm
+            inviteSlug={couple.groomName.toLowerCase().replace(/\s+/g,"-") + "-weds-" + couple.brideName.toLowerCase().replace(/\s+/g,"-")}
+            coupleName={`${couple.groomName} & ${couple.brideName}`}
+            accentColor="#D4AF37"
+            theme="dark"
+          />
+        </div>
+
         {couple.phone && (
           <button
             onClick={handleWhatsAppRSVP}
             style={{
               display: "inline-flex",
               alignItems: "center",
-              gap: 10,
-              padding: "16px 36px",
-              background: "linear-gradient(135deg, #D4AF37 0%, #B8902A 100%)",
+              gap: 8,
+              padding: "10px 22px",
+              background: "transparent",
               borderRadius: 40,
-              border: "none",
-              color: "#1a0a00",
+              border: "1px solid rgba(212,175,55,0.4)",
+              color: "rgba(212,175,55,0.8)",
               fontFamily: "'Cinzel', serif",
-              fontSize: 13,
+              fontSize: 11,
               letterSpacing: "0.15em",
               cursor: "pointer",
-              fontWeight: 600,
             }}
           >
-            <Phone size={16} />
-            RSVP VIA WHATSAPP
+            <Phone size={13} />
+            Also WhatsApp us
           </button>
         )}
 

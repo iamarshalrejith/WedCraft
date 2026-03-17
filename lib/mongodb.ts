@@ -2,9 +2,8 @@ import { MongoClient, MongoClientOptions } from "mongodb";
 
 if (!process.env.MONGODB_URI) {
   throw new Error(
-    "Missing MONGODB_URI in .env\n" +
-    "Add: MONGODB_URI=mongodb+srv://user:pass@cluster.mongodb.net/wedcraft"
-  );
+  "Missing MONGODB_URI in .env" 
+);
 }
 
 const uri = process.env.MONGODB_URI;
