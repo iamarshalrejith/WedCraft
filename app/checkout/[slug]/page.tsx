@@ -80,6 +80,40 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
+  // Coupon state
+  const [couponCode, setCouponCode] = useState("");
+  const [couponLoading, setCouponLoading] = useState(false);
+  const [couponError, setCouponError] = useState("");
+  const [couponSuccess, setCouponSuccess] = useState("");
+  const [discount, setDiscount] = useState(0);
+  const finalPrice = Math.max(1, template.price - discount);
+
+  const applyCoupon = async () => {
+    if (!couponCode.trim()) return;
+    setCouponLoading(true);
+    setCouponError("");
+    setCouponSuccess("");
+    try {
+      const res = await fetch("/api/coupon/validate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ code: couponCode, templatePrice: template.price }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        setCouponError(data.error);
+        setDiscount(0);
+      } else {
+        setDiscount(data.discountAmount);
+        setCouponSuccess(data.message);
+      }
+    } catch {
+      setCouponError("Failed to apply coupon");
+    } finally {
+      setCouponLoading(false);
+    }
+  };
+
   // Form state
   const [form, setForm] = useState({
     groomName: "",
@@ -139,7 +173,7 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          amount: template.price,
+          amount: finalPrice,
           templateSlug: template.slug,
           groomName: form.groomName,
           brideName: form.brideName,
@@ -398,6 +432,29 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
                 />
               </Field>
 
+              {/* Coupon Code */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Coupon Code</label>
+                <div className="flex gap-2">
+                  <input
+                    className={inputCls + " flex-1"}
+                    placeholder="e.g. WEDDING20"
+                    value={couponCode}
+                    onChange={(e) => { setCouponCode(e.target.value.toUpperCase()); setCouponError(""); setCouponSuccess(""); setDiscount(0); }}
+                  />
+                  <button
+                    type="button"
+                    onClick={applyCoupon}
+                    disabled={couponLoading || !couponCode.trim()}
+                    className="px-4 py-2.5 bg-gray-900 text-white rounded-xl text-sm font-medium hover:bg-gray-700 disabled:opacity-40 transition-colors shrink-0"
+                  >
+                    {couponLoading ? "..." : "Apply"}
+                  </button>
+                </div>
+                {couponError && <p className="text-xs text-red-500 mt-1.5">{couponError}</p>}
+                {couponSuccess && <p className="text-xs text-emerald-600 mt-1.5 font-medium">✓ {couponSuccess}</p>}
+              </div>
+
               <button
                 onClick={() => setStep(2)}
                 disabled={!isStep1Valid}
@@ -474,7 +531,7 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
                 ) : (
                   <>
                     <CreditCard size={16} />
-                    Pay ₹{template.price.toLocaleString("en-IN")} via Razorpay
+                    Pay ₹{finalPrice.toLocaleString("en-IN")} via Razorpay
                   </>
                 )}
               </button>
@@ -512,9 +569,15 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
                 <span>Hosting</span>
                 <span className="text-emerald-600">Free</span>
               </div>
+              {discount > 0 && (
+                <div className="flex justify-between text-sm text-emerald-600 font-medium">
+                  <span>Coupon ({couponCode})</span>
+                  <span>- ₹{discount.toLocaleString("en-IN")}</span>
+                </div>
+              )}
               <div className="flex justify-between font-bold text-gray-900 border-t pt-2 mt-2">
                 <span>Total</span>
-                <span>₹{template.price.toLocaleString("en-IN")}</span>
+                <span>₹{finalPrice.toLocaleString("en-IN")}</span>
               </div>
             </div>
 
