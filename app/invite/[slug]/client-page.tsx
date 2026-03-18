@@ -2,14 +2,16 @@
 
 import { use, useEffect, useState } from "react";
 import { notFound } from "next/navigation";
-import { InviteRecord } from "@/types/invite";
+import { InviteRecord, CoupleDetails } from "@/types/invite";
 import { Heart } from "lucide-react";
 import MangalUtsav from "@/components/templates/MangalUtsav";
 import EternalBloom from "@/components/templates/EternalBloom";
 import AzureShore from "@/components/templates/AzureShore";
 import NikahNazm from "@/components/templates/NikahNazm";
 import OnyxGold from "@/components/templates/OnyxGold";
-import { CoupleDetails } from "@/types/invite";
+import AnandKaraj from "@/components/templates/AnandKaraj";
+import SacredVows from "@/components/templates/SacredVows";
+import PaperPetals from "@/components/templates/PaperPetals";
 
 interface InvitePageProps {
   params: Promise<{ slug: string }>;
@@ -22,9 +24,9 @@ function renderTemplate(templateSlug: string, couple: CoupleDetails) {
     case "azure-shore":      return <AzureShore couple={couple} />;
     case "nikah-nazm":       return <NikahNazm couple={couple} />;
     case "onyx-and-gold":    return <OnyxGold couple={couple} />;
-    case "anand-karaj":      return <MangalUtsav couple={couple} />;
-    case "sacred-vows":      return <EternalBloom couple={couple} />;
-    case "paper-and-petals": return <EternalBloom couple={couple} />;
+    case "anand-karaj":      return <AnandKaraj couple={couple} />;
+    case "sacred-vows":      return <SacredVows couple={couple} />;
+    case "paper-and-petals": return <PaperPetals couple={couple} />;
     default:                 return <MangalUtsav couple={couple} />;
   }
 }

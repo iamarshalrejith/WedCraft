@@ -24,14 +24,32 @@ import {
   ChevronUp,
   Users,
   Pencil,
+  QrCode,
 } from "lucide-react";
 
 // ─── Single invite card ───────────────────────────────────────────────────────
 function InviteCard({ invite }: { invite: InviteRecord }) {
   const [copied, setCopied] = useState(false);
   const [showRsvp, setShowRsvp] = useState(false);
+  const [showQr, setShowQr] = useState(false);
+  const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
   const inviteUrl = `${window.location.origin}/invite/${invite.slug}`;
   const days = daysUntil(invite.coupleDetails.weddingDate);
+
+  const generateQr = async () => {
+    if (qrDataUrl) { setShowQr(!showQr); return; }
+    const url = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(inviteUrl)}&bgcolor=ffffff&color=000000&margin=10`;
+    setQrDataUrl(url);
+    setShowQr(true);
+  };
+
+  const downloadQr = () => {
+    if (!qrDataUrl) return;
+    const a = document.createElement("a");
+    a.href = qrDataUrl;
+    a.download = `${invite.slug}-qr.png`;
+    a.click();
+  };
 
   const copyLink = async () => {
     await navigator.clipboard.writeText(inviteUrl);
@@ -141,7 +159,32 @@ function InviteCard({ invite }: { invite: InviteRecord }) {
           >
             <Pencil size={13} /> Edit
           </Link>
+          <button
+            onClick={generateQr}
+            className="flex-1 flex items-center justify-center gap-1.5 py-2 text-xs font-medium bg-purple-50 text-purple-600 rounded-xl hover:bg-purple-100 transition-colors"
+          >
+            <QrCode size={13} /> QR Code
+          </button>
         </div>
+
+        {/* QR Code panel */}
+        {showQr && qrDataUrl && (
+          <div className="mt-3 p-4 bg-gray-50 rounded-xl flex items-center gap-4">
+            <img src={qrDataUrl} alt="QR Code" className="w-24 h-24 rounded-lg border border-gray-200" />
+            <div className="flex-1">
+              <p className="text-sm font-medium text-gray-900 mb-1">QR Code</p>
+              <p className="text-xs text-gray-500 mb-3">
+                Print this on physical cards so guests can scan and open your invite instantly.
+              </p>
+              <button
+                onClick={downloadQr}
+                className="text-xs font-semibold text-purple-600 hover:text-purple-800 flex items-center gap-1"
+              >
+                ↓ Download PNG
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* RSVP toggle */}
