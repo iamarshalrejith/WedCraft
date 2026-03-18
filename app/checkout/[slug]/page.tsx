@@ -6,6 +6,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTemplateBySlug } from "@/data/templates";
 import { WeddingEvent } from "@/types/invite";
+import { useAuth } from "@/context/AuthContext";
 import {
   ArrowLeft,
   Plus,
@@ -71,6 +72,7 @@ const inputCls =
 export default function CheckoutPage({ params }: CheckoutPageProps) {
   const { slug } = use(params);
   const router = useRouter();
+  const { user } = useAuth();
   const template = getTemplateBySlug(slug);
   if (!template) notFound();
 
@@ -186,6 +188,7 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
               },
               razorpayOrderId: response.razorpay_order_id,
               razorpayPaymentId: verifyData.paymentId,
+              userId: user?.id || null,
             }),
           });
           const saveData = await saveRes.json();

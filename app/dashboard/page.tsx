@@ -23,6 +23,7 @@ import {
   ChevronDown,
   ChevronUp,
   Users,
+  Pencil,
 } from "lucide-react";
 
 // ─── Single invite card ───────────────────────────────────────────────────────
@@ -133,6 +134,12 @@ function InviteCard({ invite }: { invite: InviteRecord }) {
             className="flex-1 flex items-center justify-center gap-1.5 py-2 text-xs font-medium bg-gray-50 text-gray-600 rounded-xl hover:bg-gray-100 transition-colors"
           >
             <ExternalLink size={13} /> Open
+          </Link>
+          <Link
+            href={`/edit/${invite.slug}`}
+            className="flex-1 flex items-center justify-center gap-1.5 py-2 text-xs font-medium bg-blue-50 text-blue-600 rounded-xl hover:bg-blue-100 transition-colors"
+          >
+            <Pencil size={13} /> Edit
           </Link>
         </div>
       </div>

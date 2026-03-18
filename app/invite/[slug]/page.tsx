@@ -1,58 +1,50 @@
-"use client";
+import { Metadata } from "next";
+import { getDb } from "@/lib/mongodb";
+import { formatWeddingDate } from "@/lib/invite-utils";
+import ClientPage from "./client-page";
 
-import { use, useEffect, useState } from "react";
-import { notFound } from "next/navigation";
-import { InviteRecord } from "@/types/invite";
-import { Heart } from "lucide-react";
-import MangalUtsav from "@/components/templates/MangalUtsav";
-import EternalBloom from "@/components/templates/EternalBloom";
-import AzureShore from "@/components/templates/AzureShore";
-import { CoupleDetails } from "@/types/invite";
-
-interface InvitePageProps {
+interface Props {
   params: Promise<{ slug: string }>;
 }
 
-function renderTemplate(templateSlug: string, couple: CoupleDetails) {
-  switch (templateSlug) {
-    case "mangal-utsav":    return <MangalUtsav couple={couple} />;
-    case "eternal-bloom":   return <EternalBloom couple={couple} />;
-    case "azure-shore":     return <AzureShore couple={couple} />;
-    case "anand-karaj":     return <MangalUtsav couple={couple} />;
-    case "nikah-nazm":      return <MangalUtsav couple={couple} />;
-    case "sacred-vows":     return <EternalBloom couple={couple} />;
-    case "onyx-and-gold":   return <AzureShore couple={couple} />;
-    case "paper-and-petals":return <EternalBloom couple={couple} />;
-    default:                return <MangalUtsav couple={couple} />;
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { slug } = await params;
+
+  try {
+    const db = await getDb();
+    const invite = await db.collection("invites").findOne(
+      { slug },
+      { projection: { coupleDetails: 1 } }
+    );
+
+    if (!invite) {
+      return { title: "Wedding Invitation | WedCraft" };
+    }
+
+    const { groomName, brideName, weddingDate, venue } = invite.coupleDetails;
+    const dateStr = formatWeddingDate(weddingDate);
+    const title = `${groomName} & ${brideName} | Wedding Invitation`;
+    const description = `Join us to celebrate the wedding of ${groomName} & ${brideName} on ${dateStr} at ${venue}. ❤️`;
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || "http://localhost:3000";
+
+    return {
+      title,
+      description,
+      openGraph: {
+        title,
+        description,
+        url: `${appUrl}/invite/${slug}`,
+        siteName: "WedCraft",
+        type: "website",
+        images: [{ url: `${appUrl}/og-default.png`, width: 1200, height: 630, alt: title }],
+      },
+      twitter: { card: "summary_large_image", title, description },
+    };
+  } catch {
+    return { title: "Wedding Invitation | WedCraft" };
   }
 }
 
-export default function InvitePage({ params }: InvitePageProps) {
-  const { slug } = use(params);
-  const [invite, setInvite] = useState<InviteRecord | null>(null);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetch(`/api/save-invite?slug=${slug}`)
-      .then((r) => r.json())
-      .then((data) => { if (data.id) setInvite(data); else setInvite(null); })
-      .catch(() => setInvite(null))
-      .finally(() => setLoading(false));
-  }, [slug]);
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-black">
-        <Heart size={32} className="text-yellow-600 fill-yellow-600 animate-pulse" />
-      </div>
-    );
-  }
-
-  if (!invite) notFound();
-
-  return (
-    <div style={{ position: "fixed", inset: 0, overflow: "auto", zIndex: 100 }}>
-      {renderTemplate(invite.templateSlug, invite.coupleDetails)}
-    </div>
-  );
+export default function InvitePage({ params }: Props) {
+  return <ClientPage params={params} />;
 }
