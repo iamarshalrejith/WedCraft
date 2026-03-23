@@ -35,7 +35,6 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-200`}
       >
         <AuthProvider>
-          <ScrollToTop />
           <Navbar />
           <main className="pt-32">{children}</main>
           <Footer />

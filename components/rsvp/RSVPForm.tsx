@@ -1,13 +1,23 @@
 "use client";
 
 import { useState } from "react";
-import { Check, Loader2, Users, MessageSquare, Phone, User } from "lucide-react";
+import {
+  Check,
+  Loader2,
+  Users,
+  MessageSquare,
+  Phone,
+  User,
+  PartyPopper,
+  HelpCircle,
+  XCircle,
+} from "lucide-react";
 
 interface RSVPFormProps {
   inviteSlug: string;
   coupleName: string;
-  accentColor?: string;      // hex, e.g. "#D4AF37"
-  theme?: "dark" | "light";  // for template theming
+  accentColor?: string; // hex, e.g. "#D4AF37"
+  theme?: "dark" | "light"; // for template theming
 }
 
 type Attending = "yes" | "no" | "maybe";
@@ -66,8 +76,17 @@ export default function RSVPForm({
     }
   };
 
-  const AttendBtn = ({ val, label, emoji }: { val: Attending; label: string; emoji: string }) => {
+  const AttendBtn = ({
+    val,
+    label,
+    Icon,
+  }: {
+    val: Attending;
+    label: string;
+    Icon: React.ElementType;
+  }) => {
     const active = attending === val;
+
     return (
       <button
         type="button"
@@ -90,12 +109,11 @@ export default function RSVPForm({
           gap: 4,
         }}
       >
-        <span style={{ fontSize: 20 }}>{emoji}</span>
+        <Icon size={18} />
         <span>{label}</span>
       </button>
     );
   };
-
   const inputStyle: React.CSSProperties = {
     width: "100%",
     padding: "12px 14px",
@@ -122,27 +140,51 @@ export default function RSVPForm({
 
   if (step === "success") {
     return (
-      <div style={{
-        background: bg,
-        border: `1px solid ${border}`,
-        borderRadius: 20,
-        padding: "40px 28px",
-        textAlign: "center",
-      }}>
-        <div style={{
-          width: 64, height: 64, borderRadius: "50%",
-          background: `${accentColor}22`,
-          border: `2px solid ${accentColor}`,
-          display: "flex", alignItems: "center", justifyContent: "center",
-          margin: "0 auto 20px",
-        }}>
+      <div
+        style={{
+          background: bg,
+          border: `1px solid ${border}`,
+          borderRadius: 20,
+          padding: "40px 28px",
+          textAlign: "center",
+        }}
+      >
+        <div
+          style={{
+            width: 64,
+            height: 64,
+            borderRadius: "50%",
+            background: `${accentColor}22`,
+            border: `2px solid ${accentColor}`,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            margin: "0 auto 20px",
+          }}
+        >
           <Check size={28} color={accentColor} />
         </div>
-        <h3 style={{ color: textPrimary, fontFamily: "sans-serif", fontSize: 20, fontWeight: 600, marginBottom: 8 }}>
+        <h3
+          style={{
+            color: textPrimary,
+            fontFamily: "sans-serif",
+            fontSize: 20,
+            fontWeight: 600,
+            marginBottom: 8,
+          }}
+        >
           RSVP Received! 🎉
         </h3>
-        <p style={{ color: textSecondary, fontFamily: "sans-serif", fontSize: 14, lineHeight: 1.6 }}>
-          Thank you, <strong style={{ color: textPrimary }}>{guestName}</strong>.
+        <p
+          style={{
+            color: textSecondary,
+            fontFamily: "sans-serif",
+            fontSize: 14,
+            lineHeight: 1.6,
+          }}
+        >
+          Thank you, <strong style={{ color: textPrimary }}>{guestName}</strong>
+          .
           {attending === "yes"
             ? ` ${coupleName} can't wait to celebrate with you!`
             : attending === "maybe"
@@ -154,17 +196,33 @@ export default function RSVPForm({
   }
 
   return (
-    <div style={{
-      background: bg,
-      border: `1px solid ${border}`,
-      borderRadius: 20,
-      padding: "28px 24px",
-    }}>
+    <div
+      style={{
+        background: bg,
+        border: `1px solid ${border}`,
+        borderRadius: 20,
+        padding: "28px 24px",
+      }}
+    >
       <div style={{ marginBottom: 24 }}>
-        <h3 style={{ color: textPrimary, fontFamily: "sans-serif", fontSize: 18, fontWeight: 600, marginBottom: 6 }}>
+        <h3
+          style={{
+            color: textPrimary,
+            fontFamily: "sans-serif",
+            fontSize: 18,
+            fontWeight: 600,
+            marginBottom: 6,
+          }}
+        >
           Will you be joining us?
         </h3>
-        <p style={{ color: textSecondary, fontFamily: "sans-serif", fontSize: 13 }}>
+        <p
+          style={{
+            color: textSecondary,
+            fontFamily: "sans-serif",
+            fontSize: 13,
+          }}
+        >
           Let {coupleName} know you&apos;re coming
         </p>
       </div>
@@ -174,9 +232,9 @@ export default function RSVPForm({
         <div>
           <label style={labelStyle}>Attendance *</label>
           <div style={{ display: "flex", gap: 8 }}>
-            <AttendBtn val="yes" label="Attending" emoji="🎉" />
-            <AttendBtn val="maybe" label="Maybe" emoji="🤔" />
-            <AttendBtn val="no" label="Can't make it" emoji="😢" />
+            <AttendBtn val="yes" label="Attending" Icon={PartyPopper} />
+            <AttendBtn val="maybe" label="Maybe" Icon={HelpCircle} />
+            <AttendBtn val="no" label="Can't make it" Icon={XCircle} />
           </div>
         </div>
 
@@ -198,10 +256,19 @@ export default function RSVPForm({
         {/* Show extra fields only if attending or maybe */}
         {attending && attending !== "no" && (
           <>
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12 }}>
+            <div
+              style={{
+                display: "grid",
+                gridTemplateColumns: "1fr 1fr",
+                gap: 12,
+              }}
+            >
               <div>
                 <label style={labelStyle}>
-                  <Phone size={11} style={{ display: "inline", marginRight: 4 }} />
+                  <Phone
+                    size={11}
+                    style={{ display: "inline", marginRight: 4 }}
+                  />
                   Phone (optional)
                 </label>
                 <input
@@ -214,7 +281,10 @@ export default function RSVPForm({
               </div>
               <div>
                 <label style={labelStyle}>
-                  <Users size={11} style={{ display: "inline", marginRight: 4 }} />
+                  <Users
+                    size={11}
+                    style={{ display: "inline", marginRight: 4 }}
+                  />
                   No. of Guests
                 </label>
                 <select
@@ -223,7 +293,9 @@ export default function RSVPForm({
                   style={{ ...inputStyle, cursor: "pointer" }}
                 >
                   {[1, 2, 3, 4, 5, 6].map((n) => (
-                    <option key={n} value={n}>{n} {n === 1 ? "person" : "people"}</option>
+                    <option key={n} value={n}>
+                      {n} {n === 1 ? "person" : "people"}
+                    </option>
                   ))}
                 </select>
               </div>
@@ -231,7 +303,10 @@ export default function RSVPForm({
 
             <div>
               <label style={labelStyle}>
-                <MessageSquare size={11} style={{ display: "inline", marginRight: 4 }} />
+                <MessageSquare
+                  size={11}
+                  style={{ display: "inline", marginRight: 4 }}
+                />
                 Message to couple (optional)
               </label>
               <textarea
@@ -239,14 +314,25 @@ export default function RSVPForm({
                 value={message}
                 onChange={(e) => setMessage(e.target.value)}
                 rows={3}
-                style={{ ...inputStyle, resize: "none" as const, lineHeight: 1.6 }}
+                style={{
+                  ...inputStyle,
+                  resize: "none" as const,
+                  lineHeight: 1.6,
+                }}
               />
             </div>
           </>
         )}
 
         {error && (
-          <p style={{ color: "#ef4444", fontSize: 13, fontFamily: "sans-serif", margin: 0 }}>
+          <p
+            style={{
+              color: "#ef4444",
+              fontSize: 13,
+              fontFamily: "sans-serif",
+              margin: 0,
+            }}
+          >
             {error}
           </p>
         )}
@@ -266,14 +352,18 @@ export default function RSVPForm({
             fontWeight: 700,
             letterSpacing: "0.08em",
             cursor: "pointer",
-            opacity: (!guestName.trim() || !attending) ? 0.5 : 1,
+            opacity: !guestName.trim() || !attending ? 0.5 : 1,
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             gap: 8,
           }}
         >
-          {loading ? <Loader2 size={16} className="animate-spin" /> : <Check size={16} />}
+          {loading ? (
+            <Loader2 size={16} className="animate-spin" />
+          ) : (
+            <Check size={16} />
+          )}
           {loading ? "Submitting..." : "Confirm RSVP"}
         </button>
       </div>

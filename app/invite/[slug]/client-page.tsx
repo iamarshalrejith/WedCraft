@@ -12,10 +12,12 @@ import OnyxGold from "@/components/templates/OnyxGold";
 import AnandKaraj from "@/components/templates/AnandKaraj";
 import SacredVows from "@/components/templates/SacredVows";
 import PaperPetals from "@/components/templates/PaperPetals";
+import CelestialDream from "@/components/templates/CelestialDream";
+import RusticBloom from "@/components/templates/RusticBloom";
+import ZenGarden from "@/components/templates/ZenGarden";
+import MidnightRose from "@/components/templates/MidnightRose";
 
-interface InvitePageProps {
-  params: Promise<{ slug: string }>;
-}
+interface InvitePageProps { params: Promise<{ slug: string }>; }
 
 function renderTemplate(templateSlug: string, couple: CoupleDetails) {
   switch (templateSlug) {
@@ -27,6 +29,10 @@ function renderTemplate(templateSlug: string, couple: CoupleDetails) {
     case "anand-karaj":      return <AnandKaraj couple={couple} />;
     case "sacred-vows":      return <SacredVows couple={couple} />;
     case "paper-and-petals": return <PaperPetals couple={couple} />;
+    case "celestial-dream":  return <CelestialDream couple={couple} />;
+    case "rustic-bloom":     return <RusticBloom couple={couple} />;
+    case "zen-garden":       return <ZenGarden couple={couple} />;
+    case "midnight-rose":    return <MidnightRose couple={couple} />;
     default:                 return <MangalUtsav couple={couple} />;
   }
 }
@@ -44,13 +50,11 @@ export default function InvitePage({ params }: InvitePageProps) {
       .finally(() => setLoading(false));
   }, [slug]);
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-black">
-        <Heart size={32} className="text-yellow-600 fill-yellow-600 animate-pulse" />
-      </div>
-    );
-  }
+  if (loading) return (
+    <div className="min-h-screen flex items-center justify-center bg-black">
+      <Heart size={32} className="text-yellow-600 fill-yellow-600 animate-pulse" />
+    </div>
+  );
 
   if (!invite) notFound();
 

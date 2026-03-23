@@ -6,7 +6,7 @@ import { motion } from "framer-motion";
 
 const Hero = () => {
   return (
-    <section className="relative w-full flex flex-col md:flex-row items-center justify-between px-6 md:px-12 py-8 md:py-16  overflow-hidden ">
+    <section id="hero" className="relative w-full flex flex-col md:flex-row items-center justify-between px-6 md:px-12 py-8 md:py-16  overflow-hidden ">
       {/* subtle background decoration */}
       <div className="absolute -top-32 -left-32 w-72 h-72 bg-gray-100 rounded-full blur-3xl opacity-40"></div>
       <div className="absolute -bottom-32 -right-32 w-72 h-72 bg-gray-100 rounded-full blur-3xl opacity-40"></div>

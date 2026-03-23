@@ -22,7 +22,8 @@ const Footer = () => {
   ];
 
   return (
-    <footer className="border-t mt-24" id="contact">
+     <section  id="contact">
+    <footer className="border-t mt-24">
       <div className="max-w-7xl mx-auto px-6 py-16">
 
         {/* Top Section */}
@@ -115,6 +116,7 @@ const Footer = () => {
         </div>
       </div>
     </footer>
+   </section>
   );
 };
 
