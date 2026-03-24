@@ -1,6 +1,18 @@
 export type Religion = "Hindu" | "Muslim" | "Christian" | "Sikh" | "Universal";
-export type Theme = "Traditional" | "Modern" | "Minimal" | "Beach" | "Royal" | "Floral";
-export type Tier = "Basic" | "Premium" | "Luxury";
+export type Theme =
+  | "Traditional"
+  | "Modern"
+  | "Minimal"
+  | "Beach"
+  | "Royal"
+  | "Floral"
+  | "Destination";
+
+export type Tier =
+  | "Basic"
+  | "Premium"
+  | "Luxury"
+  | "Standard";
 
 export interface Template {
   id: string;
@@ -290,8 +302,80 @@ export const templates: Template[] = [
     previewBg: "from-green-950 via-emerald-950 to-stone-950",
     colors: ["#B8860B", "#E8C97A", "#0A1A0A"],
   },
-];
+  {
+    id: "t013",
+    name: "Royal Durbar",
+    slug: "royal-durbar",
+    price: 1099,
+    tier: "Premium",
+    religion: "Hindu",
+    themes: ["Traditional"],
+    description: "Rich Mughal-inspired design with deep crimson, hanging diya animations, golden arches, and floral borders. Fit for royalty.",
+    features: ["Diya animations", "Mughal arch art", "Floral borders", "Countdown timer", "RSVP form", "WhatsApp share"],
+    rating: 4.8,
+    reviewCount: 33,
+    isFeatured: true,
+    isNew: true,
+    thumbnail: "/templates/royal-durbar.jpg",
+    previewBg: "from-red-950 via-rose-950 to-red-950",
+    colors: ["#D4AF37", "#CC0000", "#1A0005"],
+  },
+  {
+    id: "t014",
+    name: "Urban Chic",
+    slug: "urban-chic",
+    price: 899,
+    tier: "Standard",
+    religion: "Universal",
+    themes: ["Modern", "Minimal"],
+    description: "Bold editorial magazine aesthetic. Black and white with a live news ticker, grid layout, and Space Grotesk typography.",
+    features: ["Live news ticker", "Editorial grid layout", "Programme view", "Countdown timer", "RSVP form", "WhatsApp share"],
+    rating: 4.7,
+    reviewCount: 41,
+    isFeatured: true,
+    isNew: true,
+    thumbnail: "/templates/urban-chic.jpg",
+    previewBg: "from-zinc-900 via-neutral-800 to-zinc-900",
+    colors: ["#1A1A1A", "#FAFAFA", "#555555"],
+  },
+  {
+    id: "t015",
+    name: "Tropical Paradise",
+    slug: "tropical-paradise",
+    price: 999,
+    tier: "Premium",
+    religion: "Universal",
+    themes: ["Destination", "Modern"],
+    description: "Vibrant ocean-blue tropical theme with animated palm leaves, hibiscus flowers, and Pacifico script. Perfect for beach and destination weddings.",
+    features: ["Palm leaf artwork", "Hibiscus florals", "Ocean gradient", "Countdown timer", "RSVP form", "WhatsApp share"],
+    rating: 4.9,
+    reviewCount: 27,
+    isFeatured: true,
+    isNew: true,
+    thumbnail: "/templates/tropical-paradise.jpg",
+    previewBg: "from-cyan-700 via-teal-600 to-blue-700",
+    colors: ["#00B4A6", "#006994", "#FFFDE7"],
+  },
+  {
+    id: "t016",
+    name: "Indian Classic",
+    slug: "indian-classic",
+    price: 799,
+    tier: "Standard",
+    religion: "Hindu",
+    themes: ["Traditional"],
+    description: "Traditional South Indian style with deep red, kolam patterns, gopuram silhouette, Tamil script, and lotus motifs.",
+    features: ["Kolam border art", "Gopuram silhouette", "Regional script", "Countdown timer", "RSVP form", "WhatsApp share"],
+    rating: 4.8,
+    reviewCount: 58,
+    isFeatured: false,
+    isNew: true,
+    thumbnail: "/templates/indian-classic.jpg",
+    previewBg: "from-red-900 via-red-800 to-red-950",
+    colors: ["#D4AF37", "#8B0000", "#F5E6C8"],
 
+  },
+];
 export const allReligions: Religion[] = [
   "Hindu",
   "Muslim",
@@ -299,6 +383,7 @@ export const allReligions: Religion[] = [
   "Sikh",
   "Universal",
 ];
+
 export const allThemes: Theme[] = [
   "Traditional",
   "Modern",
@@ -306,8 +391,15 @@ export const allThemes: Theme[] = [
   "Beach",
   "Royal",
   "Floral",
+  "Destination",
 ];
-export const allTiers: Tier[] = ["Basic", "Premium", "Luxury"];
+
+export const allTiers: Tier[] = [
+  "Basic",
+  "Premium",
+  "Luxury",
+  "Standard",
+];
 
 export function getTemplateBySlug(slug: string): Template | undefined {
   return templates.find((t) => t.slug === slug);

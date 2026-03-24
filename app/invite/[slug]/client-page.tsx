@@ -16,24 +16,32 @@ import CelestialDream from "@/components/templates/CelestialDream";
 import RusticBloom from "@/components/templates/RusticBloom";
 import ZenGarden from "@/components/templates/ZenGarden";
 import MidnightRose from "@/components/templates/MidnightRose";
+import RoyalDurbar from "@/components/templates/RoyalDurbar";
+import UrbanChic from "@/components/templates/UrbanChic";
+import TropicalParadise from "@/components/templates/TropicalParadise";
+import IndianClassic from "@/components/templates/IndianClassic";
 
 interface InvitePageProps { params: Promise<{ slug: string }>; }
 
 function renderTemplate(templateSlug: string, couple: CoupleDetails) {
   switch (templateSlug) {
-    case "mangal-utsav":     return <MangalUtsav couple={couple} />;
-    case "eternal-bloom":    return <EternalBloom couple={couple} />;
-    case "azure-shore":      return <AzureShore couple={couple} />;
-    case "nikah-nazm":       return <NikahNazm couple={couple} />;
-    case "onyx-and-gold":    return <OnyxGold couple={couple} />;
-    case "anand-karaj":      return <AnandKaraj couple={couple} />;
-    case "sacred-vows":      return <SacredVows couple={couple} />;
-    case "paper-and-petals": return <PaperPetals couple={couple} />;
-    case "celestial-dream":  return <CelestialDream couple={couple} />;
-    case "rustic-bloom":     return <RusticBloom couple={couple} />;
-    case "zen-garden":       return <ZenGarden couple={couple} />;
-    case "midnight-rose":    return <MidnightRose couple={couple} />;
-    default:                 return <MangalUtsav couple={couple} />;
+    case "mangal-utsav":      return <MangalUtsav couple={couple} />;
+    case "eternal-bloom":     return <EternalBloom couple={couple} />;
+    case "azure-shore":       return <AzureShore couple={couple} />;
+    case "nikah-nazm":        return <NikahNazm couple={couple} />;
+    case "onyx-and-gold":     return <OnyxGold couple={couple} />;
+    case "anand-karaj":       return <AnandKaraj couple={couple} />;
+    case "sacred-vows":       return <SacredVows couple={couple} />;
+    case "paper-and-petals":  return <PaperPetals couple={couple} />;
+    case "celestial-dream":   return <CelestialDream couple={couple} />;
+    case "rustic-bloom":      return <RusticBloom couple={couple} />;
+    case "zen-garden":        return <ZenGarden couple={couple} />;
+    case "midnight-rose":     return <MidnightRose couple={couple} />;
+    case "royal-durbar":      return <RoyalDurbar couple={couple} />;
+    case "urban-chic":        return <UrbanChic couple={couple} />;
+    case "tropical-paradise": return <TropicalParadise couple={couple} />;
+    case "indian-classic":    return <IndianClassic couple={couple} />;
+    default:                  return <MangalUtsav couple={couple} />;
   }
 }
 

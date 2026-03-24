@@ -200,14 +200,14 @@ const Navbar = () => {
               </Link>
             </div>
           )}
-          {isHome && (
-            <Link
-              href="/catalog"
-              className="hidden lg:block bg-black text-white px-5 py-2 rounded-lg hover:bg-gray-800 transition text-sm font-medium"
-            >
-              Browse Templates
-            </Link>
-          )}
+
+          <Link
+            href="/catalog"
+            className="hidden lg:block bg-black text-white px-5 py-2 rounded-lg hover:bg-gray-800 transition text-sm font-medium"
+          >
+            Browse Templates
+          </Link>
+
           <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)}>
             {menuOpen ? (
               <X size={28} className="text-gray-300 bg-black rounded-lg p-2" />
@@ -241,8 +241,7 @@ const Navbar = () => {
               );
             })}
 
-           
-            {isHome && (
+          
               <li>
                 <Link
                   href="/catalog"
@@ -253,7 +252,7 @@ const Navbar = () => {
                   Browse Templates
                 </Link>
               </li>
-            )}
+            
 
             <div className="flex flex-col gap-3 pt-4 border-t">
               {user ? (
