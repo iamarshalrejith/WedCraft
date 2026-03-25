@@ -1,11 +1,14 @@
 "use client";
 
-import { use } from "react";
+import { use, useState } from "react";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { getTemplateBySlug } from "@/data/templates";
 import { Star, ShoppingCart, ArrowLeft, Check } from "lucide-react";
 import { motion } from "framer-motion";
+import { useAuth } from "@/context/AuthContext";
+import AuthModal from "@/components/AuthModal";
 import MangalUtsav from "@/components/templates/MangalUtsav";
 import EternalBloom from "@/components/templates/EternalBloom";
 import AzureShore from "@/components/templates/AzureShore";
@@ -23,6 +26,10 @@ import UrbanChic from "@/components/templates/UrbanChic";
 import TropicalParadise from "@/components/templates/TropicalParadise";
 import IndianClassic from "@/components/templates/IndianClassic";
 import { CoupleDetails } from "@/types/invite";
+import IvoryManuscript from "@/components/templates/IvoryManuscript";
+import NeonVows from "@/components/templates/NeonVows";
+import VelvetHaveli from "@/components/templates/VelvetHaveli";
+import NordicFrost from "@/components/templates/NordicFrost";
 
 interface PreviewPageProps { params: Promise<{ id: string }>; }
 
@@ -36,10 +43,10 @@ const WatermarkOverlay = ({ lightBg=false }: { lightBg?:boolean }) => (
         <span style={{ display:"block", fontSize:22, fontWeight:700, letterSpacing:"0.2em", whiteSpace:"nowrap", color:"#fff", opacity:lightBg?0.04:0.12, marginTop:-26 }}>WEDCRAFT PREVIEW</span>
       </div>
     )))}
-    <div className="fixed top-20 left-4 bg-black/70 text-white text-xs font-semibold px-3 py-1.5 rounded-full backdrop-blur-sm z-30">🔒 Preview Mode</div>
   </div>
 );
 
+// ── Demo data (unchanged) ──────────────────────────────────────────────────
 const hinduDemo: CoupleDetails = { groomName:"Aravind", brideName:"Aarathi", weddingDate:"2026-12-12", weddingTime:"7:00 PM", venue:"Grand Palace Banquet Hall", venueAddress:"NH-16, Bayyavaram, Anakapalli", mapLink:"https://maps.google.com", phone:"+919876543210", personalMessage:"Two souls, one heartbeat.", events:[{name:"Mehendi & Haldi",date:"2026-12-10",time:"4:00 PM",venue:"Bride's Residence"},{name:"Sangeet Night",date:"2026-12-11",time:"7:00 PM",venue:"Grand Palace Hall B"},{name:"Wedding Ceremony",date:"2026-12-12",time:"7:00 PM",venue:"Grand Palace Main Hall"}] };
 const modernDemo: CoupleDetails = { groomName:"Arjun", brideName:"Meera", weddingDate:"2026-11-20", weddingTime:"5:30 PM", venue:"The Ivy Gardens", venueAddress:"12 Blossom Lane, Bangalore", mapLink:"https://maps.google.com", phone:"+919876543210", personalMessage:"Two hearts, one love.", events:[{name:"Bridal Shower",date:"2026-11-18",time:"3:00 PM",venue:"Bride's Home"},{name:"Cocktail Evening",date:"2026-11-19",time:"6:00 PM",venue:"The Ivy Terrace"},{name:"Wedding Ceremony",date:"2026-11-20",time:"5:30 PM",venue:"The Ivy Gardens"}] };
 const beachDemo: CoupleDetails = { groomName:"Kiran", brideName:"Nadia", weddingDate:"2027-01-15", weddingTime:"4:00 PM", venue:"Tide & Palms Beach Resort", venueAddress:"Beachfront Road, Goa", mapLink:"https://maps.google.com", phone:"+919876543210", personalMessage:"With the ocean as our witness.", events:[{name:"Welcome Sundowner",date:"2027-01-14",time:"6:00 PM",venue:"Pool Deck"},{name:"Beach Ceremony",date:"2027-01-15",time:"4:00 PM",venue:"Beachfront Gazebo"},{name:"Reception Dinner",date:"2027-01-15",time:"8:00 PM",venue:"Palm Garden"}] };
@@ -56,6 +63,10 @@ const royalDemo: CoupleDetails = { groomName:"Nawab", brideName:"Begum", wedding
 const urbanDemo: CoupleDetails = { groomName:"Kabir", brideName:"Aisha", weddingDate:"2027-03-15", weddingTime:"6:00 PM", venue:"The Oberoi", venueAddress:"Dr. Zakir Hussain Marg, New Delhi", mapLink:"https://maps.google.com", phone:"+919876543210", personalMessage:"Not a fairy tale. The real thing — and it's better.", events:[{name:"Cocktail Hour",date:"2027-03-15",time:"5:00 PM",venue:"The Lobby Lounge"},{name:"Wedding Ceremony",date:"2027-03-15",time:"6:00 PM",venue:"The Grand Ballroom"},{name:"After Party",date:"2027-03-15",time:"10:00 PM",venue:"The Oberoi Rooftop"}] };
 const tropicalDemo: CoupleDetails = { groomName:"Surya", brideName:"Marina", weddingDate:"2027-02-22", weddingTime:"4:30 PM", venue:"Emerald Isle Beach Resort", venueAddress:"Cherai Beach, Kochi", mapLink:"https://maps.google.com", phone:"+919876543210", personalMessage:"Love found us where the ocean meets the sky.", events:[{name:"Welcome Sundowner",date:"2027-02-21",time:"6:00 PM",venue:"Pool Deck"},{name:"Beach Ceremony",date:"2027-02-22",time:"4:30 PM",venue:"Beachfront"},{name:"Tropical Reception",date:"2027-02-22",time:"8:00 PM",venue:"The Palm Pavilion"}] };
 const classicDemo: CoupleDetails = { groomName:"Murugan", brideName:"Meenakshi", weddingDate:"2026-11-14", weddingTime:"9:00 AM", venue:"Kapaleeshwarar Temple Hall", venueAddress:"Mylapore, Chennai", mapLink:"https://maps.google.com", phone:"+919876543210", personalMessage:"மங்கள நிகழ்வில் கலந்து கொள்ளுமாறு அன்புடன் அழைக்கிறோம்.", events:[{name:"Naandi & Puja",date:"2026-11-13",time:"6:00 AM",venue:"Family Home"},{name:"Thirumanam",date:"2026-11-14",time:"9:00 AM",venue:"Kapaleeshwarar Temple Hall"},{name:"Reception",date:"2026-11-14",time:"7:00 PM",venue:"Devathatchan Kalyana Mahal"}] };
+const ivoryDemo: CoupleDetails = { groomName:"Edmund", brideName:"Celeste", weddingDate:"2027-04-10", weddingTime:"4:00 PM", venue:"The Old Library, Ooty", venueAddress:"Club Road, Ooty, Tamil Nadu", mapLink:"https://maps.google.com", phone:"+919876543210", personalMessage:"Every love story is beautiful, but ours is my favourite.", events:[{name:"Garden Party",date:"2027-04-09",time:"5:00 PM",venue:"The Manor Garden"},{name:"Wedding Ceremony",date:"2027-04-10",time:"4:00 PM",venue:"The Old Library"}] };
+const neonDemo: CoupleDetails = { groomName:"Zane", brideName:"Nova", weddingDate:"2027-03-08", weddingTime:"9:00 PM", venue:"Skyline Club, Mumbai", venueAddress:"BKC, Mumbai", mapLink:"https://maps.google.com", phone:"+919876543210", personalMessage:"Love is the only frequency that matters.", events:[{name:"Pre-Party",date:"2027-03-07",time:"10:00 PM",venue:"Rooftop Lounge"},{name:"Wedding Ceremony",date:"2027-03-08",time:"9:00 PM",venue:"Skyline Club"}] };
+const haveliDemo: CoupleDetails = { groomName:"Rajveer", brideName:"Padmini", weddingDate:"2026-12-05", weddingTime:"6:30 PM", venue:"Samode Haveli, Jaipur", venueAddress:"Gangapole, Jaipur, Rajasthan", mapLink:"https://maps.google.com", phone:"+919876543210", personalMessage:"Like the blue city, our love is ancient and everlasting.", events:[{name:"Haldi & Chooda",date:"2026-12-03",time:"9:00 AM",venue:"Bride's Haveli"},{name:"Sangeet & Dandiya",date:"2026-12-04",time:"7:00 PM",venue:"Haveli Courtyard"},{name:"Shahi Vivah",date:"2026-12-05",time:"6:30 PM",venue:"Samode Haveli"}] };
+const nordicDemo: CoupleDetails = { groomName:"Erik", brideName:"Freya", weddingDate:"2027-01-06", weddingTime:"2:00 PM", venue:"The Snow Chapel, Shimla", venueAddress:"The Ridge, Shimla, Himachal Pradesh", mapLink:"https://maps.google.com", phone:"+919876543210", personalMessage:"In the quiet of winter, we found forever.", events:[{name:"Ice Dinner",date:"2027-01-05",time:"7:00 PM",venue:"Mountain Lodge"},{name:"Wedding Ceremony",date:"2027-01-06",time:"2:00 PM",venue:"The Snow Chapel"}] };
 
 function getPreview(slug: string) {
   switch(slug) {
@@ -75,26 +86,51 @@ function getPreview(slug: string) {
     case "urban-chic":        return <UrbanChic couple={urbanDemo}/>;
     case "tropical-paradise": return <TropicalParadise couple={tropicalDemo}/>;
     case "indian-classic":    return <IndianClassic couple={classicDemo}/>;
+    case "ivory-manuscript":  return <IvoryManuscript couple={ivoryDemo}/>;
+    case "neon-vows":         return <NeonVows couple={neonDemo}/>;
+    case "velvet-haveli":     return <VelvetHaveli couple={haveliDemo}/>;
+    case "nordic-frost":      return <NordicFrost couple={nordicDemo}/>;
     default:                  return <MangalUtsav couple={hinduDemo}/>;
   }
 }
 
 export default function PreviewPage({ params }: PreviewPageProps) {
   const { id } = use(params);
+  const router = useRouter();
+  const { user, loading: authLoading } = useAuth();
   const template = getTemplateBySlug(id);
   if (!template) notFound();
+
+  const [authModalOpen, setAuthModalOpen] = useState(false);
+
+  const handleBuyClick = () => {
+    if (authLoading) return;
+    if (user) {
+      // Already logged in → go straight to checkout
+      router.push(`/checkout/${template.slug}`);
+    } else {
+      // Not logged in → show auth modal
+      setAuthModalOpen(true);
+    }
+  };
+
+  const handleAuthSuccess = () => {
+    setAuthModalOpen(false);
+    router.push(`/checkout/${template.slug}`);
+  };
+
   return (
     <div className="relative">
-      <div className="fixed top-0 left-0 right-0 z-30 bg-white/90 backdrop-blur-md border-b border-gray-200 px-4 py-3 flex items-center gap-4 h-[72px]">
-        <Link href="/catalog" className="flex items-center gap-1.5 text-sm text-gray-600 hover:text-black transition-colors shrink-0"><ArrowLeft size={16}/> Back</Link>
-        <div className="flex-1 min-w-0">
-          <p className="text-sm font-semibold text-gray-900 truncate">{template.name}</p>
-          <div className="flex items-center gap-1"><Star size={11} className="fill-amber-400 text-amber-400"/><span className="text-xs text-gray-500">{template.rating} · {template.reviewCount} reviews</span></div>
-        </div>
-        <span className="hidden sm:block text-xs text-gray-500 bg-gray-100 px-2 py-1 rounded-full shrink-0">🔒 Watermarked preview</span>
-      </div>
+      <div className="fixed top-28 md:top-32 lg:top-40 left-4 z-40">
+  <span className="text-xs text-white bg-black/70 px-3 py-1.5 rounded-full backdrop-blur-sm">
+    🔒 Watermarked preview
+  </span>
+</div>
+
       <WatermarkOverlay lightBg={LIGHT_BG.includes(id)}/>
       <div onContextMenu={e=>e.preventDefault()}>{getPreview(id)}</div>
+
+      {/* Floating Buy Bar */}
       <motion.div initial={{y:100,opacity:0}} animate={{y:0,opacity:1}} transition={{delay:0.6,type:"spring",stiffness:200}} className="fixed bottom-6 left-1/2 -translate-x-1/2 z-40 w-full max-w-sm px-4">
         <div className="bg-white rounded-2xl shadow-2xl border border-gray-200 p-4 flex items-center gap-4">
           <div className="flex-1">
@@ -104,10 +140,24 @@ export default function PreviewPage({ params }: PreviewPageProps) {
               {["No watermark","Live URL","WhatsApp share"].map(f=><span key={f} className="text-xs text-emerald-700 flex items-center gap-0.5"><Check size={10}/> {f}</span>)}
             </div>
           </div>
-          <Link href={`/checkout/${template.slug}`} className="flex items-center gap-2 bg-black text-white px-5 py-3 rounded-xl font-semibold text-sm hover:bg-gray-800 active:scale-95 transition-all shrink-0"><ShoppingCart size={16}/> Buy Now</Link>
+          <button
+            onClick={handleBuyClick}
+            className="flex items-center gap-2 bg-black text-white px-5 py-3 rounded-xl font-semibold text-sm hover:bg-gray-800 active:scale-95 transition-all shrink-0"
+          >
+            <ShoppingCart size={16}/> Buy Now
+          </button>
         </div>
       </motion.div>
+
       <div className="h-32"/>
+
+      {/* Auth Modal */}
+      <AuthModal
+        isOpen={authModalOpen}
+        onClose={() => setAuthModalOpen(false)}
+        onSuccess={handleAuthSuccess}
+        defaultTab="login"
+      />
     </div>
   );
 }

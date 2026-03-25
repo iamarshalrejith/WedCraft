@@ -6,6 +6,7 @@ import { TemplateCard } from "@/components/catalog/TemplateCard";
 import { ArrowRight } from "lucide-react";
 
 export const FeaturedTemplates = () => {
+  // getFeaturedTemplates already slices to 8 max
   const featured = getFeaturedTemplates();
 
   return (
@@ -27,6 +28,7 @@ export const FeaturedTemplates = () => {
         </Link>
       </div>
 
+      {/* 4-column grid — 8 templates = 2 clean rows */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
         {featured.map((template, i) => (
           <TemplateCard key={template.id} template={template} index={i} />

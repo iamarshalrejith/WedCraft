@@ -5,17 +5,17 @@ import { usePathname } from "next/navigation";
 import {
   Menu,
   X,
-  LogIn,
   LogOut,
   LayoutDashboard,
   ShieldCheck,
   ChevronDown,
   LayoutGrid,
+  LogIn, UserPlus
 } from "lucide-react";
 import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { useAuth } from "@/context/AuthContext";
-
+import AuthModal from "./AuthModal";
 const Navbar = () => {
   const pathname = usePathname();
   const isHome = pathname === "/";
@@ -24,6 +24,13 @@ const Navbar = () => {
   const userMenuRef = useRef<HTMLDivElement>(null);
   const { user, loading, logout } = useAuth();
   const [activeSection, setActiveSection] = useState("hero");
+  const [authOpen, setAuthOpen] = useState(false);
+  const [authTab, setAuthTab] = useState<"login" | "signup">("login");
+
+  const openAuthModal = (tab: "login" | "signup") => {
+  setAuthTab(tab);
+  setAuthOpen(true);
+};
 
   const navItems = [
     { name: "Home", path: "/#hero" },
@@ -84,7 +91,7 @@ const Navbar = () => {
     : "U";
 
   return (
-    <header className="fixed top-0 w-full h-32 bg-gray-100 z-50">
+    <header className="fixed top-0 w-full h-24 md:h-28 lg:h-32 bg-gray-100 z-50">
       <div className="max-w-7xl mx-auto flex items-center justify-between px-6 relative h-full">
         <Link href="/" className="flex items-center gap-2 cursor-pointer">
           <Image
@@ -96,7 +103,56 @@ const Navbar = () => {
           />
         </Link>
 
-        <nav className="hidden md:flex flex-1 justify-center">
+        <nav className="hidden md:flex lg:hidden justify-center max-w-md mx-auto">
+  <ul className="flex items-center gap-2 px-3 py-2 bg-white/30 backdrop-blur-md border border-white/40 shadow-sm rounded-full text-sm font-medium">
+   {navItems.slice(0, 3).map((item) => {
+  const sectionId = item.path.split("#")[1];
+  const isActive = pathname === "/" && activeSection === sectionId;
+
+  return (
+    <li key={item.path}>
+      <Link
+        href={item.path}
+        className={`px-3 py-1.5 rounded-full transition ${
+          isActive
+            ? "bg-black text-white"
+            : "hover:bg-white/50"
+        }`}
+      >
+        {item.name}
+      </Link>
+    </li>
+  );
+})}
+  </ul>
+</nav>
+
+<nav className="hidden lg:flex xl:hidden flex-1 justify-center">
+  <ul className="flex items-center gap-2 px-3 py-2 bg-white/20 backdrop-blur-lg border border-white/30 rounded-full text-sm font-medium">
+    {navItems.slice(0, 4).map((item) => {
+      const sectionId = item.path.split("#")[1];
+      const isActive = pathname === "/" && activeSection === sectionId;
+
+      return (
+        <li key={item.path}>
+          <Link
+            href={item.path}
+            className={`px-3 py-1.5 rounded-full transition ${
+              isActive
+                ? "bg-black text-white"
+                : "hover:bg-white/40"
+            }`}
+          >
+            {item.name}
+          </Link>
+        </li>
+      );
+    })}
+  </ul>
+</nav>
+        
+
+        <nav className="hidden xl:flex flex-1 justify-center">
           <ul className="flex items-center gap-2 md:gap-3 px-3 md:px-4 py-1.5 md:py-2 bg-white/20 backdrop-blur-xl border border-white/30 rounded-full shadow-lg text-gray-700 text-sm md:text-base font-medium">
             {navItems.map((item) => {
               const sectionId = item.path.split("#")[1];
@@ -120,13 +176,41 @@ const Navbar = () => {
         </nav>
 
         <div className="flex items-center gap-3">
+          {/* Laptop (lg) icon actions */}
+{!user && (
+  <div className="hidden lg:flex xl:hidden items-center gap-2">
+    <button
+      onClick={() => openAuthModal("login")}
+      className="p-2 rounded-lg hover:bg-gray-200 transition-all duration-200 hover:scale-105 active:scale-95"
+      title="Login"
+    >
+      <LogIn size={18} />
+    </button>
+
+    <button
+      onClick={() => openAuthModal("signup")}
+      className="p-2 rounded-lg hover:bg-gray-200 transition-all duration-200 hover:scale-105 active:scale-95"
+      title="Sign up"
+    >
+      <UserPlus size={18} />
+    </button>
+
+    <Link
+      href="/catalog"
+      className="p-2 rounded-lg bg-black text-white hover:bg-gray-800 transition-all duration-200 hover:scale-105 active:scale-95"
+      title="Browse templates"
+    >
+      <LayoutGrid size={18} />
+    </Link>
+  </div>
+)}
           {loading ? (
             <div className="w-8 h-8 rounded-full bg-gray-200 animate-pulse" />
           ) : user ? (
             <div className="relative" ref={userMenuRef}>
               <button
                 onClick={() => setUserMenuOpen(!userMenuOpen)}
-                className="hidden md:flex items-center gap-2 bg-white border border-gray-200 rounded-full px-3 py-1.5 hover:border-gray-300 transition-colors"
+                className="hidden xl:flex items-center gap-2 bg-white border border-gray-200 rounded-full px-3 py-1.5 hover:border-gray-300 transition-colors"
               >
                 {user.avatarUrl ? (
                   <Image
@@ -181,11 +265,12 @@ const Navbar = () => {
                   >
                     <LogOut size={14} /> Sign Out
                   </button>
+                  
                 </div>
               )}
             </div>
           ) : (
-            <div className="hidden md:flex items-center gap-2">
+            <div className="hidden xl:flex items-center gap-2">
               <Link
                 href="/auth/login"
                 className="flex items-center gap-1.5 text-sm font-medium text-gray-700 hover:text-black px-3 py-2 transition-colors"
@@ -203,12 +288,12 @@ const Navbar = () => {
 
           <Link
             href="/catalog"
-            className="hidden lg:block bg-black text-white px-5 py-2 rounded-lg hover:bg-gray-800 transition text-sm font-medium"
+            className="hidden xl:block bg-black text-white px-5 py-2 rounded-lg hover:bg-gray-800 transition text-sm font-medium"
           >
             Browse Templates
           </Link>
 
-          <button className="md:hidden" onClick={() => setMenuOpen(!menuOpen)}>
+          <button className="lg:hidden" onClick={() => setMenuOpen(!menuOpen)}>
             {menuOpen ? (
               <X size={28} className="text-gray-300 bg-black rounded-lg p-2" />
             ) : (
@@ -307,13 +392,22 @@ const Navbar = () => {
                   >
                     Sign Up
                   </Link>
+                  
                 </div>
               )}
             </div>
           </ul>
         </div>
       )}
+      <AuthModal
+  isOpen={authOpen}
+  onClose={() => setAuthOpen(false)}
+  onSuccess={() => setAuthOpen(false)}
+  defaultTab={authTab}
+  
+/>
     </header>
+    
   );
 };
 

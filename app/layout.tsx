@@ -30,13 +30,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className={cn("font-sans", figtree.variable)}>
+    <html lang="en" className={cn("font-sans", figtree.variable)}  data-scroll-behavior="smooth">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-200`}
       >
         <AuthProvider>
           <Navbar />
-          <main className="pt-32">{children}</main>
+          <main className="pt-24">{children}</main>
           <Footer />
         </AuthProvider>
       </body>
