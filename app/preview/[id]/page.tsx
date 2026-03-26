@@ -25,6 +25,9 @@ import RoyalDurbar from "@/components/templates/RoyalDurbar";
 import UrbanChic from "@/components/templates/UrbanChic";
 import TropicalParadise from "@/components/templates/TropicalParadise";
 import IndianClassic from "@/components/templates/IndianClassic";
+import BengaliClassic from "@/components/templates/BengaliClassic";
+import SilverScreen from "@/components/templates/SilverScreen";
+import GardenParty from "@/components/templates/GardenParty";
 import { CoupleDetails } from "@/types/invite";
 import IvoryManuscript from "@/components/templates/IvoryManuscript";
 import NeonVows from "@/components/templates/NeonVows";
@@ -33,7 +36,7 @@ import NordicFrost from "@/components/templates/NordicFrost";
 
 interface PreviewPageProps { params: Promise<{ id: string }>; }
 
-const LIGHT_BG = ["eternal-bloom","sacred-vows","paper-and-petals","rustic-bloom","zen-garden","urban-chic"];
+const LIGHT_BG = ["eternal-bloom","sacred-vows","paper-and-petals","rustic-bloom","zen-garden","urban-chic","garden-party","ivory-manuscript","nordic-frost"];
 
 const WatermarkOverlay = ({ lightBg=false }: { lightBg?:boolean }) => (
   <div className="fixed inset-0 z-20 pointer-events-none overflow-hidden select-none" aria-hidden="true">
@@ -86,6 +89,9 @@ function getPreview(slug: string) {
     case "urban-chic":        return <UrbanChic couple={urbanDemo}/>;
     case "tropical-paradise": return <TropicalParadise couple={tropicalDemo}/>;
     case "indian-classic":    return <IndianClassic couple={classicDemo}/>;
+    case "bengali-classic":   return <BengaliClassic couple={{ groomName:"Arjun", brideName:"Priya", weddingDate:"2026-12-05", weddingTime:"11:00 AM", venue:"Jorasanko Thakur Bari", venueAddress:"Chitpur, Kolkata", mapLink:"https://maps.google.com", phone:"+919876543210", personalMessage:"দুটি মন, একটি স্বপ্ন — আপনার উপস্থিতি আমাদের বিশেষ দিনটিকে আরও সুন্দর করবে।", events:[{name:"Aiburo Bhaat",date:"2026-12-04",time:"6:00 PM",venue:"Bride's Home"},{name:"Biye Bari",date:"2026-12-05",time:"11:00 AM",venue:"Jorasanko Thakur Bari"},{name:"Bou Bhaat",date:"2026-12-06",time:"8:00 PM",venue:"Groom's Residence"}] }}/>;
+    case "silver-screen":     return <SilverScreen couple={{ groomName:"Raj", brideName:"Simran", weddingDate:"2027-01-10", weddingTime:"7:00 PM", venue:"Mehboob Studios", venueAddress:"Hill Road, Bandra, Mumbai", mapLink:"https://maps.google.com", phone:"+919876543210", personalMessage:"In the greatest love story ever told — yours — the best scene is yet to come.", events:[{name:"Cocktail Hour",date:"2027-01-10",time:"6:00 PM",venue:"The Lobby"},{name:"Grand Ceremony",date:"2027-01-10",time:"7:00 PM",venue:"Mehboob Studios"},{name:"After Party",date:"2027-01-10",time:"10:00 PM",venue:"The Terrace"}] }}/>;
+    case "garden-party":      return <GardenParty couple={{ groomName:"Aiden", brideName:"Flora", weddingDate:"2027-04-12", weddingTime:"4:00 PM", venue:"The Blossom Garden", venueAddress:"Munnar, Kerala", mapLink:"https://maps.google.com", phone:"+919876543210", personalMessage:"In every garden, there is a season for everything. Our season of love has arrived.", events:[{name:"Garden Cocktails",date:"2027-04-12",time:"3:00 PM",venue:"The Rose Terrace"},{name:"Wedding Ceremony",date:"2027-04-12",time:"4:00 PM",venue:"The Blossom Garden"},{name:"Garden Dinner",date:"2027-04-12",time:"7:30 PM",venue:"Under the Stars"}] }}/>;
     case "ivory-manuscript":  return <IvoryManuscript couple={ivoryDemo}/>;
     case "neon-vows":         return <NeonVows couple={neonDemo}/>;
     case "velvet-haveli":     return <VelvetHaveli couple={haveliDemo}/>;

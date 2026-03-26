@@ -20,6 +20,9 @@ import RoyalDurbar from "@/components/templates/RoyalDurbar";
 import UrbanChic from "@/components/templates/UrbanChic";
 import TropicalParadise from "@/components/templates/TropicalParadise";
 import IndianClassic from "@/components/templates/IndianClassic";
+import BengaliClassic from "@/components/templates/BengaliClassic";
+import SilverScreen from "@/components/templates/SilverScreen";
+import GardenParty from "@/components/templates/GardenParty";
 
 interface InvitePageProps { params: Promise<{ slug: string }>; }
 
@@ -41,6 +44,9 @@ function renderTemplate(templateSlug: string, couple: CoupleDetails) {
     case "urban-chic":        return <UrbanChic couple={couple} />;
     case "tropical-paradise": return <TropicalParadise couple={couple} />;
     case "indian-classic":    return <IndianClassic couple={couple} />;
+    case "bengali-classic":   return <BengaliClassic couple={couple} />;
+    case "silver-screen":     return <SilverScreen couple={couple} />;
+    case "garden-party":      return <GardenParty couple={couple} />;
     default:                  return <MangalUtsav couple={couple} />;
   }
 }
