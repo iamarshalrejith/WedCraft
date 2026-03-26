@@ -6,7 +6,7 @@ export type Theme =
   | "Beach"
   | "Royal"
   | "Floral"
-  | "Destination";
+  | "Destination"
 
 export type Tier =
   | "Basic"
@@ -483,6 +483,60 @@ export const templates: Template[] = [
     previewBg: "from-slate-100 via-blue-50 to-cyan-50",
     colors: ["#B0C4DE", "#4682B4", "#F0F8FF"],
   },
+  {
+    id: "t021",
+    name: "Bengali Classic",
+    slug: "bengali-classic",
+    price: 899,
+    tier: "Standard",
+    religion: "Hindu",
+    themes: ["Traditional"],
+    description: "Traditional Bengali wedding with deep crimson, alpona dot patterns, shankha motifs, and Bengali script. Warm, festive and deeply cultural.",
+    features: ["Alpona border art", "Shankha motif", "Bengali script", "Countdown timer", "RSVP form", "WhatsApp share"],
+    rating: 4.8,
+    reviewCount: 44,
+    isFeatured: false,
+    isNew: true,
+    thumbnail: "/templates/bengali-classic.jpg",
+    previewBg: "from-red-900 via-rose-900 to-red-950",
+    colors: ["#FF6B8A", "#7B0D1E"],
+  },
+  {
+    id: "t022",
+    name: "Silver Screen",
+    slug: "silver-screen",
+    price: 1199,
+    tier: "Premium",
+    religion: "Universal",
+    themes: ["Modern"],
+    description: "Vintage 1950s Bollywood cinema poster aesthetic. Film strips, Abril Fatface headlines, gold on black, and a flickering film reel. Dramatic and unforgettable.",
+    features: ["Film strip borders", "Cinema poster style", "Programme layout", "Countdown timer", "RSVP form", "WhatsApp share"],
+    rating: 4.9,
+    reviewCount: 31,
+    isFeatured: true,
+    isNew: true,
+    thumbnail: "/templates/silver-screen.jpg",
+    previewBg: "from-yellow-950 via-stone-900 to-yellow-950",
+    colors: ["#D4AF37", "#F5E6C8"],
+  },
+  {
+    id: "t023",
+    name: "Garden Party",
+    slug: "garden-party",
+    price: 799,
+    tier: "Standard",
+    religion: "Universal",
+    themes: ["Modern", "Destination"],
+    description: "Soft watercolor florals, animated butterflies, falling petals, and Alex Brush cursive. A dreamy pastel garden wedding full of colour and joy.",
+    features: ["Butterfly animations", "Watercolor flowers", "Falling petals", "Countdown timer", "RSVP form", "WhatsApp share"],
+    rating: 4.8,
+    reviewCount: 52,
+    isFeatured: true,
+    isNew: true,
+    thumbnail: "/templates/garden-party.jpg",
+    previewBg: "from-pink-50 via-purple-50 to-rose-50",
+    colors: ["#9B59B6", "#F9A8D4"],
+  },
 ];
 
 export const allReligions: Religion[] = [
@@ -505,9 +559,10 @@ export const allThemes: Theme[] = [
 
 export const allTiers: Tier[] = [
   "Basic",
+  "Standard",
   "Premium",
   "Luxury",
-  "Standard",
+  
 ];
 
 export function getTemplateBySlug(slug: string): Template | undefined {
