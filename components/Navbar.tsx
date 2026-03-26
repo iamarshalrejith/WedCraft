@@ -10,7 +10,8 @@ import {
   ShieldCheck,
   ChevronDown,
   LayoutGrid,
-  LogIn, UserPlus
+  LogIn,
+  UserPlus,
 } from "lucide-react";
 import React, { useState, useRef, useEffect } from "react";
 import Image from "next/image";
@@ -28,9 +29,9 @@ const Navbar = () => {
   const [authTab, setAuthTab] = useState<"login" | "signup">("login");
 
   const openAuthModal = (tab: "login" | "signup") => {
-  setAuthTab(tab);
-  setAuthOpen(true);
-};
+    setAuthTab(tab);
+    setAuthOpen(true);
+  };
 
   const navItems = [
     { name: "Home", path: "/#hero" },
@@ -93,64 +94,58 @@ const Navbar = () => {
   return (
     <header className="fixed top-0 w-full h-24 md:h-28 lg:h-32 bg-gray-100 z-50">
       <div className="max-w-7xl mx-auto flex items-center justify-between px-6 relative h-full">
-        <Link href="/" className="flex items-center gap-2 cursor-pointer">
-          <Image
-            src="/images/logo.png"
-            alt="WedCraft Logo"
-            width={144}
-            height={40}
-            className="w-32 md:w-36"
-          />
-        </Link>
+        <Image
+          src="/images/logo.png"
+          alt="WedCraft Logo"
+          width={144}
+          height={40}
+          style={{ width: "120px", height: "auto" }}
+          loading="eager"
+        />
 
         <nav className="hidden md:flex lg:hidden justify-center max-w-md mx-auto">
-  <ul className="flex items-center gap-2 px-3 py-2 bg-white/30 backdrop-blur-md border border-white/40 shadow-sm rounded-full text-sm font-medium">
-   {navItems.slice(0, 3).map((item) => {
-  const sectionId = item.path.split("#")[1];
-  const isActive = pathname === "/" && activeSection === sectionId;
+          <ul className="flex items-center gap-2 px-3 py-2 bg-white/30 backdrop-blur-md border border-white/40 shadow-sm rounded-full text-sm font-medium">
+            {navItems.slice(0, 3).map((item) => {
+              const sectionId = item.path.split("#")[1];
+              const isActive = pathname === "/" && activeSection === sectionId;
 
-  return (
-    <li key={item.path}>
-      <Link
-        href={item.path}
-        className={`px-3 py-1.5 rounded-full transition ${
-          isActive
-            ? "bg-black text-white"
-            : "hover:bg-white/50"
-        }`}
-      >
-        {item.name}
-      </Link>
-    </li>
-  );
-})}
-  </ul>
-</nav>
+              return (
+                <li key={item.path}>
+                  <Link
+                    href={item.path}
+                    className={`px-3 py-1.5 rounded-full transition ${
+                      isActive ? "bg-black text-white" : "hover:bg-white/50"
+                    }`}
+                  >
+                    {item.name}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
 
-<nav className="hidden lg:flex xl:hidden flex-1 justify-center">
-  <ul className="flex items-center gap-2 px-3 py-2 bg-white/20 backdrop-blur-lg border border-white/30 rounded-full text-sm font-medium">
-    {navItems.slice(0, 4).map((item) => {
-      const sectionId = item.path.split("#")[1];
-      const isActive = pathname === "/" && activeSection === sectionId;
+        <nav className="hidden lg:flex xl:hidden flex-1 justify-center">
+          <ul className="flex items-center gap-2 px-3 py-2 bg-white/20 backdrop-blur-lg border border-white/30 rounded-full text-sm font-medium">
+            {navItems.slice(0, 4).map((item) => {
+              const sectionId = item.path.split("#")[1];
+              const isActive = pathname === "/" && activeSection === sectionId;
 
-      return (
-        <li key={item.path}>
-          <Link
-            href={item.path}
-            className={`px-3 py-1.5 rounded-full transition ${
-              isActive
-                ? "bg-black text-white"
-                : "hover:bg-white/40"
-            }`}
-          >
-            {item.name}
-          </Link>
-        </li>
-      );
-    })}
-  </ul>
-</nav>
-        
+              return (
+                <li key={item.path}>
+                  <Link
+                    href={item.path}
+                    className={`px-3 py-1.5 rounded-full transition ${
+                      isActive ? "bg-black text-white" : "hover:bg-white/40"
+                    }`}
+                  >
+                    {item.name}
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </nav>
 
         <nav className="hidden xl:flex flex-1 justify-center">
           <ul className="flex items-center gap-2 md:gap-3 px-3 md:px-4 py-1.5 md:py-2 bg-white/20 backdrop-blur-xl border border-white/30 rounded-full shadow-lg text-gray-700 text-sm md:text-base font-medium">
@@ -177,33 +172,33 @@ const Navbar = () => {
 
         <div className="flex items-center gap-3">
           {/* Laptop (lg) icon actions */}
-{!user && (
-  <div className="hidden lg:flex xl:hidden items-center gap-2">
-    <button
-      onClick={() => openAuthModal("login")}
-      className="p-2 rounded-lg hover:bg-gray-200 transition-all duration-200 hover:scale-105 active:scale-95"
-      title="Login"
-    >
-      <LogIn size={18} />
-    </button>
+          {!user && (
+            <div className="hidden lg:flex xl:hidden items-center gap-2">
+              <button
+                onClick={() => openAuthModal("login")}
+                className="p-2 rounded-lg hover:bg-gray-200 transition-all duration-200 hover:scale-105 active:scale-95"
+                title="Login"
+              >
+                <LogIn size={18} />
+              </button>
 
-    <button
-      onClick={() => openAuthModal("signup")}
-      className="p-2 rounded-lg hover:bg-gray-200 transition-all duration-200 hover:scale-105 active:scale-95"
-      title="Sign up"
-    >
-      <UserPlus size={18} />
-    </button>
+              <button
+                onClick={() => openAuthModal("signup")}
+                className="p-2 rounded-lg hover:bg-gray-200 transition-all duration-200 hover:scale-105 active:scale-95"
+                title="Sign up"
+              >
+                <UserPlus size={18} />
+              </button>
 
-    <Link
-      href="/catalog"
-      className="p-2 rounded-lg bg-black text-white hover:bg-gray-800 transition-all duration-200 hover:scale-105 active:scale-95"
-      title="Browse templates"
-    >
-      <LayoutGrid size={18} />
-    </Link>
-  </div>
-)}
+              <Link
+                href="/catalog"
+                className="p-2 rounded-lg bg-black text-white hover:bg-gray-800 transition-all duration-200 hover:scale-105 active:scale-95"
+                title="Browse templates"
+              >
+                <LayoutGrid size={18} />
+              </Link>
+            </div>
+          )}
           {loading ? (
             <div className="w-8 h-8 rounded-full bg-gray-200 animate-pulse" />
           ) : user ? (
@@ -265,7 +260,6 @@ const Navbar = () => {
                   >
                     <LogOut size={14} /> Sign Out
                   </button>
-                  
                 </div>
               )}
             </div>
@@ -326,18 +320,16 @@ const Navbar = () => {
               );
             })}
 
-          
-              <li>
-                <Link
-                  href="/catalog"
-                  onClick={() => setMenuOpen(false)}
-                  className="flex items-center gap-2 w-full bg-black text-white px-4 py-2.5 rounded-lg text-sm font-medium hover:bg-gray-800 transition-colors"
-                >
-                  <LayoutGrid size={16} />
-                  Browse Templates
-                </Link>
-              </li>
-            
+            <li>
+              <Link
+                href="/catalog"
+                onClick={() => setMenuOpen(false)}
+                className="flex items-center gap-2 w-full bg-black text-white px-4 py-2.5 rounded-lg text-sm font-medium hover:bg-gray-800 transition-colors"
+              >
+                <LayoutGrid size={16} />
+                Browse Templates
+              </Link>
+            </li>
 
             <div className="flex flex-col gap-3 pt-4 border-t">
               {user ? (
@@ -392,7 +384,6 @@ const Navbar = () => {
                   >
                     Sign Up
                   </Link>
-                  
                 </div>
               )}
             </div>
@@ -400,14 +391,12 @@ const Navbar = () => {
         </div>
       )}
       <AuthModal
-  isOpen={authOpen}
-  onClose={() => setAuthOpen(false)}
-  onSuccess={() => setAuthOpen(false)}
-  defaultTab={authTab}
-  
-/>
+        isOpen={authOpen}
+        onClose={() => setAuthOpen(false)}
+        onSuccess={() => setAuthOpen(false)}
+        defaultTab={authTab}
+      />
     </header>
-    
   );
 };
 
