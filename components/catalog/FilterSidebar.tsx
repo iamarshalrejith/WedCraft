@@ -104,13 +104,15 @@ export const FilterSidebar = ({
           {allTiers.map((tier) => (
             <CheckItem
               key={tier}
-              label={
-                tier === "Basic"
-                  ? "Basic — up to ₹499"
-                  : tier === "Premium"
-                    ? "Premium — ₹799–₹999"
-                    : "Luxury — ₹1999+"
-              }
+             label={
+  tier === "Basic"
+    ? "Basic — up to ₹499"
+    : tier === "Standard"
+      ? "Standard — ₹499–₹799"
+      : tier === "Premium"
+        ? "Premium — ₹799–₹999"
+        : "Luxury — ₹1999+"
+}
               checked={filters.tiers.includes(tier)}
               onToggle={() => toggle("tiers", tier, filters.tiers)}
             />

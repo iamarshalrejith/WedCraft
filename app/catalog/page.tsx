@@ -70,7 +70,7 @@ export default function CatalogPage() {
   }, [filters, sortBy]);
 
   return (
-    <div className="max-w-7xl mx-auto px-4 md:px-8 py-8">
+    <div className="max-w-7xl mx-auto px-4 md:px-8 py-8 md:py-16 lg:py-20">
       {/* Page Header */}
       <div className="mb-8">
         <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-2">
@@ -139,7 +139,7 @@ export default function CatalogPage() {
       <div className="flex gap-8">
         {/* Desktop Sidebar */}
         <div className="hidden md:block w-56 shrink-0">
-          <div className="sticky top-36">
+          <div >
             <FilterSidebar
               filters={filters}
               onChange={setFilters}
