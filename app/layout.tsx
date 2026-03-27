@@ -31,7 +31,7 @@ export const metadata: Metadata = {
     siteName: "WedCraft",
     images: [
       {
-        url: "/og-default.png",
+        url: `${baseUrl}/og-default.png`,
         width: 1200,
         height: 630,
         alt: "WedCraft Invitation",
