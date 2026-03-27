@@ -23,6 +23,10 @@ import IndianClassic from "@/components/templates/IndianClassic";
 import BengaliClassic from "@/components/templates/BengaliClassic";
 import SilverScreen from "@/components/templates/SilverScreen";
 import GardenParty from "@/components/templates/GardenParty";
+import IvoryManuscript from "@/components/templates/IvoryManuscript";
+import NeonVows from "@/components/templates/NeonVows";
+import VelvetHaveli from "@/components/templates/VelvetHaveli";
+import NordicFrost from "@/components/templates/NordicFrost";
 
 interface InvitePageProps { params: Promise<{ slug: string }>; }
 
@@ -47,6 +51,10 @@ function renderTemplate(templateSlug: string, couple: CoupleDetails) {
     case "bengali-classic":   return <BengaliClassic couple={couple} />;
     case "silver-screen":     return <SilverScreen couple={couple} />;
     case "garden-party":      return <GardenParty couple={couple} />;
+    case "ivory-manuscript":  return <IvoryManuscript couple={couple} />;
+    case "neon-vows":         return <NeonVows couple={couple} />;
+    case "velvet-haveli":     return <VelvetHaveli couple={couple} />;
+    case "nordic-frost":      return <NordicFrost couple={couple} />;
     default:                  return <MangalUtsav couple={couple} />;
   }
 }
@@ -59,7 +67,19 @@ export default function InvitePage({ params }: InvitePageProps) {
   useEffect(() => {
     fetch(`/api/save-invite?slug=${slug}`)
       .then((r) => r.json())
-      .then((data) => { if (data.id) setInvite(data); else setInvite(null); })
+      .then((data) => {
+        if (data.id) {
+          setInvite(data);
+          // Track this view (fire and forget)
+          fetch("/api/analytics", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ slug }),
+          }).catch(() => {});
+        } else {
+          setInvite(null);
+        }
+      })
       .catch(() => setInvite(null))
       .finally(() => setLoading(false));
   }, [slug]);

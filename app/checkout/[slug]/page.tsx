@@ -7,6 +7,7 @@ import { notFound } from "next/navigation";
 import { getTemplateBySlug } from "@/data/templates";
 import { WeddingEvent } from "@/types/invite";
 import { useAuth } from "@/context/AuthContext";
+import AuthModal from "@/components/AuthModal";
 import {
   ArrowLeft,
   Plus,
@@ -79,6 +80,7 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
   const [step, setStep] = useState<1 | 2>(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
   // Coupon state
   const [couponCode, setCouponCode] = useState("");
@@ -228,7 +230,22 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
           const saveData = await saveRes.json();
           if (!saveRes.ok) throw new Error("Failed to create invite");
 
-          // 6. Redirect to dashboard
+          // 6. Send email notification (fire and forget — don't block redirect)
+          const inviteUrl = `${window.location.origin}/invite/${saveData.slug}`;
+          fetch("/api/email", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              type: "purchase",
+              groomName: form.groomName,
+              brideName: form.brideName,
+              inviteUrl,
+              buyerEmail: user?.email ?? null,
+              templateName: template.name,
+            }),
+          }).catch(() => {}); // silently ignore email errors
+
+          // 7. Redirect to dashboard
           router.push(`/dashboard?slug=${saveData.slug}`);
         },
         modal: {
@@ -455,12 +472,22 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
                 {couponSuccess && <p className="text-xs text-emerald-600 mt-1.5 font-medium">✓ {couponSuccess}</p>}
               </div>
 
+              <AuthModal
+                isOpen={showAuthModal}
+                onClose={() => setShowAuthModal(false)}
+                onSuccess={() => { setShowAuthModal(false); setStep(2); }}
+                redirectMessage="Sign in to complete your purchase"
+              />
+
               <button
-                onClick={() => setStep(2)}
+                onClick={() => {
+                  if (!user) { setShowAuthModal(true); return; }
+                  setStep(2);
+                }}
                 disabled={!isStep1Valid}
                 className="w-full py-3 bg-black text-white rounded-xl font-semibold text-sm disabled:opacity-40 disabled:cursor-not-allowed hover:bg-gray-800 transition-colors"
               >
-                Continue to Payment →
+                {user ? "Continue to Payment →" : "Sign In to Continue →"}
               </button>
             </div>
           )}
