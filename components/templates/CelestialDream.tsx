@@ -99,7 +99,7 @@ export default function CelestialDream({ couple }: CelestialDreamProps) {
 
         {/* Constellations */}
         <Constellation x={20} y={80} opacity={0.12}/>
-        <Constellation x="60%" as="string" y={200} opacity={0.10}/>
+        <Constellation x={60} y={200} opacity={0.10}/>
 
         {/* ── SECTION 1 — Hero ─── */}
         <section style={{ position:"relative", minHeight:"100vh", display:"flex", flexDirection:"column", alignItems:"center", justifyContent:"center", padding:"80px 24px 100px", textAlign:"center" }}>
