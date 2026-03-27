@@ -45,23 +45,28 @@ const Navbar = () => {
     const sections = ["hero", "featured", "how-it-works", "pricing", "contact"];
 
     const handleScroll = () => {
-      let current = "hero";
-      let minDistance = Number.POSITIVE_INFINITY;
+  if (window.scrollY < 200) {
+    setActiveSection("hero");
+    return;
+  }
 
-      sections.forEach((id) => {
-        const el = document.getElementById(id);
-        if (el) {
-          const rect = el.getBoundingClientRect();
-          const distance = Math.abs(rect.top - 140);
-          if (distance < minDistance) {
-            minDistance = distance;
-            current = id;
-          }
-        }
-      });
+  let current = "hero";
+  let minDistance = Number.POSITIVE_INFINITY;
 
-      setActiveSection(current);
-    };
+  sections.forEach((id) => {
+    const el = document.getElementById(id);
+    if (el) {
+      const rect = el.getBoundingClientRect();
+      const distance = Math.abs(rect.top - 140);
+      if (distance < minDistance) {
+        minDistance = distance;
+        current = id;
+      }
+    }
+  });
+
+  setActiveSection(current);
+};
 
     window.addEventListener("scroll", handleScroll);
     handleScroll();
@@ -81,6 +86,14 @@ const Navbar = () => {
     document.addEventListener("mousedown", handler);
     return () => document.removeEventListener("mousedown", handler);
   }, []);
+
+
+  useEffect(() => {
+  if (pathname === "/") {
+   window.scrollTo({ top: 0, behavior: "auto" });
+  }
+}, [pathname]);
+
 
   const avatarInitials = user?.name
     ? user.name

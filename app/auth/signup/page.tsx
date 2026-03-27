@@ -54,7 +54,7 @@ export default function SignupPage() {
     "w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-black/10 focus:border-gray-400 transition-colors placeholder:text-gray-400";
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center px-4">
+    <div className="pt-14 min-h-[80vh] flex items-center justify-center px-4">
       <div className="w-full max-w-md">
         {/* Header */}
         <div className="text-center mb-8">
