@@ -27,6 +27,7 @@ const Hero = () => {
           duration={0.8}
           className="text-4xl md:text-3xl lg:text-6xl font-bold leading-tight text-black tracking-tight"
           to={loaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
+          onLetterAnimationComplete={() => {}}
         />
 
         <button className="hidden md:block lg:hidden mt-10 px-8 py-4 bg-black text-white rounded-xl hover:bg-gray-900 transition-all duration-300 shadow-lg hover:shadow-xl">
