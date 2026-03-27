@@ -22,12 +22,28 @@ const plans = [
     ctaStyle: "border border-gray-300 bg-white text-gray-900 hover:bg-gray-50",
   },
   {
+    tier: "Standard",
+    price: 799,
+    badge: null,
+    description: "More flexibility and personalization for your invite.",
+    features: [
+      "Everything in Basic",
+      "2–3 templates to choose from",
+      "Basic animations",
+      "Photo section (limited)",
+      "Custom colors",
+      "Active for 9 months",
+    ],
+    cta: "Choose Standard",
+    ctaStyle: "border border-gray-300 bg-white text-gray-900 hover:bg-gray-50",
+  },
+  {
     tier: "Premium",
     price: 999,
     badge: "Most Popular",
     description: "Animations, gallery, and more for your special day.",
     features: [
-      "Everything in Basic",
+      "Everything in Standard",
       "Animated entrance & transitions",
       "Couple photo gallery",
       "Countdown timer",
@@ -73,7 +89,7 @@ export const Pricing = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-5xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
           {plans.map((plan, i) => (
             <motion.div
               key={plan.tier}
