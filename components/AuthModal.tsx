@@ -12,6 +12,7 @@ interface AuthModalProps {
   onSuccess: () => void;
   /** Which tab to show first */
   defaultTab?: "login" | "signup";
+   redirectMessage?: string;
 }
 
 const inputCls =
@@ -22,6 +23,7 @@ export default function AuthModal({
   onClose,
   onSuccess,
   defaultTab = "login",
+  redirectMessage,
 }: AuthModalProps) {
   const { refresh } = useAuth();
   const [tab, setTab] = useState<"login" | "signup">(defaultTab);
@@ -134,9 +136,11 @@ export default function AuthModal({
             {tab === "login" ? "Sign in to continue" : "Create your account"}
           </h2>
           <p className="text-sm text-gray-500 mt-1">
-            {tab === "login"
-              ? "Your purchased invitations will be saved to your dashboard."
-              : "Join WedCraft and save all your invitations in one place."}
+            {redirectMessage
+  ? redirectMessage
+  : tab === "login"
+  ? "Your purchased invitations will be saved to your dashboard."
+  : "Join WedCraft and save all your invitations in one place."}
           </p>
         </div>
 
