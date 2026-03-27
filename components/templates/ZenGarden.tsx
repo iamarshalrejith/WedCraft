@@ -132,11 +132,11 @@ export default function ZenGarden({ couple }: ZenGardenProps) {
           {couple.personalMessage && (
             <section style={{ padding:"20px 0 48px" }}>
               <Reveal>
-                <BrushStroke width="100%" color="#1A1A1A" opacity={0.06} y={-2}/>
+                <BrushStroke width={100} color="#1A1A1A" opacity={0.06} y={-2}/>
                 <p style={{ fontFamily:"'Noto Serif JP',serif", fontWeight:300, fontSize:18, color:"#333", lineHeight:2, padding:"24px 0", fontStyle:"italic" }}>
                   &ldquo;{couple.personalMessage}&rdquo;
                 </p>
-                <BrushStroke width="100%" color="#1A1A1A" opacity={0.06} y={2}/>
+                <BrushStroke width={100} color="#1A1A1A" opacity={0.06} y={-2}/>
               </Reveal>
             </section>
           )}
@@ -193,7 +193,7 @@ export default function ZenGarden({ couple }: ZenGardenProps) {
           {/* ── SECTION 6 — RSVP ─── */}
           <section style={{ padding:"20px 0 80px" }}>
             <Reveal>
-              <BrushStroke width="100%" color="#1A1A1A" opacity={0.06}/>
+              <BrushStroke width={100} color="#1A1A1A" opacity={0.06}/>
               <div style={{ padding:"28px 0" }}>
                 <p style={{ fontFamily:"'Noto Sans JP',sans-serif", fontWeight:300, fontSize:10, letterSpacing:"0.4em", color:"#999", textTransform:"uppercase" as const, textAlign:"center", marginBottom:8 }}>出欠 — RSVP</p>
                 <p style={{ fontFamily:"'Noto Serif JP',serif", fontWeight:300, fontSize:18, color:"#333", textAlign:"center", marginBottom:28 }}>ご出席をお知らせください</p>
@@ -207,7 +207,7 @@ export default function ZenGarden({ couple }: ZenGardenProps) {
                   </div>
                 )}
               </div>
-              <BrushStroke width="100%" color="#1A1A1A" opacity={0.06}/>
+              <BrushStroke width={100} color="#1A1A1A" opacity={0.06}/>
               <div style={{ textAlign:"center", marginTop:24 }}>
                 <div style={{ display:"inline-flex", alignItems:"center", gap:12 }}>
                   <RedSeal text="愛"/>
