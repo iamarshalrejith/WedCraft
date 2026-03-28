@@ -1,91 +1,79 @@
 "use client";
 
-import Image from "next/image";
-import SplitText from "@/components/SplitText";
-import { motion } from "framer-motion";
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 
 const Hero = () => {
-  const [loaded, setLoaded] = useState(false);
+  const spotlightRef = useRef<HTMLDivElement>(null);
+  const router = useRouter();
+  const [visible, setVisible] = useState(false);
+
+  // Spotlight effect
+  useEffect(() => {
+    const handleMove = (e: MouseEvent) => {
+      if (!spotlightRef.current) return;
+      spotlightRef.current.style.background = `
+        radial-gradient(
+          600px at ${e.clientX}px ${e.clientY}px,
+          rgba(0,0,0,0.08),
+          transparent 80%
+        )
+      `;
+    };
+
+    window.addEventListener("mousemove", handleMove);
+    return () => window.removeEventListener("mousemove", handleMove);
+  }, []);
+
+  // Trigger animation
+  useEffect(() => {
+    setVisible(true);
+  }, []);
+
   return (
-    <section
-      id="hero"
-      className="relative w-full flex flex-col md:flex-row items-center justify-between px-6 md:px-12 py-8 md:py-16  overflow-hidden "
-    >
-      {/* subtle background decoration */}
-      <div className="absolute -top-32 -left-32 w-72 h-72 bg-gray-100 rounded-full blur-3xl opacity-40"></div>
-      <div className="absolute -bottom-32 -right-32 w-72 h-72 bg-gray-100 rounded-full blur-3xl opacity-40"></div>
+<section className="relative w-full min-h-[75vh] sm:min-h-[85vh] flex items-center justify-center pt-20 sm:pt-24 pb-6  text-black overflow-hidden">      <div
+        ref={spotlightRef}
+        className="pointer-events-none absolute inset-0 transition duration-200"
+      />
 
       {/* Content */}
-      <div className="relative w-full md:w-1/2 max-w-xl order-2 md:order-1 mt-6 md:mt-0 flex flex-col items-center md:items-start text-center md:text-left mx-auto">
-        <SplitText
-          text={"Your Wedding Invite, But Make It a Website."}
-          tag="h1"
-          splitType="chars"
-          useScrollTrigger={false}
-          delay={20}
-          duration={0.8}
-          className="text-4xl md:text-3xl lg:text-6xl font-bold leading-tight text-black tracking-tight"
-          to={loaded ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }}
-          onLetterAnimationComplete={() => {}}
-        />
-
-        <button className="hidden md:block lg:hidden mt-10 px-8 py-4 bg-black text-white rounded-xl hover:bg-gray-900 transition-all duration-300 shadow-lg hover:shadow-xl">
-          Explore Templates
-        </button>
-      </div>
-
-      {/* Image */}
-      <div className="relative w-full md:w-1/2 flex items-center justify-center order-1 md:order-2">
-        {/* Mobile Image */}
-
-        <motion.div
-          initial={false} 
-          animate={
-            loaded
-              ? { opacity: 1, y: 0, scale: 1 }
-              : { opacity: 0, y: 40, scale: 0.98 }
-          }
-          transition={{ duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="md:hidden"
+      <div className="relative z-10 max-w-5xl px-6 text-center">
+        {/* Heading */}
+        <h1
+          className={`text-[36px]  sm:text-5xl md:text-7xl font-semibold tracking-tight leading-[1.1] transition-all duration-700 ${
+            visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+          }`}
         >
-          <Image
-            src="/images/mobhero5.png"
-            alt="Wedding invitation website preview"
-            width={800}
-            height={800}
-            className="w-full max-w-lg object-contain"
-            priority
-          onLoad={() => {
-  if (!loaded) setLoaded(true);
-}}
-          />
-        </motion.div>
+          Your Wedding Invite.
+          <br />
+          <span className="text-neutral-600 block">Made Interactive.</span>
+        </h1>
 
-        {/* Desktop Image */}
-        <div className="relative hidden md:block w-full h-[70vh]">
-          <motion.div
-            initial={false}
-            animate={
-              loaded
-                ? { opacity: 1, x: 0, scale: 1 }
-                : { opacity: 0, x: 60, scale: 0.98 }
-            }
-            transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}
-            className="relative w-full h-full"
-          >
-            <Image
-              src="/images/hero4.png"
-              alt="Wedding invitation website preview"
-              fill
-              sizes="(max-width: 768px) 100vw, 50vw"
-              className="object-contain"
-              priority
-              onLoad={() => {
-  if (!loaded) setLoaded(true);
-}}
-            />
-          </motion.div>
+        {/* Subtext */}
+       <p
+  className={`mt-6 sm:mt-8 px-15 sm:px-4 text-xs sm:text-lg text-neutral-700 max-w-md mx-auto transition-all duration-700 delay-150 ${
+    visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+  }`}
+>
+  Not a card. Not a PDF. An interactive experience your guests will
+  remember.
+</p>
+
+        {/* CTA */}
+        <div
+          className={`mt-10 flex flex-col items-center gap-3 transition-all duration-700 delay-300 ${
+            visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6"
+          }`}
+        >
+          <MagneticButton
+            text="Open a Sample Invite"
+            primary
+            onClick={() => router.push("/preview/celestial-dream")}
+          />
+
+          <p className="text-sm text-neutral-500">
+            Experience it like your guests will
+          </p>
         </div>
       </div>
     </section>
@@ -93,3 +81,48 @@ const Hero = () => {
 };
 
 export default Hero;
+
+/* ---------------- BUTTON ---------------- */
+
+const MagneticButton = ({
+  text,
+  primary = false,
+  onClick,
+}: {
+  text: string;
+  primary?: boolean;
+  onClick?: () => void;
+}) => {
+  const ref = useRef<HTMLButtonElement | null>(null);
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLButtonElement>) => {
+    if (!ref.current) return;
+
+    const rect = ref.current.getBoundingClientRect();
+    const x = e.clientX - rect.left - rect.width / 2;
+    const y = e.clientY - rect.top - rect.height / 2;
+
+    ref.current.style.transform = `translate(${x * 0.2}px, ${y * 0.2}px)`;
+  };
+
+  const handleLeave = () => {
+    if (!ref.current) return;
+    ref.current.style.transform = "translate(0px, 0px)";
+  };
+
+  return (
+    <button
+      ref={ref}
+      onClick={onClick}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleLeave}
+      className={`px-5 py-2.5 sm:px-8 sm:py-4 text-sm sm:text-base rounded-full transition-transform duration-200 ${
+        primary
+          ? "bg-black text-white hover:scale-[1.03] active:scale-[0.97]"
+          : "border border-black hover:bg-black hover:text-white"
+      }`}
+    >
+      {text}
+    </button>
+  );
+};
