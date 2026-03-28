@@ -7,18 +7,16 @@ import React from "react";
 
 const Footer = () => {
   const navItems = [
-    { name: "Home", path: "/" },
-    { name: "Catalog", path: "/catalog" },
-    { name: "How it Works", path: "/how-it-works" },
-    { name: "Pricing", path: "/pricing" },
-    { name: "Contact", path: "/contact" },
-  ];
+  { name: "Home", path: "/#hero" },
+  { name: "Catalog", path: "/#featured" },
+  { name: "How it Works", path: "/#how-it-works" },
+  { name: "Pricing", path: "/#pricing" },
+  { name: "Contact", path: "/#contact" },
+];
 
   const socialLinks = [
     { icon: Instagram, href: "#" },
-    { icon: Facebook, href: "#" },
-    { icon: Twitter, href: "#" },
-    { icon: Mail, href: "mailto:hello@wedcraft.in" },
+    { icon: Mail, href: "mailto:wedcraft@gmail.com" },
   ];
 
   return (

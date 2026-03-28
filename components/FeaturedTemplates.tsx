@@ -38,7 +38,11 @@ export const FeaturedTemplates = () => {
       <div className="mt-8 flex justify-center md:hidden">
         <Link
           href="/catalog"
-          className="flex items-center gap-2 border border-gray-300 px-6 py-2.5 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors"
+          className="flex items-center gap-2 
+             bg-gray-900 text-white 
+             px-6 py-3 rounded-xl text-sm font-medium 
+             shadow-sm hover:bg-black 
+             transition-colors"
         >
           Browse all templates <ArrowRight size={16} />
         </Link>

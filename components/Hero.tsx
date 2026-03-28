@@ -50,7 +50,7 @@ const Hero = () => {
           className="md:hidden"
         >
           <Image
-            src="/images/mobhero2.png"
+            src="/images/mobhero5.png"
             alt="Wedding invitation website preview"
             width={800}
             height={800}

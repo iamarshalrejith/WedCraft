@@ -17,7 +17,9 @@ export interface StoredUser {
 }
 
 export function hashPassword(password: string): string {
-  return Buffer.from(password + (process.env.AUTH_SECRET || "wedcraft_secret")).toString("base64");
+  return Buffer.from(
+    password + (process.env.AUTH_SECRET || "wedcraft_secret")
+  ).toString("base64");
 }
 
 export function verifyPassword(password: string, hash: string): boolean {
@@ -26,13 +28,17 @@ export function verifyPassword(password: string, hash: string): boolean {
 
 export async function findUserByEmail(email: string): Promise<StoredUser | null> {
   const db = await getDb();
-  const user = await db.collection<StoredUser>("users").findOne({ email }, { projection: { _id: 0 } });
+  const user = await db
+    .collection<StoredUser>("users")
+    .findOne({ email }, { projection: { _id: 0 } });
   return user || null;
 }
 
 export async function findUserById(id: string): Promise<StoredUser | null> {
   const db = await getDb();
-  const user = await db.collection<StoredUser>("users").findOne({ id }, { projection: { _id: 0 } });
+  const user = await db
+    .collection<StoredUser>("users")
+    .findOne({ id }, { projection: { _id: 0 } });
   return user || null;
 }
 
@@ -47,15 +53,22 @@ export async function updateUser(id: string, update: Partial<StoredUser>): Promi
 }
 
 export async function ensureAdminExists(): Promise<void> {
-  const existing = await findUserByEmail("admin@wedcraft.in");
+  const adminEmail    = process.env.ADMIN_EMAIL;
+  const adminPassword = process.env.ADMIN_PASSWORD;
+
+  if (!adminEmail || !adminPassword) {
+    return;
+  }
+
+  const existing = await findUserByEmail(adminEmail);
   if (!existing) {
     await createUser({
       id: "admin-001",
-      email: "admin@wedcraft.in",
+      email: adminEmail,
       name: "WedCraft Admin",
       provider: "email",
       role: "admin",
-      passwordHash: hashPassword("admin123"),
+      passwordHash: hashPassword(adminPassword),
       createdAt: new Date().toISOString(),
       purchases: [],
     });
@@ -69,9 +82,17 @@ export function encodeSession(user: SessionUser): string {
 
 export function decodeSession(token: string): SessionUser | null {
   try {
-    const payload = JSON.parse(Buffer.from(token, "base64url").toString("utf-8"));
+    const payload = JSON.parse(
+      Buffer.from(token, "base64url").toString("utf-8")
+    );
     if (payload.exp < Date.now()) return null;
-    return { id: payload.id, email: payload.email, name: payload.name, avatarUrl: payload.avatarUrl, role: payload.role };
+    return {
+      id: payload.id,
+      email: payload.email,
+      name: payload.name,
+      avatarUrl: payload.avatarUrl,
+      role: payload.role,
+    };
   } catch {
     return null;
   }

@@ -38,8 +38,8 @@ export default function ContactPage() {
               <Mail size={18} className="text-blue-600" />
             </div>
             <h3 className="font-semibold text-gray-900 mb-1">Email</h3>
-            <a href="mailto:hello@wedcraft.in" className="text-sm text-blue-600 hover:underline">
-              hello@wedcraft.in
+            <a href="mailto:wedcraft@gmail.com" className="text-sm text-blue-600 hover:underline">
+              wedcraft@gmail.com
             </a>
             <p className="text-xs text-gray-400 mt-1">We reply within 24 hours</p>
           </div>

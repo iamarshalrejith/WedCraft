@@ -34,39 +34,39 @@ const Navbar = () => {
   };
 
   const navItems = [
-    { name: "Home", path: "/#hero" },
-    { name: "How it Works", path: "/#how-it-works" },
-    { name: "Catalog", path: "/#featured" },
-    { name: "Pricing", path: "/#pricing" },
-    { name: "Contact", path: "/#contact" },
+    { name: "Home", path: "/", section: "hero" },
+    { name: "How it Works", path: "/#how-it-works", section: "how-it-works" },
+    { name: "Catalog", path: "/#featured", section: "featured" },
+    { name: "Pricing", path: "/#pricing", section: "pricing" },
+    { name: "Contact", path: "/#contact", section: "contact" },
   ];
 
   useEffect(() => {
     const sections = ["hero", "featured", "how-it-works", "pricing", "contact"];
 
     const handleScroll = () => {
-  if (window.scrollY < 200) {
-    setActiveSection("hero");
-    return;
-  }
-
-  let current = "hero";
-  let minDistance = Number.POSITIVE_INFINITY;
-
-  sections.forEach((id) => {
-    const el = document.getElementById(id);
-    if (el) {
-      const rect = el.getBoundingClientRect();
-      const distance = Math.abs(rect.top - 140);
-      if (distance < minDistance) {
-        minDistance = distance;
-        current = id;
+      if (window.scrollY < 200) {
+        setActiveSection("hero");
+        return;
       }
-    }
-  });
 
-  setActiveSection(current);
-};
+      let current = "hero";
+      let minDistance = Number.POSITIVE_INFINITY;
+
+      sections.forEach((id) => {
+        const el = document.getElementById(id);
+        if (el) {
+          const rect = el.getBoundingClientRect();
+          const distance = Math.abs(rect.top - 140);
+          if (distance < minDistance) {
+            minDistance = distance;
+            current = id;
+          }
+        }
+      });
+
+      setActiveSection(current);
+    };
 
     window.addEventListener("scroll", handleScroll);
     handleScroll();
@@ -87,13 +87,12 @@ const Navbar = () => {
     return () => document.removeEventListener("mousedown", handler);
   }, []);
 
-
   useEffect(() => {
-  if (pathname === "/") {
-   window.scrollTo({ top: 0, behavior: "auto" });
-  }
-}, [pathname]);
-
+    if (pathname === "/") {
+      window.scrollTo({ top: 0, behavior: "auto" });
+      setActiveSection("hero");
+    }
+  }, [pathname]);
 
   const avatarInitials = user?.name
     ? user.name
@@ -107,20 +106,31 @@ const Navbar = () => {
   return (
     <header className="fixed top-0 w-full h-24 md:h-28 lg:h-32 bg-gray-100 z-50">
       <div className="max-w-7xl mx-auto flex items-center justify-between px-6 relative h-full">
-        <Image
-          src="/images/logo.png"
-          alt="WedCraft Logo"
-          width={144}
-          height={40}
-          style={{ width: "120px", height: "auto" }}
-          loading="eager"
-        />
+        <Link
+          href="/"
+          scroll={false}
+          onClick={() => {
+            window.scrollTo({ top: 0, behavior: "smooth" });
+            setActiveSection("hero");
+          }}
+        >
+          <Image
+            src="/images/logo.png"
+            alt="WedCraft Logo"
+            width={144}
+            height={40}
+            style={{ width: "120px", height: "auto", cursor: "pointer" }}
+            loading="eager"
+          />
+        </Link>
 
         <nav className="hidden md:flex lg:hidden justify-center max-w-md mx-auto">
           <ul className="flex items-center gap-2 px-3 py-2 bg-white/30 backdrop-blur-md border border-white/40 shadow-sm rounded-full text-sm font-medium">
             {navItems.slice(0, 3).map((item) => {
-              const sectionId = item.path.split("#")[1];
-              const isActive = pathname === "/" && activeSection === sectionId;
+              const sectionId = item.section;
+              const isActive =
+                (pathname === "/" && activeSection === sectionId) ||
+                (pathname !== "/" && item.path === pathname);
 
               return (
                 <li key={item.path}>
@@ -141,8 +151,10 @@ const Navbar = () => {
         <nav className="hidden lg:flex xl:hidden flex-1 justify-center">
           <ul className="flex items-center gap-2 px-3 py-2 bg-white/20 backdrop-blur-lg border border-white/30 rounded-full text-sm font-medium">
             {navItems.slice(0, 4).map((item) => {
-              const sectionId = item.path.split("#")[1];
-              const isActive = pathname === "/" && activeSection === sectionId;
+              const sectionId = item.section;
+              const isActive =
+                (pathname === "/" && activeSection === sectionId) ||
+                (pathname !== "/" && item.path === pathname);
 
               return (
                 <li key={item.path}>
@@ -163,8 +175,10 @@ const Navbar = () => {
         <nav className="hidden xl:flex flex-1 justify-center">
           <ul className="flex items-center gap-2 md:gap-3 px-3 md:px-4 py-1.5 md:py-2 bg-white/20 backdrop-blur-xl border border-white/30 rounded-full shadow-lg text-gray-700 text-sm md:text-base font-medium">
             {navItems.map((item) => {
-              const sectionId = item.path.split("#")[1];
-              const isActive = pathname === "/" && activeSection === sectionId;
+              const sectionId = item.section;
+              const isActive =
+                (pathname === "/" && activeSection === sectionId) ||
+                (pathname !== "/" && item.path === pathname);
               return (
                 <li key={item.path}>
                   <Link
@@ -314,8 +328,10 @@ const Navbar = () => {
         <div className="lg:hidden px-6 pb-6">
           <ul className="flex flex-col gap-4 bg-white shadow-lg rounded-xl p-6">
             {navItems.map((item) => {
-              const sectionId = item.path.split("#")[1];
-              const isActive = pathname === "/" && activeSection === sectionId;
+              const sectionId = item.section;
+              const isActive =
+                (pathname === "/" && activeSection === sectionId) ||
+                (pathname !== "/" && item.path === pathname);
               return (
                 <li key={item.path}>
                   <Link

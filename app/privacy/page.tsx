@@ -99,7 +99,7 @@ export default function PrivacyPage() {
           <p>If you have any questions about this Privacy Policy or your data, please contact us:</p>
           <div className="mt-3 p-4 bg-gray-50 rounded-xl text-sm">
             <p className="font-medium text-gray-900">WedCraft</p>
-            <p>Email: <a href="mailto:hello@wedcraft.in" className="text-blue-600 hover:underline">hello@wedcraft.in</a></p>
+            <p>Email: <a href="mailto:wedcraft@gmail.com" className="text-blue-600 hover:underline">wedcraft@gmail.com</a></p>
           </div>
         </Section>
       </div>
