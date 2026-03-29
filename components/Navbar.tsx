@@ -38,7 +38,7 @@ const Navbar = () => {
     { name: "How it Works", path: "/#how-it-works", section: "how-it-works" },
     { name: "Catalog", path: "/#featured", section: "featured" },
     { name: "Pricing", path: "/#pricing", section: "pricing" },
-    { name: "Contact", path: "/#contact", section: "contact" },
+    { name: "Contact", path: "/contact", section: "contact" },
   ];
 
   useEffect(() => {

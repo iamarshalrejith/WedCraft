@@ -21,7 +21,7 @@ export default function ContactPage() {
   const inputCls = "w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 text-sm focus:outline-none focus:ring-2 focus:ring-black/10 focus:border-gray-400 transition-colors placeholder:text-gray-400";
 
   return (
-    <div className="max-w-5xl mx-auto px-4 md:px-8 py-12" id="contact">
+    <div className="max-w-5xl mx-auto px-4 mt-10 md:px-8 py-12" >
       {/* Header */}
       <div className="text-center mb-12">
         <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-3">Get in Touch</h1>
@@ -38,8 +38,8 @@ export default function ContactPage() {
               <Mail size={18} className="text-blue-600" />
             </div>
             <h3 className="font-semibold text-gray-900 mb-1">Email</h3>
-            <a href="mailto:wedcraft@gmail.com" className="text-sm text-blue-600 hover:underline">
-              wedcraft@gmail.com
+            <a href="mailto:teamwedcraft@gmail.com" className="text-sm text-blue-600 hover:underline">
+              teamwedcraft@gmail.com
             </a>
             <p className="text-xs text-gray-400 mt-1">We reply within 24 hours</p>
           </div>
@@ -49,9 +49,9 @@ export default function ContactPage() {
               <FaInstagram size={18} className="text-pink-600" />
             </div>
             <h3 className="font-semibold text-gray-900 mb-1">Instagram</h3>
-            <a href="https://instagram.com/wedcraft.in" target="_blank" rel="noopener noreferrer"
+            <a href="https://instagram.com/this_is_wedcraft" target="_blank" rel="noopener noreferrer"
               className="text-sm text-blue-600 hover:underline">
-              @wedcraft.in
+              @this_is_wedcraft
             </a>
             <p className="text-xs text-gray-400 mt-1">DM us for quick questions</p>
           </div>

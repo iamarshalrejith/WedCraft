@@ -94,7 +94,7 @@ export default function TermsPage() {
           <p>Questions about these Terms? Contact us:</p>
           <div className="mt-3 p-4 bg-gray-50 rounded-xl text-sm">
             <p className="font-medium text-gray-900">WedCraft</p>
-            <p>Email: <a href="mailto:wedcraft@gmail.com" className="text-blue-600 hover:underline">wedcraft@gmail.com</a></p>
+            <p>Email: <a href="mailto:teamwedcraft@gmail.com" className="text-blue-600 hover:underline">teamwedcraft@gmail.com</a></p>
           </div>
         </Section>
       </div>

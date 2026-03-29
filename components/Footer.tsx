@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Instagram, Facebook, Twitter, Mail } from "lucide-react";
+import {   Mail } from "lucide-react";
+import { FaInstagram } from "react-icons/fa";
 import React from "react";
 
 const Footer = () => {
@@ -11,17 +12,17 @@ const Footer = () => {
   { name: "Catalog", path: "/#featured" },
   { name: "How it Works", path: "/#how-it-works" },
   { name: "Pricing", path: "/#pricing" },
-  { name: "Contact", path: "/#contact" },
+  { name: "Contact", path: "/contact" },
 ];
 
-  const socialLinks = [
-    { icon: Instagram, href: "#" },
-    { icon: Mail, href: "mailto:wedcraft@gmail.com" },
-  ];
+ const socialLinks = [
+  { icon: FaInstagram, href: "https://instagram.com/this_is_wedcraft" },
+  { icon: Mail, href: "mailto:teamwedcraft@gmail.com" },
+];
 
   return (
-     <section  id="contact">
-    <footer className="border-t mt-24">
+     <section >
+    <footer className="border-t pt-24  bg-gray-100">
       <div className="max-w-7xl mx-auto px-6 py-16">
 
         {/* Top Section */}
@@ -82,10 +83,12 @@ const Footer = () => {
 
                 return (
                   <a
-                    key={i}
-                    href={s.href}
-                    className="w-9 h-9 flex items-center justify-center rounded-lg bg-white border border-gray-200 text-gray-600 hover:text-black hover:border-gray-300 transition"
-                  >
+  key={i}
+  href={s.href}
+  target="_blank"
+  rel="noopener noreferrer"
+  className="w-9 h-9 flex items-center justify-center rounded-lg bg-white border border-gray-200 text-gray-600 hover:text-black hover:border-gray-300 transition"
+>
                     <Icon size={18} />
                   </a>
                 );
