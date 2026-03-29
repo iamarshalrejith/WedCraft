@@ -43,7 +43,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "WedCraft",
     description: "Invite with Style",
-    images: ["/og-default.png"],
+    images: [`${baseUrl}/og-default.png`],
   },
 };
 

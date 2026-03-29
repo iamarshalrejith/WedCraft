@@ -4,6 +4,7 @@ import Link from "next/link";
 import { Star, Zap } from "lucide-react";
 import { Template } from "@/data/templates";
 import { motion } from "framer-motion";
+import { useEffect, useState } from "react";
 
 interface TemplateCardProps {
   template: Template;
@@ -35,6 +36,18 @@ const LIGHT_BG_SLUGS = [
 export const TemplateCard = ({ template, index = 0 }: TemplateCardProps) => {
   const isLight = LIGHT_BG_SLUGS.includes(template.slug);
   const accent = template.colors[0] ?? "#888888";
+
+  // Fetch real user reviews
+  const [liveRating, setLiveRating] = useState<{ avg: number; count: number } | null>(null);
+  useEffect(() => {
+    fetch(`/api/review?slug=${template.slug}`)
+      .then((r) => r.json())
+      .then((d) => { if (d.count > 0) setLiveRating({ avg: d.average, count: d.count }); })
+      .catch(() => {});
+  }, [template.slug]);
+
+  const displayRating = liveRating ? liveRating.avg : template.rating;
+  const displayCount  = liveRating ? liveRating.count : template.reviewCount;
 
   // Mock card inner elements — adapt based on background lightness
   const mockCircle = isLight
@@ -148,10 +161,10 @@ export const TemplateCard = ({ template, index = 0 }: TemplateCardProps) => {
             <div className="flex items-center gap-1 mb-2">
               <Star size={12} className="fill-amber-400 text-amber-400" />
               <span className="text-xs font-medium text-gray-700">
-                {template.rating}
+                {displayRating}
               </span>
               <span className="text-xs text-gray-400">
-                ({template.reviewCount})
+                ({displayCount})
               </span>
             </div>
             <div className="flex flex-wrap gap-1 mt-2">
