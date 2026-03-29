@@ -7,6 +7,7 @@ import { useAuth } from "@/context/AuthContext";
 import { InviteRecord } from "@/types/invite";
 import { formatWeddingDate, daysUntil } from "@/lib/invite-utils";
 import RSVPDashboard from "@/components/rsvp/RSVPDashboard";
+import { RatingWidget } from "@/components/RatingWidget";
 import {
   Copy,
   Check,
@@ -58,10 +59,10 @@ function InviteCard({ invite }: { invite: InviteRecord }) {
   };
 
   return (
-    <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden">
-      <div className="p-5">
+    <div className="bg-white rounded-2xl border border-gray-200 overflow-hidden shadow-sm hover:shadow-md transition">
+      <div className="p-4 sm:p-5">
         {/* Header */}
-        <div className="flex items-start justify-between mb-4">
+       <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-4">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 rounded-full bg-rose-100 flex items-center justify-center shrink-0">
               <Heart size={18} className="text-rose-500 fill-rose-400" />
@@ -104,7 +105,7 @@ function InviteCard({ invite }: { invite: InviteRecord }) {
           </span>
           <button
             onClick={copyLink}
-            className={`flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-lg transition-all shrink-0 ${
+            className={`shrink-0 min-w-[70px] flex items-center gap-1 text-xs font-semibold px-2.5 py-1 rounded-lg transition-all ${
               copied
                 ? "bg-emerald-100 text-emerald-700"
                 : "bg-black text-white hover:bg-gray-800"
@@ -123,7 +124,7 @@ function InviteCard({ invite }: { invite: InviteRecord }) {
         </div>
 
         {/* Actions */}
-        <div className="flex gap-2">
+        <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
           <button
             onClick={() =>
               window.open(
@@ -131,7 +132,7 @@ function InviteCard({ invite }: { invite: InviteRecord }) {
                 "_blank",
               )
             }
-            className="flex-1 flex items-center justify-center gap-1.5 py-2 text-xs font-medium bg-[#25D366]/10 text-[#128C7E] rounded-xl hover:bg-[#25D366]/20 transition-colors"
+            className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-xs sm:text-sm whitespace-nowrap font-medium bg-[#25D366]/10 text-[#128C7E] rounded-xl hover:bg-[#25D366]/20 transition-colors"
           >
             <MessageCircle size={13} /> WhatsApp
           </button>
@@ -142,26 +143,26 @@ function InviteCard({ invite }: { invite: InviteRecord }) {
                 "_blank",
               )
             }
-            className="flex-1 flex items-center justify-center gap-1.5 py-2 text-xs font-medium bg-pink-50 text-pink-600 rounded-xl hover:bg-pink-100 transition-colors"
+            className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-xs sm:text-sm whitespace-nowrap font-medium bg-pink-50 text-pink-600 rounded-xl hover:bg-pink-100 transition-colors"
           >
             <Instagram size={13} /> Instagram
           </button>
           <Link
             href={`/invite/${invite.slug}`}
             target="_blank"
-            className="flex-1 flex items-center justify-center gap-1.5 py-2 text-xs font-medium bg-gray-50 text-gray-600 rounded-xl hover:bg-gray-100 transition-colors"
+            className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-xs sm:text-sm whitespace-nowrap font-medium bg-gray-50 text-gray-600 rounded-xl hover:bg-gray-100 transition-colors"
           >
             <ExternalLink size={13} /> Open
           </Link>
           <Link
             href={`/edit/${invite.slug}`}
-            className="flex-1 flex items-center justify-center gap-1.5 py-2 text-xs font-medium bg-blue-50 text-blue-600 rounded-xl hover:bg-blue-100 transition-colors"
+            className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-xs sm:text-sm whitespace-nowrap font-medium bg-blue-50 text-blue-600 rounded-xl hover:bg-blue-100 transition-colors"
           >
             <Pencil size={13} /> Edit
           </Link>
           <button
             onClick={generateQr}
-            className="flex-1 flex items-center justify-center gap-1.5 py-2 text-xs font-medium bg-purple-50 text-purple-600 rounded-xl hover:bg-purple-100 transition-colors"
+            className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-xs sm:text-sm whitespace-nowrap font-medium bg-purple-50 text-purple-600 rounded-xl hover:bg-purple-100 transition-colors"
           >
             <QrCode size={13} /> QR Code
           </button>
@@ -169,8 +170,8 @@ function InviteCard({ invite }: { invite: InviteRecord }) {
 
         {/* QR Code panel */}
         {showQr && qrDataUrl && (
-          <div className="mt-3 p-4 bg-gray-50 rounded-xl flex items-center gap-4">
-            <img src={qrDataUrl} alt="QR Code" className="w-24 h-24 rounded-lg border border-gray-200" />
+         <div className="mt-3 p-4 bg-gray-50 rounded-xl flex flex-col sm:flex-row items-center gap-4">
+            <img src={qrDataUrl} alt="QR Code" className="w-28 h-28 sm:w-24 sm:h-24 rounded-lg border border-gray-200" />
             <div className="flex-1">
               <p className="text-sm font-medium text-gray-900 mb-1">QR Code</p>
               <p className="text-xs text-gray-500 mb-3">
@@ -190,7 +191,7 @@ function InviteCard({ invite }: { invite: InviteRecord }) {
       {/* RSVP toggle */}
       <button
         onClick={() => setShowRsvp(!showRsvp)}
-        className="w-full flex items-center justify-between px-5 py-3 border-t border-gray-100 text-xs font-medium text-gray-600 hover:bg-gray-50 transition-colors"
+        className="w-full flex items-center justify-between px-4 sm:px-5 py-3 border-t border-gray-100 text-xs font-medium text-gray-600 hover:bg-gray-50 transition-colors"
       >
         <span className="flex items-center gap-2">
           <Users size={13} /> Guest Responses (RSVP)
@@ -203,6 +204,14 @@ function InviteCard({ invite }: { invite: InviteRecord }) {
           <RSVPDashboard inviteSlug={invite.slug} />
         </div>
       )}
+
+      {/* Rating widget — only for verified buyers */}
+      <div className="px-5 pb-5">
+        <RatingWidget
+          templateSlug={invite.templateSlug}
+          templateName={invite.templateSlug.replace(/-/g, " ")}
+        />
+      </div>
     </div>
   );
 }
@@ -258,9 +267,9 @@ function LoggedInDashboard() {
   }, [newSlug, user]);
 
   return (
-    <div className="max-w-4xl mx-auto px-4 md:px-8 py-10">
+    <div className="max-w-4xl mx-auto px-4 md:px-8 py-10 mt-10">
       {/* Header */}
-      <div className="flex items-center justify-between mb-8">
+     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
         <div className="flex items-center gap-3">
           <div className="w-10 h-10 rounded-xl bg-black flex items-center justify-center shrink-0">
             <User size={20} className="text-white" />
