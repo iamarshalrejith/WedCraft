@@ -4,13 +4,24 @@ import { getDb } from "@/lib/mongodb";
 import { Template } from "@/data/templates";
 import { templates as staticTemplates } from "@/data/templates";
 
-// Seed static templates into DB if collection is empty
-async function seedIfEmpty() {
+/**
+ * Sync static templates into MongoDB.
+ * - If the collection is empty → insert all.
+ * - If the collection has records but is missing some static templates
+ *   (i.e. new templates were added to data/templates.ts after first seed)
+ *   → insert only the missing ones by id.
+ * This means existing admin edits are never overwritten.
+ */
+async function syncTemplates() {
   const db = await getDb();
   const col = db.collection("templates");
-  const count = await col.countDocuments();
-  if (count === 0) {
-    await col.insertMany(staticTemplates.map((t) => ({ ...t })));
+
+  const existingIds = await col.distinct("id");
+  const existingIdSet = new Set(existingIds);
+
+  const missing = staticTemplates.filter((t) => !existingIdSet.has(t.id));
+  if (missing.length > 0) {
+    await col.insertMany(missing.map((t) => ({ ...t })));
   }
 }
 
@@ -20,9 +31,12 @@ export async function GET() {
   if (!session || session.role !== "admin") {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-  await seedIfEmpty();
+  await syncTemplates();
   const db = await getDb();
-  const templates = await db.collection("templates").find({}, { projection: { _id: 0 } }).toArray();
+  const templates = await db
+    .collection("templates")
+    .find({}, { projection: { _id: 0 } })
+    .toArray();
   return NextResponse.json(templates);
 }
 
@@ -34,8 +48,10 @@ export async function POST(req: NextRequest) {
   }
   try {
     const body = await req.json();
-    const { name, slug, price, tier, religion, themes, description, features,
-            rating, reviewCount, isFeatured, isNew, thumbnail, previewBg, colors } = body;
+    const {
+      name, slug, price, tier, religion, themes, description, features,
+      rating, reviewCount, isFeatured, isNew, thumbnail, previewBg, colors,
+    } = body;
 
     if (!name || !slug || !price || !tier || !religion) {
       return NextResponse.json({ error: "Missing required fields" }, { status: 400 });
@@ -57,7 +73,7 @@ export async function POST(req: NextRequest) {
       colors: colors || ["#000000"],
     };
 
-    await seedIfEmpty();
+    await syncTemplates();
     const db = await getDb();
     await db.collection("templates").insertOne(template);
     return NextResponse.json(template, { status: 201 });

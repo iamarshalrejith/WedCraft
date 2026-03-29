@@ -22,7 +22,7 @@ const Footer = () => {
 
   return (
      <section >
-    <footer className="border-t pt-24  bg-gray-100">
+   <footer className="relative border-t pt-24 z-50 bg-gray-100">
       <div className="max-w-7xl mx-auto px-6 py-16">
 
         {/* Top Section */}

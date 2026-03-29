@@ -155,7 +155,7 @@ export default function PreviewPage({ params }: PreviewPageProps) {
         </div>
       </motion.div>
 
-      <div className="h-32"/>
+      
 
       {/* Auth Modal */}
       <AuthModal
