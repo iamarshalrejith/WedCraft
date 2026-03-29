@@ -1,6 +1,6 @@
 "use client";
 
-import { use, useState } from "react";
+import { use, useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -82,6 +82,10 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
   const [error, setError] = useState("");
   const [showAuthModal, setShowAuthModal] = useState(false);
 
+  // First-time buyer discount
+  const [isFirstTime, setIsFirstTime] = useState(false);
+  const [firstTimeBanner, setFirstTimeBanner] = useState("");
+
   // Coupon state
   const [couponCode, setCouponCode] = useState("");
   const [couponLoading, setCouponLoading] = useState(false);
@@ -90,8 +94,31 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
   const [discount, setDiscount] = useState(0);
   const finalPrice = Math.max(1, template.price - discount);
 
+  useEffect(() => {
+  window.scrollTo({ top: 0, behavior: "smooth" });
+}, [step]);
+
+  // Auto-check first-time buyer status when user is known
+  useEffect(() => {
+    if (!user) return;
+    fetch(`/api/coupon/firsttime?price=${template.price}`)
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.isFirstTime) {
+          setIsFirstTime(true);
+          setDiscount(data.discountAmount);
+          setCouponCode(data.couponCode);
+          setCouponSuccess(data.message);
+          setFirstTimeBanner(data.message);
+        }
+      })
+      .catch(() => {});
+  }, [user, template.price]);
+
   const applyCoupon = async () => {
     if (!couponCode.trim()) return;
+    // If the auto-applied first-time coupon is already active, don't re-apply
+    if (isFirstTime && couponCode === "WELCOME10") return;
     setCouponLoading(true);
     setCouponError("");
     setCouponSuccess("");
@@ -263,7 +290,7 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-4 md:px-8 py-8">
+    <div className="max-w-5xl mx-auto px-4 md:px-8 py-8 mt-10">
       {/* Header */}
       <div className="mb-8">
         <Link
@@ -449,28 +476,46 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
                 />
               </Field>
 
-              {/* Coupon Code */}
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">Coupon Code</label>
-                <div className="flex gap-2">
-                  <input
-                    className={inputCls + " flex-1"}
-                    placeholder="e.g. WEDDING20"
-                    value={couponCode}
-                    onChange={(e) => { setCouponCode(e.target.value.toUpperCase()); setCouponError(""); setCouponSuccess(""); setDiscount(0); }}
-                  />
-                  <button
-                    type="button"
-                    onClick={applyCoupon}
-                    disabled={couponLoading || !couponCode.trim()}
-                    className="px-4 py-2.5 bg-gray-900 text-white rounded-xl text-sm font-medium hover:bg-gray-700 disabled:opacity-40 transition-colors shrink-0"
-                  >
-                    {couponLoading ? "..." : "Apply"}
-                  </button>
+              {/* First-time buyer banner — shows automatically when eligible */}
+              {isFirstTime && (
+                <div className="flex items-start gap-3 bg-emerald-50 border border-emerald-200 rounded-xl px-4 py-3.5">
+                  <span className="text-lg leading-none mt-0.5">🎁</span>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-sm font-semibold text-emerald-800">First order discount applied!</p>
+                    <p className="text-xs text-emerald-600 mt-0.5">
+                      10% off has been automatically applied to your order. Welcome to WedCraft!
+                    </p>
+                  </div>
+                  <span className="text-xs font-bold text-emerald-700 bg-emerald-100 px-2 py-1 rounded-lg shrink-0">
+                    −10%
+                  </span>
                 </div>
-                {couponError && <p className="text-xs text-red-500 mt-1.5">{couponError}</p>}
-                {couponSuccess && <p className="text-xs text-emerald-600 mt-1.5 font-medium">✓ {couponSuccess}</p>}
-              </div>
+              )}
+
+              {/* Coupon Code — hidden when first-time discount is active */}
+              {!isFirstTime && (
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Coupon Code</label>
+                  <div className="flex gap-2">
+                    <input
+                      className={inputCls + " flex-1"}
+                      placeholder="e.g. WEDDING20"
+                      value={couponCode}
+                      onChange={(e) => { setCouponCode(e.target.value.toUpperCase()); setCouponError(""); setCouponSuccess(""); setDiscount(0); }}
+                    />
+                    <button
+                      type="button"
+                      onClick={applyCoupon}
+                      disabled={couponLoading || !couponCode.trim()}
+                      className="px-4 py-2.5 bg-gray-900 text-white rounded-xl text-sm font-medium hover:bg-gray-700 disabled:opacity-40 transition-colors shrink-0"
+                    >
+                      {couponLoading ? "..." : "Apply"}
+                    </button>
+                  </div>
+                  {couponError && <p className="text-xs text-red-500 mt-1.5">{couponError}</p>}
+                  {couponSuccess && <p className="text-xs text-emerald-600 mt-1.5 font-medium">✓ {couponSuccess}</p>}
+                </div>
+              )}
 
               <AuthModal
                 isOpen={showAuthModal}
