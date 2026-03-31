@@ -107,7 +107,7 @@ export default function EditInvitePage({ params }: EditPageProps) {
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-4 md:px-8 py-8 mt-10">
+   <div className="max-w-3xl mx-auto px-3 sm:px-4 md:px-8 py-6 md:py-8 mt-6 md:mt-10">
       {/* Header */}
       <div className="mb-8">
         <Link
@@ -116,7 +116,7 @@ export default function EditInvitePage({ params }: EditPageProps) {
         >
           <ArrowLeft size={15} /> Back to Dashboard
         </Link>
-        <div className="flex items-center justify-between">
+       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Edit Invitation</h1>
             <p className="text-sm text-gray-500 mt-1">
@@ -133,11 +133,11 @@ export default function EditInvitePage({ params }: EditPageProps) {
         </div>
       </div>
 
-      <div className="space-y-5">
+      <div className="space-y-4 md:space-y-5">
         {/* Names */}
         <div className="bg-white rounded-2xl border border-gray-200 p-6 space-y-4">
           <h2 className="font-semibold text-gray-900">Couple Details</h2>
-          <div className="grid grid-cols-2 gap-4">
+         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Field label="Groom's Name">
               <input className={inputCls} value={form.groomName}
                 onChange={(e) => update("groomName", e.target.value)} placeholder="e.g. Rahul" />
@@ -147,7 +147,7 @@ export default function EditInvitePage({ params }: EditPageProps) {
                 onChange={(e) => update("brideName", e.target.value)} placeholder="e.g. Priya" />
             </Field>
           </div>
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Field label="Wedding Date">
               <input type="date" className={inputCls} value={form.weddingDate}
                 onChange={(e) => update("weddingDate", e.target.value)} />
@@ -192,11 +192,11 @@ export default function EditInvitePage({ params }: EditPageProps) {
 
         {/* Events */}
         <div className="bg-white rounded-2xl border border-gray-200 p-6 space-y-4">
-          <div className="flex items-center justify-between">
+         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
             <h2 className="font-semibold text-gray-900">Events</h2>
             <button
               onClick={() => setEvents([...events, { name: "", date: "", time: "", venue: "" }])}
-              className="flex items-center gap-1 text-xs font-medium border border-gray-200 px-2.5 py-1 rounded-lg hover:bg-gray-50"
+              className="flex items-center justify-center sm:justify-start gap-1 text-xs font-medium border border-gray-200 px-2.5 py-1 rounded-lg hover:bg-gray-50"
             >
               <Plus size={12} /> Add Event
             </button>
@@ -208,17 +208,17 @@ export default function EditInvitePage({ params }: EditPageProps) {
 
           <div className="space-y-3">
             {events.map((event, i) => (
-              <div key={i} className="grid grid-cols-12 gap-2 items-start bg-gray-50 p-3 rounded-xl">
-                <input className={`${inputCls} col-span-3`} placeholder="Event name"
+             <div key={i} className="grid grid-cols-1 md:grid-cols-12 gap-2 items-start bg-gray-50 p-3 rounded-xl">
+                <input className={`${inputCls} md:col-span-3`} placeholder="Event name"
                   value={event.name} onChange={(e) => updateEvent(i, "name", e.target.value)} />
-                <input type="date" className={`${inputCls} col-span-3`}
+                <input type="date" className={`${inputCls} md:col-span-3`}
                   value={event.date} onChange={(e) => updateEvent(i, "date", e.target.value)} />
-                <input className={`${inputCls} col-span-2`} placeholder="Time"
+                <input className={`${inputCls} md:col-span-2`} placeholder="Time"
                   value={event.time} onChange={(e) => updateEvent(i, "time", e.target.value)} />
-                <input className={`${inputCls} col-span-3`} placeholder="Venue (optional)"
+                <input className={`${inputCls} md:col-span-3`} placeholder="Venue (optional)"
                   value={event.venue || ""} onChange={(e) => updateEvent(i, "venue", e.target.value)} />
                 <button onClick={() => setEvents(events.filter((_, idx) => idx !== i))}
-                  className="col-span-1 p-2.5 text-gray-400 hover:text-red-500 transition-colors">
+                className="md:col-span-1 p-2.5 text-gray-400 hover:text-red-500 transition-colors">
                   <Trash2 size={14} />
                 </button>
               </div>
