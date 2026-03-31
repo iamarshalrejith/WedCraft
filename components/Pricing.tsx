@@ -4,6 +4,14 @@ import Link from "next/link";
 import { Check } from "lucide-react";
 import { motion } from "framer-motion";
 
+// ── What is actually built and enforced ──────────────────────────────────────
+// Basic    ₹499 — 6 months active · 2 edits · RSVP · Maps · WhatsApp
+// Standard ₹799 — 9 months active · 2 edits · everything Basic + animations
+// Premium  ₹999 — 12 months · 2 edits · everything Standard + photo + music + countdown + schedule
+// Luxury   ₹1999 — 24 months · 2 edits · everything Premium + exclusive templates + RSVP dashboard + priority support
+
+const SUPPORT_WHATSAPP = "https://wa.me/919876543210?text=Hi%20WedCraft%20support%2C%20I%20need%20help%20with%20my%20Luxury%20invite.";
+
 const plans = [
   {
     tier: "Basic",
@@ -13,45 +21,47 @@ const plans = [
     features: [
       "1 template of your choice",
       "Shareable unique URL",
-      "RSVP form",
+      "Guest RSVP form",
       "Google Maps integration",
       "WhatsApp share button",
+      "2 edits included",
       "Active for 6 months",
     ],
     cta: "Get Started",
+    ctaHref: "/catalog",
     ctaStyle: "border border-gray-300 bg-white text-gray-900 hover:bg-gray-50",
   },
   {
     tier: "Standard",
     price: 799,
     badge: null,
-    description: "More flexibility and personalization for your invite.",
+    description: "Smooth animations and a richer invite experience.",
     features: [
       "Everything in Basic",
-      "2–3 templates to choose from",
-      "Basic animations",
-      "Photo section (limited)",
-      "Custom colors",
+      "Animated entrance & transitions",
+      "Event schedule timeline",
+      "Countdown timer",
+      "2 edits included",
       "Active for 9 months",
     ],
     cta: "Choose Standard",
+    ctaHref: "/catalog",
     ctaStyle: "border border-gray-300 bg-white text-gray-900 hover:bg-gray-50",
   },
   {
     tier: "Premium",
     price: 999,
     badge: "Most Popular",
-    description: "Animations, gallery, and more for your special day.",
+    description: "Full experience — gallery, music, and more.",
     features: [
       "Everything in Standard",
-      "Animated entrance & transitions",
-      "Couple photo gallery",
-      "Countdown timer",
+      "Couple photo in invite",
       "Background music",
-      "Event schedule timeline",
+      "2 edits included",
       "Active for 12 months",
     ],
     cta: "Choose Premium",
+    ctaHref: "/catalog",
     ctaStyle: "bg-black text-white hover:bg-gray-800",
   },
   {
@@ -63,13 +73,14 @@ const plans = [
       "Everything in Premium",
       "Exclusive luxury templates",
       "Live RSVP dashboard",
-      "Custom domain option",
-      "Priority support",
-      "30-day free edits",
+      "Priority WhatsApp support",
+      "2 edits included",
       "Active for 24 months",
     ],
     cta: "Go Luxury",
+    ctaHref: "/catalog",
     ctaStyle: "bg-zinc-900 text-yellow-400 hover:bg-black border border-yellow-400/30",
+    supportLink: SUPPORT_WHATSAPP,
   },
 ];
 
@@ -97,7 +108,7 @@ export const Pricing = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: i * 0.1 }}
-              className={`relative rounded-3xl p-7 border ${
+              className={`relative rounded-3xl p-7 border flex flex-col ${
                 plan.badge === "Most Popular"
                   ? "border-black shadow-xl scale-105"
                   : plan.tier === "Luxury"
@@ -120,42 +131,28 @@ export const Pricing = () => {
               )}
 
               <div className="mb-5">
-                <p
-                  className={`text-sm font-medium mb-1 ${plan.tier === "Luxury" ? "text-gray-400" : "text-gray-500"}`}
-                >
+                <p className={`text-sm font-medium mb-1 ${plan.tier === "Luxury" ? "text-gray-400" : "text-gray-500"}`}>
                   {plan.tier}
                 </p>
                 <div className="flex items-end gap-1">
-                  <span
-                    className={`text-4xl font-bold ${plan.tier === "Luxury" ? "text-white" : "text-gray-900"}`}
-                  >
+                  <span className={`text-4xl font-bold ${plan.tier === "Luxury" ? "text-white" : "text-gray-900"}`}>
                     ₹{plan.price.toLocaleString("en-IN")}
                   </span>
-                  <span
-                    className={`text-sm mb-1 ${plan.tier === "Luxury" ? "text-gray-400" : "text-gray-400"}`}
-                  >
-                    one-time
-                  </span>
+                  <span className="text-sm mb-1 text-gray-400">one-time</span>
                 </div>
-                <p
-                  className={`text-sm mt-1 ${plan.tier === "Luxury" ? "text-gray-400" : "text-gray-500"}`}
-                >
+                <p className={`text-sm mt-1 ${plan.tier === "Luxury" ? "text-gray-400" : "text-gray-500"}`}>
                   {plan.description}
                 </p>
               </div>
 
-              <ul className="space-y-2.5 mb-7">
+              <ul className="space-y-2.5 mb-7 flex-1">
                 {plan.features.map((f) => (
                   <li key={f} className="flex items-start gap-2">
                     <Check
                       size={14}
-                      className={`mt-0.5 shrink-0 ${
-                        plan.tier === "Luxury" ? "text-yellow-400" : "text-emerald-600"
-                      }`}
+                      className={`mt-0.5 shrink-0 ${plan.tier === "Luxury" ? "text-yellow-400" : "text-emerald-600"}`}
                     />
-                    <span
-                      className={`text-sm ${plan.tier === "Luxury" ? "text-gray-300" : "text-gray-600"}`}
-                    >
+                    <span className={`text-sm ${plan.tier === "Luxury" ? "text-gray-300" : "text-gray-600"}`}>
                       {f}
                     </span>
                   </li>
@@ -163,7 +160,7 @@ export const Pricing = () => {
               </ul>
 
               <Link
-                href="/catalog"
+                href={plan.ctaHref}
                 className={`block w-full text-center py-3 rounded-xl font-semibold text-sm transition-all duration-200 ${plan.ctaStyle}`}
               >
                 {plan.cta}
@@ -171,6 +168,12 @@ export const Pricing = () => {
             </motion.div>
           ))}
         </div>
+
+        {/* Fine print */}
+        <p className="text-center text-xs text-gray-400 mt-8">
+          All plans include: animated invite · RSVP · Google Maps · WhatsApp share · countdown timer · 2 edits.
+          Invite active period starts from date of purchase.
+        </p>
       </div>
     </section>
   );
