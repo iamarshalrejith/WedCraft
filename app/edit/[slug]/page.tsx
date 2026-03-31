@@ -107,7 +107,7 @@ export default function EditInvitePage({ params }: EditPageProps) {
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-4 md:px-8 py-8">
+    <div className="max-w-3xl mx-auto px-4 md:px-8 py-8 mt-10">
       {/* Header */}
       <div className="mb-8">
         <Link
