@@ -1,7 +1,15 @@
 import { NextRequest, NextResponse } from "next/server";
-import { InviteRecord } from "@/types/invite";
+import { InviteRecord, TIER_EXPIRY_MONTHS } from "@/types/invite";
 import { generateInviteSlug } from "@/lib/invite-utils";
 import { getDb } from "@/lib/mongodb";
+import { getTemplateBySlug } from "@/data/templates";
+
+function calcExpiresAt(tier: string): string {
+  const months = TIER_EXPIRY_MONTHS[tier] ?? 12;
+  const d = new Date();
+  d.setMonth(d.getMonth() + months);
+  return d.toISOString();
+}
 
 // POST /api/save-invite — called after payment is verified
 export async function POST(req: NextRequest) {
@@ -20,17 +28,21 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Missing invite data" }, { status: 400 });
     }
 
+    // Resolve tier from template data
+    const template = getTemplateBySlug(templateSlug);
+    const purchasedTier = template?.tier ?? "Premium";
+
     const db = await getDb();
     const invites = db.collection("invites");
 
-    // Generate unique slug, append random suffix if collision
+    // Generate unique slug
     let slug = generateInviteSlug(coupleDetails.groomName, coupleDetails.brideName);
     const existing = await invites.findOne({ slug });
     if (existing) {
       slug = `${slug}-${Math.floor(Math.random() * 9000) + 1000}`;
     }
 
-    const invite = {
+    const invite: Omit<InviteRecord, "_id"> = {
       id: crypto.randomUUID(),
       slug,
       templateId,
@@ -42,6 +54,10 @@ export async function POST(req: NextRequest) {
       userId: userId || null,
       createdAt: new Date().toISOString(),
       purchasedAt: new Date().toISOString(),
+      // ── Tier-based limits ────────────────────────────────────
+      purchasedTier,
+      expiresAt: calcExpiresAt(purchasedTier),
+      editCount: 0,
     };
 
     await invites.insertOne(invite);
