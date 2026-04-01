@@ -8,6 +8,7 @@ import { getTemplateBySlug } from "@/data/templates";
 import { WeddingEvent } from "@/types/invite";
 import { useAuth } from "@/context/AuthContext";
 import AuthModal from "@/components/AuthModal";
+import FileUpload from "@/components/FileUpload";
 import {
   ArrowLeft,
   Plus,
@@ -154,6 +155,8 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
     mapLink: "",
     phone: "",
     personalMessage: "",
+    couplePhotoUrl: "",
+    bgMusicUrl: "",
   });
 
   const [events, setEvents] = useState<WeddingEvent[]>([
@@ -475,6 +478,33 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
                   onChange={(e) => update("personalMessage", e.target.value)}
                 />
               </Field>
+
+              {/* Premium & Luxury only — Couple photo + Background music */}
+              {(template.tier === "Premium" || template.tier === "Luxury") && (
+                <div className="space-y-5 pt-2">
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-semibold px-2 py-0.5 bg-amber-100 text-amber-800 rounded-full">
+                      {template.tier} feature
+                    </span>
+                  </div>
+
+                  <Field label="Couple Photo (optional)">
+                    <FileUpload
+                      type="photo"
+                      value={form.couplePhotoUrl}
+                      onChange={(url) => update("couplePhotoUrl", url)}
+                    />
+                  </Field>
+
+                  <Field label="Background Music (optional)">
+                    <FileUpload
+                      type="music"
+                      value={form.bgMusicUrl}
+                      onChange={(url) => update("bgMusicUrl", url)}
+                    />
+                  </Field>
+                </div>
+              )}
 
               {/* First-time buyer banner — shows automatically when eligible */}
               {isFirstTime && (

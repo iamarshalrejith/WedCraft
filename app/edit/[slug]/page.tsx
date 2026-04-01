@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
 import { InviteRecord, WeddingEvent } from "@/types/invite";
 import { ArrowLeft, Save, Loader2, Plus, Trash2, Check, AlertTriangle, Lock } from "lucide-react";
+import FileUpload from "@/components/FileUpload";
 
 interface EditPageProps {
   params: Promise<{ slug: string }>;
@@ -101,6 +102,7 @@ export default function EditInvitePage({ params }: EditPageProps) {
   const [form, setForm] = useState({
     groomName: "", brideName: "", weddingDate: "", weddingTime: "",
     venue: "", venueAddress: "", mapLink: "", phone: "", personalMessage: "",
+    couplePhotoUrl: "", bgMusicUrl: "",
   });
   const [events, setEvents] = useState<WeddingEvent[]>([]);
 
@@ -125,6 +127,8 @@ export default function EditInvitePage({ params }: EditPageProps) {
           mapLink: c.mapLink || "",
           phone: c.phone || "",
           personalMessage: c.personalMessage || "",
+          couplePhotoUrl: c.couplePhotoUrl || "",
+          bgMusicUrl: c.bgMusicUrl || "",
         });
         setEvents(c.events || []);
 
@@ -306,6 +310,36 @@ export default function EditInvitePage({ params }: EditPageProps) {
               placeholder="A short note to your guests..." />
           </Field>
         </div>
+
+        {/* Photo & Music — shown for Premium/Luxury templates */}
+        {invite && (invite.purchasedTier === "Premium" || invite.purchasedTier === "Luxury") && (
+          <div className={`bg-white rounded-2xl border border-gray-200 p-6 space-y-5 ${locked ? "opacity-60 pointer-events-none" : ""}`}>
+            <div className="flex items-center gap-2">
+              <h2 className="font-semibold text-gray-900">Photo & Music</h2>
+              <span className="text-xs font-semibold px-2 py-0.5 bg-amber-100 text-amber-800 rounded-full">
+                {invite.purchasedTier}
+              </span>
+            </div>
+
+            <Field label="Couple Photo (optional)">
+              <FileUpload
+                type="photo"
+                value={form.couplePhotoUrl}
+                onChange={(url) => update("couplePhotoUrl", url)}
+                disabled={locked}
+              />
+            </Field>
+
+            <Field label="Background Music (optional)">
+              <FileUpload
+                type="music"
+                value={form.bgMusicUrl}
+                onChange={(url) => update("bgMusicUrl", url)}
+                disabled={locked}
+              />
+            </Field>
+          </div>
+        )}
 
         {/* Events */}
         <div className={`bg-white rounded-2xl border border-gray-200 p-6 space-y-4 ${locked ? "opacity-60 pointer-events-none" : ""}`}>
