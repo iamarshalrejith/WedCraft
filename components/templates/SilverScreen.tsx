@@ -99,7 +99,8 @@ export default function SilverScreen({couple}:SilverScreenProps) {
                 <circle cx="60" cy="60" r="55" stroke="#D4AF37" strokeWidth="1" fill="none"/>
                 <circle cx="60" cy="60" r="48" stroke="#D4AF37" strokeWidth="0.5" fill="none" strokeDasharray="4 4"/>
                 <circle cx="60" cy="60" r="40" stroke="#D4AF37" strokeWidth="1" fill="none"/>
-                {[0,60,120,180,240,300].map((a,i)=>{const r=a*Math.PI/180;return <circle key={i} cx={60+50*Math.cos(r)} cy={60+50*Math.sin(r)} r={3} fill="#D4AF37"/>;})}
+                {[0,60,120,180,240,300].map((a,i)=>{const r=a*Math.PI/180;return <circle key={i} cx={Number((60 + 50 * Math.cos(r)).toFixed(4))} 
+  cy={Number((60 + 50 * Math.sin(r)).toFixed(4))} r={3} fill="#D4AF37"/>;})}
               </svg>
               <div style={{position:"absolute",inset:0,display:"flex",alignItems:"center",justifyContent:"center"}}>
                 <span style={{fontSize:36,animation:"flicker 4s infinite"}}>🎬</span>
