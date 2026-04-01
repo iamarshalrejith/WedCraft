@@ -6,6 +6,8 @@ import { formatWeddingDate } from "@/lib/invite-utils";
 import { motion, useInView } from "framer-motion";
 import { MapPin, Phone, Calendar, Clock } from "lucide-react";
 import RSVPForm from "@/components/rsvp/RSVPForm";
+import MusicPlayer from "@/components/MusicPlayer";
+import Image from "next/image";
 
 interface SilverScreenProps { couple: CoupleDetails; }
 
@@ -125,6 +127,33 @@ export default function SilverScreen({couple}:SilverScreenProps) {
             </h1>
           </Reveal>
 
+          {couple.couplePhotoUrl && (
+  <Reveal delay={0.25}>
+    <div style={{
+      marginTop: 24,
+      padding: "6px",
+      background: "linear-gradient(135deg,#D4AF37,#8B7340,#D4AF37)",
+      display: "inline-block"
+    }}>
+      <div style={{
+        background: "#0D0A04",
+        padding: "6px"
+      }}>
+        <Image
+  src={couple.couplePhotoUrl}
+  alt="Couple"
+  width={180}
+  height={220}
+  style={{
+    objectFit: "cover",
+    filter: "sepia(40%) contrast(1.1)",
+  }}
+/>
+      </div>
+    </div>
+  </Reveal>
+)}
+
           <Reveal delay={0.3}>
             <div style={{display:"inline-block",padding:"3px",background:"linear-gradient(135deg,#D4AF37,#8B7340,#D4AF37)",marginBottom:6}}>
               <div style={{background:"#0D0A04",padding:"11px 28px",display:"flex",alignItems:"center",gap:10}}>
@@ -223,6 +252,14 @@ export default function SilverScreen({couple}:SilverScreenProps) {
 
         <FilmStrip/>
       </div>
+
+      {couple.bgMusicUrl && (
+  <MusicPlayer 
+    src={couple.bgMusicUrl} 
+    dark 
+    accentColor="#D4AF37" 
+  />
+)}
     </>
   );
 }

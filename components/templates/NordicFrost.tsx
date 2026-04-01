@@ -3,6 +3,8 @@
 import { useEffect, useState, useRef } from "react";
 import { CoupleDetails } from "@/types/invite";
 import RSVPForm from "@/components/rsvp/RSVPForm";
+import MusicPlayer from "@/components/MusicPlayer";
+import Image from "next/image";
 
 interface Props { couple?: CoupleDetails; }
 
@@ -119,6 +121,22 @@ export default function NordicFrost({ couple = defaultCouple }: Props) {
             {c.brideName}
           </h1>
 
+          {c.couplePhotoUrl && (
+  <div className={`${visible ? "reveal" : "opacity-0"} mb-8`}>
+    <Image
+      src={c.couplePhotoUrl}
+      alt="Couple"
+      width={200}
+      height={240}
+      style={{
+        objectFit: "cover",
+        borderRadius: "12px",
+        border: "1px solid rgba(70,130,180,0.2)",
+      }}
+    />
+  </div>
+)}
+
           {/* Date badge */}
           <div className="inline-block px-8 py-4 rounded-2xl mb-4" style={{ background:"rgba(70,130,180,0.08)", border:"1.5px solid rgba(70,130,180,0.25)" }}>
             <p className="nordic-serif text-lg" style={{ color:"#1A2744" }}>{formatDate(c.weddingDate)}</p>
@@ -231,6 +249,12 @@ export default function NordicFrost({ couple = defaultCouple }: Props) {
   )}
 
 </section>
+{c.bgMusicUrl && (
+  <MusicPlayer
+    src={c.bgMusicUrl}
+    accentColor="#4682B4"
+  />
+)}
     </div>
   );
 }

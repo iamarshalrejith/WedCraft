@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { CoupleDetails } from "@/types/invite";
 import RSVPForm from "@/components/rsvp/RSVPForm";
+import MusicPlayer from "@/components/MusicPlayer";
+import Image from "next/image";
 
 interface Props { couple?: CoupleDetails; }
 
@@ -117,6 +119,38 @@ export default function VelvetHaveli({ couple = defaultCouple }: Props) {
             {c.brideName}
           </h1>
         </div>
+
+        {c.couplePhotoUrl && (
+  <div className={`mt-8 ${visible ? "fade-up" : "opacity-0"}`} style={{ animationDelay:"0.5s" }}>
+    <div
+      style={{
+        display: "inline-block",
+        padding: "8px",
+        background: "linear-gradient(135deg,#D4AF37,#FF8C00,#D4AF37)",
+        boxShadow: "0 10px 40px rgba(0,0,0,0.6)",
+      }}
+    >
+      <div
+        style={{
+          padding: "6px",
+          background: "#0C0A1E",
+          border: "1px solid rgba(212,175,55,0.4)",
+        }}
+      >
+        <Image
+          src={c.couplePhotoUrl}
+          alt="Couple"
+          width={200}
+          height={260}
+          style={{
+            objectFit: "cover",
+            filter: "contrast(1.05) saturate(1.05)",
+          }}
+        />
+      </div>
+    </div>
+  </div>
+)}
 
         {/* Divider */}
         <div className={`my-8 flex items-center gap-4 ${visible ? "fade-up" : "opacity-0"}`} style={{ animationDelay:"0.6s" }}>
@@ -238,6 +272,13 @@ export default function VelvetHaveli({ couple = defaultCouple }: Props) {
   )}
 
 </section>
+{c.bgMusicUrl && (
+  <MusicPlayer
+    src={c.bgMusicUrl}
+    dark
+    accentColor="#D4AF37"
+  />
+)}
     </div>
   );
 }

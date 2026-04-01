@@ -3,6 +3,8 @@
 import { useEffect, useState, useRef } from "react";
 import { CoupleDetails } from "@/types/invite";
 import RSVPForm from "@/components/rsvp/RSVPForm";
+import MusicPlayer from "@/components/MusicPlayer";
+import Image from "next/image";
 
 interface Props { couple?: CoupleDetails; }
 
@@ -137,6 +139,32 @@ export default function NeonVows({ couple = defaultCouple }: Props) {
           <span className="neon-pink-glow">{c.brideName}</span>
         </div>
 
+        {c.couplePhotoUrl && (
+  <div className="mb-10">
+    <div
+      style={{
+        display: "inline-block",
+        padding: "2px",
+        borderRadius: "16px",
+        background: "linear-gradient(135deg,#FF2D78,#00F5FF)",
+        boxShadow: "0 0 25px #FF2D78AA, 0 0 40px #00F5FF55",
+      }}
+    >
+     <Image
+  src={c.couplePhotoUrl}
+  alt="Couple"
+  width={200}
+  height={200}
+  style={{
+    objectFit: "cover",
+    borderRadius: "14px",
+    filter: "contrast(1.1) saturate(1.2)",
+  }}
+/>
+    </div>
+  </div>
+)}
+
         {/* Date */}
         <div className="neon-mono text-lg mb-2" style={{ color:"#00F5FF" }}>
           <span className="neon-cyan-glow">{formatDate(c.weddingDate)}</span>
@@ -245,9 +273,18 @@ export default function NeonVows({ couple = defaultCouple }: Props) {
     >
       📡 RSVP via WhatsApp
     </a>
+
   )}
 
 </section>
+
+{c.bgMusicUrl && (
+  <MusicPlayer
+    src={c.bgMusicUrl}
+    dark
+    accentColor="#FF2D78"
+  />
+)}
     </div>
   );
 }

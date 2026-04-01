@@ -6,6 +6,8 @@ import { formatWeddingDate } from "@/lib/invite-utils";
 import { motion, useInView } from "framer-motion";
 import { MapPin, Phone, Calendar, Clock } from "lucide-react";
 import RSVPForm from "@/components/rsvp/RSVPForm";
+import MusicPlayer from "@/components/MusicPlayer";
+import Image from "next/image";
 
 interface NikahNazmProps {
   couple: CoupleDetails;
@@ -164,6 +166,32 @@ export default function NikahNazm({ couple }: NikahNazmProps) {
             </h1>
           </Reveal>
 
+          {couple.couplePhotoUrl && (
+  <Reveal delay={0.3}>
+    <div style={{ marginBottom: 28 }}>
+      <div
+        style={{
+          display: "inline-block",
+          padding: "6px",
+          border: "1px solid rgba(212,175,55,0.4)",
+          background: "rgba(212,175,55,0.05)",
+        }}
+      >
+        <Image
+          src={couple.couplePhotoUrl}
+          alt="Couple"
+          width={200}
+          height={240}
+          style={{
+            objectFit: "cover",
+            filter: "contrast(1.02) brightness(0.98)",
+          }}
+        />
+      </div>
+    </div>
+  </Reveal>
+)}
+
           <Reveal delay={0.35}>
             <div style={{ display:"inline-flex", alignItems:"center", gap:10, padding:"11px 26px", background:"rgba(212,175,55,0.08)", border:"1px solid rgba(212,175,55,0.3)", borderRadius:40 }}>
               <Calendar size={13} color="rgba(212,175,55,0.7)"/>
@@ -279,6 +307,14 @@ export default function NikahNazm({ couple }: NikahNazmProps) {
           </Reveal>
         </section>
       </div>
+
+      {couple.bgMusicUrl && (
+  <MusicPlayer
+    src={couple.bgMusicUrl}
+    dark
+    accentColor="#D4AF37"
+  />
+)}
     </>
   );
 }

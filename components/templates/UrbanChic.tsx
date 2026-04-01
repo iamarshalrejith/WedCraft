@@ -6,6 +6,9 @@ import { formatWeddingDate } from "@/lib/invite-utils";
 import { motion, useInView } from "framer-motion";
 import { MapPin, Phone, Calendar } from "lucide-react";
 import RSVPForm from "@/components/rsvp/RSVPForm";
+import MusicPlayer from "@/components/MusicPlayer";
+import Image from "next/image";
+
 
 interface UrbanChicProps { couple: CoupleDetails; }
 
@@ -94,6 +97,22 @@ export default function UrbanChic({couple}:UrbanChicProps) {
                 </p>
               </div>
             </Reveal>
+            {couple.couplePhotoUrl && (
+  <Reveal delay={0.25}>
+    <div style={{ marginTop: 28 }}>
+      <Image
+        src={couple.couplePhotoUrl}
+        alt="Couple"
+        width={220}
+        height={260}
+        style={{
+          objectFit: "cover",
+          border: "1px solid #1A1A1A",
+        }}
+      />
+    </div>
+  </Reveal>
+)}
             <Reveal delay={0.3}>
               <div style={{marginTop:32,display:"flex",alignItems:"center",gap:12,zIndex:1}}>
                 <div style={{height:1,width:32,background:"#1A1A1A"}}/>
@@ -180,6 +199,12 @@ export default function UrbanChic({couple}:UrbanChicProps) {
           <span style={{fontFamily:"'Space Mono',monospace",fontSize:9,color:"rgba(255,255,255,0.2)",letterSpacing:"0.2em"}}>MADE WITH WEDCRAFT</span>
         </div>
       </div>
+      {couple.bgMusicUrl && (
+  <MusicPlayer
+    src={couple.bgMusicUrl}
+    accentColor="#1A1A1A"
+  />
+)}
     </>
   );
 }

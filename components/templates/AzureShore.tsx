@@ -6,6 +6,8 @@ import { formatWeddingDate } from "@/lib/invite-utils";
 import { motion, useInView } from "framer-motion";
 import { MapPin, Phone, Calendar, Clock, Waves } from "lucide-react";
 import RSVPForm from "@/components/rsvp/RSVPForm";
+import MusicPlayer from "@/components/MusicPlayer";
+import Image from "next/image";
 
 interface AzureShoreProps {
   couple: CoupleDetails;
@@ -254,6 +256,35 @@ export default function AzureShore({ couple }: AzureShoreProps) {
               {couple.brideName}
             </h1>
           </Reveal>
+
+          {couple.couplePhotoUrl && (
+  <Reveal delay={0.35}>
+    <div style={{ marginBottom: 28 }}>
+      <div
+        style={{
+          display: "inline-block",
+          padding: "6px",
+          borderRadius: "20px",
+          background: "rgba(255,255,255,0.15)",
+          backdropFilter: "blur(10px)",
+          border: "1px solid rgba(255,255,255,0.25)",
+        }}
+      >
+        <Image
+          src={couple.couplePhotoUrl}
+          alt="Couple"
+          width={200}
+          height={240}
+          style={{
+            objectFit: "cover",
+            borderRadius: "16px",
+            filter: "brightness(1.05) contrast(1.02)",
+          }}
+        />
+      </div>
+    </div>
+  </Reveal>
+)}
 
           <Reveal delay={0.4}>
             <div style={{
@@ -528,6 +559,13 @@ export default function AzureShore({ couple }: AzureShoreProps) {
           </Reveal>
         </section>
       </div>
+      {couple.bgMusicUrl && (
+  <MusicPlayer
+    src={couple.bgMusicUrl}
+    dark
+    accentColor="#0D9488"
+  />
+)}
     </>
   );
 }

@@ -6,6 +6,8 @@ import { formatWeddingDate } from "@/lib/invite-utils";
 import { motion, useInView } from "framer-motion";
 import { MapPin, Phone, Calendar, Clock } from "lucide-react";
 import RSVPForm from "@/components/rsvp/RSVPForm";
+import Image from "next/image";
+import MusicPlayer from "@/components/MusicPlayer";
 
 interface RoyalDurbarProps { couple: CoupleDetails; }
 
@@ -112,6 +114,40 @@ export default function RoyalDurbar({couple}:RoyalDurbarProps) {
             </h1>
           </Reveal>
 
+          {couple.couplePhotoUrl && (
+  <Reveal delay={0.3}>
+    <div style={{ marginBottom: 28 }}>
+      <div
+        style={{
+          display: "inline-block",
+          padding: "8px",
+          background: "linear-gradient(135deg,#D4AF37,#8B7340,#D4AF37)",
+          boxShadow: "0 10px 40px rgba(0,0,0,0.6)",
+        }}
+      >
+        <div
+          style={{
+            padding: "6px",
+            background: "#1A0005",
+            border: "1px solid rgba(212,175,55,0.4)",
+          }}
+        >
+          <Image
+            src={couple.couplePhotoUrl}
+            alt="Couple"
+            width={200}
+            height={260}
+            style={{
+              objectFit: "cover",
+              filter: "contrast(1.05) saturate(1.05)",
+            }}
+          />
+        </div>
+      </div>
+    </div>
+  </Reveal>
+)}
+
           <Reveal delay={0.35}>
             <div style={{display:"inline-flex",alignItems:"center",gap:10,padding:"12px 28px",background:"rgba(212,175,55,0.08)",border:"1px solid rgba(212,175,55,0.35)",borderRadius:4}}>
               <Calendar size={13} color="#D4AF37"/>
@@ -210,6 +246,14 @@ export default function RoyalDurbar({couple}:RoyalDurbarProps) {
           <MughalArch width={200} color="#D4AF37" opacity={1}/>
         </div>
       </div>
+
+      {couple.bgMusicUrl && (
+  <MusicPlayer
+    src={couple.bgMusicUrl}
+    dark
+    accentColor="#D4AF37"
+  />
+)}
     </>
   );
 }

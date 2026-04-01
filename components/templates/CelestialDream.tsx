@@ -6,6 +6,8 @@ import { formatWeddingDate } from "@/lib/invite-utils";
 import { motion, useInView } from "framer-motion";
 import { MapPin, Phone, Calendar, Clock } from "lucide-react";
 import RSVPForm from "@/components/rsvp/RSVPForm";
+import MusicPlayer from "@/components/MusicPlayer";
+import Image from "next/image";
 
 interface CelestialDreamProps { couple: CoupleDetails; }
 
@@ -142,6 +144,34 @@ export default function CelestialDream({ couple }: CelestialDreamProps) {
             </h1>
           </Reveal>
 
+          {couple.couplePhotoUrl && (
+  <Reveal delay={0.35}>
+    <div style={{ marginBottom: 28 }}>
+      <div
+        style={{
+          display: "inline-block",
+          padding: "6px",
+          borderRadius: "20px",
+          background: "rgba(147,112,219,0.15)",
+          boxShadow: "0 0 30px rgba(147,112,219,0.25)",
+        }}
+      >
+        <Image
+          src={couple.couplePhotoUrl}
+          alt="Couple"
+          width={200}
+          height={240}
+          style={{
+            objectFit: "cover",
+            borderRadius: "16px",
+            filter: "brightness(1.05) contrast(1.02)",
+          }}
+        />
+      </div>
+    </div>
+  </Reveal>
+)}
+
           <Reveal delay={0.4}>
             <div style={{ display:"inline-flex", alignItems:"center", gap:10, padding:"12px 28px", background:"rgba(147,112,219,0.08)", border:"1px solid rgba(147,112,219,0.3)", borderRadius:40 }}>
               <Calendar size={13} color="#9370DB"/>
@@ -254,6 +284,13 @@ export default function CelestialDream({ couple }: CelestialDreamProps) {
           </Reveal>
         </section>
       </div>
+      {couple.bgMusicUrl && (
+  <MusicPlayer
+    src={couple.bgMusicUrl}
+    dark
+    accentColor="#9370DB"
+  />
+)}
     </>
   );
 }

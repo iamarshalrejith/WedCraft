@@ -6,6 +6,8 @@ import { formatWeddingDate } from "@/lib/invite-utils";
 import { motion, useInView } from "framer-motion";
 import { MapPin, Phone, Calendar, Clock } from "lucide-react";
 import RSVPForm from "@/components/rsvp/RSVPForm";
+import Image from "next/image";
+import MusicPlayer from "@/components/MusicPlayer";
 
 interface MidnightRoseProps { couple: CoupleDetails; }
 
@@ -131,6 +133,34 @@ export default function MidnightRose({ couple }: MidnightRoseProps) {
             </h1>
           </Reveal>
 
+          {couple.couplePhotoUrl && (
+  <Reveal delay={0.3}>
+    <div style={{ marginBottom: 28 }}>
+      <div
+        style={{
+          display: "inline-block",
+          padding: "4px",
+          borderRadius: "12px",
+          background: "rgba(184,134,11,0.25)",
+          boxShadow: "0 10px 30px rgba(0,0,0,0.6)",
+        }}
+      >
+        <Image
+          src={couple.couplePhotoUrl}
+          alt="Couple"
+          width={200}
+          height={240}
+          style={{
+            objectFit: "cover",
+            borderRadius: "10px",
+            filter: "brightness(0.95) contrast(1.05)",
+          }}
+        />
+      </div>
+    </div>
+  </Reveal>
+)}
+
           <Reveal delay={0.35}>
             <div style={{ display:"inline-flex", alignItems:"center", gap:10, padding:"12px 28px", background:"rgba(184,134,11,0.08)", border:"1px solid rgba(184,134,11,0.3)", borderRadius:3 }}>
               <Calendar size={13} color="#B8860B"/>
@@ -236,6 +266,14 @@ export default function MidnightRose({ couple }: MidnightRoseProps) {
           </Reveal>
         </section>
       </div>
+
+      {couple.bgMusicUrl && (
+  <MusicPlayer
+    src={couple.bgMusicUrl}
+    dark
+    accentColor="#B8860B"
+  />
+)}
     </>
   );
 }

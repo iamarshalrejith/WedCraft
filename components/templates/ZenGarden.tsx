@@ -6,6 +6,8 @@ import { formatWeddingDate } from "@/lib/invite-utils";
 import { motion, useInView } from "framer-motion";
 import { MapPin, Phone, Calendar, Clock } from "lucide-react";
 import RSVPForm from "@/components/rsvp/RSVPForm";
+import MusicPlayer from "@/components/MusicPlayer";
+import Image from "next/image";
 
 interface ZenGardenProps { couple: CoupleDetails; }
 
@@ -118,6 +120,23 @@ export default function ZenGarden({ couple }: ZenGardenProps) {
               </h1>
             </Reveal>
 
+            {couple.couplePhotoUrl && (
+  <Reveal delay={0.25}>
+    <div style={{ marginBottom: 32 }}>
+      <Image
+        src={couple.couplePhotoUrl}
+        alt="Couple"
+        width={200}
+        height={240}
+        style={{
+          objectFit: "cover",
+          opacity: 0.9,
+        }}
+      />
+    </div>
+  </Reveal>
+)}
+
             <Reveal delay={0.3}>
               <div style={{ borderLeft:"2px solid #CC2936", paddingLeft:16 }}>
                 <p style={{ fontFamily:"'Noto Sans JP',sans-serif", fontWeight:300, fontSize:15, color:"#333", marginBottom:4 }}>{formatWeddingDate(couple.weddingDate)}</p>
@@ -221,6 +240,12 @@ export default function ZenGarden({ couple }: ZenGardenProps) {
           </section>
         </div>
       </div>
+      {couple.bgMusicUrl && (
+  <MusicPlayer
+    src={couple.bgMusicUrl}
+    accentColor="#CC2936"
+  />
+)}
     </>
   );
 }

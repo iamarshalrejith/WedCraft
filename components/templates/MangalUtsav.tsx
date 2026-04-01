@@ -6,6 +6,8 @@ import { formatWeddingDate } from "@/lib/invite-utils";
 import { motion, useInView } from "framer-motion";
 import { MapPin, Phone, Heart } from "lucide-react";
 import RSVPForm from "@/components/rsvp/RSVPForm";
+import MusicPlayer from "@/components/MusicPlayer";
+import Image from "next/image";
 
 interface MangalUtsavProps {
   couple: CoupleDetails;
@@ -281,6 +283,20 @@ export default function MangalUtsav({ couple }: MangalUtsavProps) {
           {couple.brideName.toUpperCase()}
         </h1>
       </FadeIn>
+
+      {/* IMAGE HERE (separate block) */}
+      {couple.couplePhotoUrl && (
+        <FadeIn delay={0.45}>
+          <Image
+  src={couple.couplePhotoUrl}
+  alt="Couple"
+  width={160}
+  height={160}
+  className="mt-6 object-cover rounded-full border-4 border-[#D4AF37] shadow-xl"
+  priority
+/>
+        </FadeIn>
+      )}
 
       <FadeIn delay={0.5}>
         <div className="mt-8 text-center">
@@ -778,6 +794,11 @@ export default function MangalUtsav({ couple }: MangalUtsavProps) {
         <CountdownSection />
         <RsvpSection />
       </div>
+
+      {/* Background music — Premium/Luxury feature */}
+      {couple.bgMusicUrl && (
+        <MusicPlayer src={couple.bgMusicUrl} dark accentColor="#D4AF37" />
+      )}
     </>
   );
 }

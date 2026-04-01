@@ -6,6 +6,8 @@ import { formatWeddingDate } from "@/lib/invite-utils";
 import { motion, useInView } from "framer-motion";
 import { MapPin, Phone, Calendar, Clock } from "lucide-react";
 import RSVPForm from "@/components/rsvp/RSVPForm";
+import MusicPlayer from "@/components/MusicPlayer";
+import Image from "next/image";
 
 interface OnyxGoldProps {
   couple: CoupleDetails;
@@ -151,6 +153,32 @@ export default function OnyxGold({ couple }: OnyxGoldProps) {
             </h1>
           </Reveal>
 
+          {couple.couplePhotoUrl && (
+  <Reveal delay={0.35}>
+    <div style={{ marginBottom: 32 }}>
+      <div
+        style={{
+          display: "inline-block",
+          padding: "4px",
+          border: "0.5px solid rgba(212,175,55,0.4)",
+          background: "#050505",
+        }}
+      >
+        <Image
+          src={couple.couplePhotoUrl}
+          alt="Couple"
+          width={200}
+          height={240}
+          style={{
+            objectFit: "cover",
+            filter: "grayscale(10%) contrast(1.05)",
+          }}
+        />
+      </div>
+    </div>
+  </Reveal>
+)}
+
           <Reveal delay={0.4}>
             <div style={{ display:"inline-flex", alignItems:"center", gap:16, padding:"14px 32px", border:"0.5px solid rgba(212,175,55,0.3)", borderRadius:2, background:"rgba(212,175,55,0.04)" }}>
               <span style={{ fontFamily:"'Montserrat',sans-serif", fontWeight:300, fontSize:12, letterSpacing:"0.2em", color:"rgba(255,255,255,0.7)", textTransform:"uppercase" as const }}>
@@ -275,7 +303,15 @@ export default function OnyxGold({ couple }: OnyxGoldProps) {
             </div>
           </Reveal>
         </section>
+
       </div>
+      {couple.bgMusicUrl && (
+  <MusicPlayer
+    src={couple.bgMusicUrl}
+    dark
+    accentColor="#D4AF37"
+  />
+)}
     </>
   );
 }

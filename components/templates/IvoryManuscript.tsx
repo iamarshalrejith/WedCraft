@@ -3,6 +3,8 @@
 import { useEffect, useState } from "react";
 import { CoupleDetails } from "@/types/invite";
 import RSVPForm from "@/components/rsvp/RSVPForm";
+import MusicPlayer from "@/components/MusicPlayer";
+import Image from "next/image";
 
 interface Props { couple?: CoupleDetails; }
 
@@ -118,6 +120,39 @@ export default function IvoryManuscript({ couple = defaultCouple }: Props) {
           <p className="manuscript-body" style={{ color:"#7A5C40", fontStyle:"italic" }}>{c.weddingTime} · {c.venue}</p>
         </div>
 
+        {c.couplePhotoUrl && (
+  <div className={`${contentVisible ? "content-reveal" : "opacity-0"} mt-8`}>
+    <div
+      style={{
+        display: "inline-block",
+        padding: "8px",
+        background: "#F8F2E4",
+        border: "1px solid #C4A97A88",
+        boxShadow: "0 6px 20px rgba(139,111,66,0.18)",
+      }}
+    >
+      <div
+        style={{
+          padding: "6px",
+          border: "1px solid #8B6F4244",
+          background: "#EFE4CF",
+        }}
+      >
+        <Image
+          src={c.couplePhotoUrl}
+          alt="Couple"
+          width={220}
+          height={280}
+          style={{
+            objectFit: "cover",
+            filter: "sepia(18%) contrast(1.03)",
+          }}
+        />
+      </div>
+    </div>
+  </div>
+)}
+
         {/* Scroll down hint */}
         <div className={`absolute bottom-10 flex flex-col items-center gap-2 ${contentVisible ? "ink-reveal" : "opacity-0"}`}>
           <p className="manuscript-body text-xs tracking-widest uppercase" style={{ color:"#A0856A" }}>Scroll to read</p>
@@ -177,6 +212,8 @@ export default function IvoryManuscript({ couple = defaultCouple }: Props) {
         </div>
       </section>
 
+      
+
      {/* ── RSVP ── */}
 <section className="max-w-lg mx-auto px-8 pb-24 text-center">
 
@@ -222,6 +259,12 @@ export default function IvoryManuscript({ couple = defaultCouple }: Props) {
   )}
 
 </section>
+{c.bgMusicUrl && (
+  <MusicPlayer
+    src={c.bgMusicUrl}
+    accentColor="#8B6F42"
+  />
+)}
     </div>
   );
 }
