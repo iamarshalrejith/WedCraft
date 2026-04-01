@@ -23,7 +23,8 @@ export interface CoupleDetails {
   venueAddress: string;
   mapLink: string;
   phone: string;             // for RSVP
-  couplePhotoUrl?: string;
+  couplePhotoUrl?: string;   // direct image URL (Premium+)
+  bgMusicUrl?: string;       // direct audio URL (Premium+)
   events: WeddingEvent[];
   personalMessage?: string;
 }
