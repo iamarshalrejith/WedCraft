@@ -9,10 +9,27 @@ import { formatWeddingDate, daysUntil } from "@/lib/invite-utils";
 import RSVPDashboard from "@/components/rsvp/RSVPDashboard";
 import { RatingWidget } from "@/components/RatingWidget";
 import {
-  Copy, Check, ExternalLink, MessageCircle, Instagram,
-  Loader2, Heart, CalendarDays, MapPin, User, LogIn, Plus,
-  ChevronDown, ChevronUp, Users, Pencil, QrCode,
-  Clock, Edit3, AlertTriangle,
+  Copy,
+  Check,
+  ExternalLink,
+  MessageCircle,
+  Instagram,
+  Loader2,
+  Heart,
+  CalendarDays,
+  MapPin,
+  User,
+  LogIn,
+  Plus,
+  ChevronDown,
+  ChevronUp,
+  Users,
+  Pencil,
+  QrCode,
+  Clock,
+  Edit3,
+  AlertTriangle,
+  Eye,
 } from "lucide-react";
 
 // ── Expiry + edit info bar shown inside each invite card ─────────────────────
@@ -41,24 +58,28 @@ function InviteStatusBar({ invite }: { invite: InviteRecord }) {
 
   return (
     <div className="flex flex-wrap items-center gap-2 px-4 sm:px-5 py-2.5 border-t border-gray-100 bg-gray-50 text-xs">
-
       {/* Expiry */}
-      {expiresAt && (
-        isExpired ? (
+      {expiresAt &&
+        (isExpired ? (
           <span className="flex items-center gap-1 text-red-500 font-medium">
             <AlertTriangle size={11} /> Invite expired
           </span>
         ) : daysLeft !== null && daysLeft <= 30 ? (
           <span className="flex items-center gap-1 text-amber-600 font-medium">
-            <Clock size={11} /> Expires in {daysLeft} day{daysLeft !== 1 ? "s" : ""}
+            <Clock size={11} /> Expires in {daysLeft} day
+            {daysLeft !== 1 ? "s" : ""}
           </span>
         ) : (
           <span className="flex items-center gap-1 text-gray-400">
             <Clock size={11} />
-            Active until {expiresAt.toLocaleDateString("en-IN", { day: "numeric", month: "short", year: "numeric" })}
+            Active until{" "}
+            {expiresAt.toLocaleDateString("en-IN", {
+              day: "numeric",
+              month: "short",
+              year: "numeric",
+            })}
           </span>
-        )
-      )}
+        ))}
 
       {/* Divider dot */}
       {expiresAt && <span className="text-gray-300">·</span>}
@@ -67,10 +88,14 @@ function InviteStatusBar({ invite }: { invite: InviteRecord }) {
       {isEditLocked ? (
         <span className="flex items-center gap-1 text-gray-400">
           <Edit3 size={11} />
-          {weddingPassed ? "Editing closed (wedding passed)" : "No edits remaining"}
+          {weddingPassed
+            ? "Editing closed (wedding passed)"
+            : "No edits remaining"}
         </span>
       ) : (
-        <span className={`flex items-center gap-1 ${editsLeft === 1 ? "text-amber-600 font-medium" : "text-gray-400"}`}>
+        <span
+          className={`flex items-center gap-1 ${editsLeft === 1 ? "text-amber-600 font-medium" : "text-gray-400"}`}
+        >
           <Edit3 size={11} />
           {editsLeft} edit{editsLeft !== 1 ? "s" : ""} left
         </span>
@@ -90,14 +115,25 @@ function InviteStatusBar({ invite }: { invite: InviteRecord }) {
 // ─── Single invite card ───────────────────────────────────────────────────────
 function InviteCard({ invite }: { invite: InviteRecord }) {
   const [copied, setCopied] = useState(false);
+  const [viewCount, setViewCount] = useState<number | null>(null);
   const [showRsvp, setShowRsvp] = useState(false);
   const [showQr, setShowQr] = useState(false);
   const [qrDataUrl, setQrDataUrl] = useState<string | null>(null);
   const inviteUrl = `${window.location.origin}/invite/${invite.slug}`;
   const days = daysUntil(invite.coupleDetails.weddingDate);
 
+  useEffect(() => {
+    fetch(`/api/analytics?slug=${invite.slug}`)
+      .then((r) => r.json())
+      .then((d) => setViewCount(d.viewCount ?? 0))
+      .catch(() => {});
+  }, [invite.slug]);
+
   const generateQr = async () => {
-    if (qrDataUrl) { setShowQr(!showQr); return; }
+    if (qrDataUrl) {
+      setShowQr(!showQr);
+      return;
+    }
     const url = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(inviteUrl)}&bgcolor=ffffff&color=000000&margin=10`;
     setQrDataUrl(url);
     setShowQr(true);
@@ -146,6 +182,13 @@ function InviteCard({ invite }: { invite: InviteRecord }) {
 
         {/* Details */}
         <div className="space-y-1.5 mb-4">
+          {/* 👁 VIEW COUNT */}
+          {viewCount !== null && (
+            <div className="flex items-center gap-2 text-xs text-gray-500">
+              <Eye size={12} />
+              {viewCount} view{viewCount !== 1 ? "s" : ""}
+            </div>
+          )}
           <div className="flex items-center gap-2 text-xs text-gray-500">
             <CalendarDays size={12} />
             {formatWeddingDate(invite.coupleDetails.weddingDate)} ·{" "}
@@ -170,20 +213,38 @@ function InviteCard({ invite }: { invite: InviteRecord }) {
                 : "bg-black text-white hover:bg-gray-800"
             }`}
           >
-            {copied ? <><Check size={10} /> Copied!</> : <><Copy size={10} /> Copy</>}
+            {copied ? (
+              <>
+                <Check size={10} /> Copied!
+              </>
+            ) : (
+              <>
+                <Copy size={10} /> Copy
+              </>
+            )}
           </button>
         </div>
 
         {/* Actions */}
         <div className="grid grid-cols-2 md:grid-cols-3 gap-2">
           <button
-            onClick={() => window.open(`https://wa.me/?text=${encodeURIComponent("You're invited! 💍 " + inviteUrl)}`, "_blank")}
+            onClick={() =>
+              window.open(
+                `https://wa.me/?text=${encodeURIComponent("You're invited! 💍 " + inviteUrl)}`,
+                "_blank",
+              )
+            }
             className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-xs sm:text-sm whitespace-nowrap font-medium bg-[#25D366]/10 text-[#128C7E] rounded-xl hover:bg-[#25D366]/20 transition-colors"
           >
             <MessageCircle size={13} /> WhatsApp
           </button>
           <button
-            onClick={() => window.open(`https://www.instagram.com/share?url=${encodeURIComponent(inviteUrl)}`, "_blank")}
+            onClick={() =>
+              window.open(
+                `https://www.instagram.com/share?url=${encodeURIComponent(inviteUrl)}`,
+                "_blank",
+              )
+            }
             className="flex-1 flex items-center justify-center gap-1.5 py-2.5 text-xs sm:text-sm whitespace-nowrap font-medium bg-pink-50 text-pink-600 rounded-xl hover:bg-pink-100 transition-colors"
           >
             <Instagram size={13} /> Instagram
@@ -212,13 +273,21 @@ function InviteCard({ invite }: { invite: InviteRecord }) {
         {/* QR Code panel */}
         {showQr && qrDataUrl && (
           <div className="mt-3 p-4 bg-gray-50 rounded-xl flex flex-col sm:flex-row items-center gap-4">
-            <img src={qrDataUrl} alt="QR Code" className="w-28 h-28 sm:w-24 sm:h-24 rounded-lg border border-gray-200" />
+            <img
+              src={qrDataUrl}
+              alt="QR Code"
+              className="w-28 h-28 sm:w-24 sm:h-24 rounded-lg border border-gray-200"
+            />
             <div className="flex-1">
               <p className="text-sm font-medium text-gray-900 mb-1">QR Code</p>
               <p className="text-xs text-gray-500 mb-3">
-                Print this on physical cards so guests can scan and open your invite instantly.
+                Print this on physical cards so guests can scan and open your
+                invite instantly.
               </p>
-              <button onClick={downloadQr} className="text-xs font-semibold text-purple-600 hover:text-purple-800 flex items-center gap-1">
+              <button
+                onClick={downloadQr}
+                className="text-xs font-semibold text-purple-600 hover:text-purple-800 flex items-center gap-1"
+              >
                 ↓ Download PNG
               </button>
             </div>
@@ -279,7 +348,9 @@ function LoggedInDashboard() {
             results.push(data);
             seen.add(data.slug);
           }
-        } catch { /* ignore */ }
+        } catch {
+          /* ignore */
+        }
       }
 
       try {
@@ -293,7 +364,9 @@ function LoggedInDashboard() {
             }
           });
         }
-      } catch { /* ignore */ }
+      } catch {
+        /* ignore */
+      }
 
       setInvites(results);
       setLoading(false);
@@ -311,7 +384,9 @@ function LoggedInDashboard() {
           </div>
           <div>
             <h1 className="text-2xl font-bold text-gray-900">My Dashboard</h1>
-            <p className="text-sm text-gray-500">Welcome back, {user?.name?.split(" ")[0]}</p>
+            <p className="text-sm text-gray-500">
+              Welcome back, {user?.name?.split(" ")[0]}
+            </p>
           </div>
         </div>
         <Link
@@ -325,10 +400,17 @@ function LoggedInDashboard() {
       {/* Success banner */}
       {newSlug && (
         <div className="mb-6 bg-emerald-50 border border-emerald-200 rounded-2xl p-4 flex items-center gap-3">
-          <Heart size={18} className="text-emerald-600 fill-emerald-600 shrink-0" />
+          <Heart
+            size={18}
+            className="text-emerald-600 fill-emerald-600 shrink-0"
+          />
           <div>
-            <p className="text-sm font-semibold text-emerald-800">Your invitation is live! 🎉</p>
-            <p className="text-xs text-emerald-600">Share it with your guests using the link below.</p>
+            <p className="text-sm font-semibold text-emerald-800">
+              Your invitation is live! 🎉
+            </p>
+            <p className="text-xs text-emerald-600">
+              Share it with your guests using the link below.
+            </p>
           </div>
         </div>
       )}
@@ -341,16 +423,27 @@ function LoggedInDashboard() {
       ) : invites.length === 0 ? (
         <div className="flex flex-col items-center justify-center py-20 text-center bg-white rounded-2xl border border-gray-200">
           <div className="text-5xl mb-4">💌</div>
-          <h2 className="text-xl font-bold text-gray-900 mb-2">No invitations yet</h2>
-          <p className="text-gray-500 mb-6 text-sm">Browse our templates and create your first wedding invitation.</p>
-          <Link href="/catalog" className="bg-black text-white px-6 py-2.5 rounded-xl text-sm font-semibold hover:bg-gray-800 transition-colors">
+          <h2 className="text-xl font-bold text-gray-900 mb-2">
+            No invitations yet
+          </h2>
+          <p className="text-gray-500 mb-6 text-sm">
+            Browse our templates and create your first wedding invitation.
+          </p>
+          <Link
+            href="/catalog"
+            className="bg-black text-white px-6 py-2.5 rounded-xl text-sm font-semibold hover:bg-gray-800 transition-colors"
+          >
             Browse Templates
           </Link>
         </div>
       ) : (
         <div className="space-y-4">
-          <p className="text-sm text-gray-500">{invites.length} invitation{invites.length !== 1 ? "s" : ""}</p>
-          {invites.map((invite) => <InviteCard key={invite.slug} invite={invite} />)}
+          <p className="text-sm text-gray-500">
+            {invites.length} invitation{invites.length !== 1 ? "s" : ""}
+          </p>
+          {invites.map((invite) => (
+            <InviteCard key={invite.slug} invite={invite} />
+          ))}
         </div>
       )}
     </div>
@@ -365,19 +458,25 @@ function GuestDashboard() {
   const [loading, setLoading] = useState(!!slug);
 
   useEffect(() => {
-    if (!slug) { setLoading(false); return; }
+    if (!slug) {
+      setLoading(false);
+      return;
+    }
     fetch(`/api/save-invite?slug=${slug}`)
       .then((r) => r.json())
-      .then((data) => { if (data.id) setInvite(data); })
+      .then((data) => {
+        if (data.id) setInvite(data);
+      })
       .catch(() => {})
       .finally(() => setLoading(false));
   }, [slug]);
 
-  if (loading) return (
-    <div className="min-h-[60vh] flex items-center justify-center">
-      <Loader2 size={28} className="animate-spin text-gray-400" />
-    </div>
-  );
+  if (loading)
+    return (
+      <div className="min-h-[60vh] flex items-center justify-center">
+        <Loader2 size={28} className="animate-spin text-gray-400" />
+      </div>
+    );
 
   return (
     <div className="max-w-2xl mx-auto px-4 py-16 text-center">
@@ -386,31 +485,56 @@ function GuestDashboard() {
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-emerald-100 mb-4">
             <Heart size={28} className="text-emerald-600 fill-emerald-600" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Your invitation is live! 🎉</h1>
+          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+            Your invitation is live! 🎉
+          </h1>
           <p className="text-gray-500 mb-6">
             {invite.coupleDetails.groomName} & {invite.coupleDetails.brideName}{" "}
             · {formatWeddingDate(invite.coupleDetails.weddingDate)}
           </p>
-          <Link href={`/invite/${invite.slug}`} target="_blank"
-            className="inline-flex items-center gap-2 bg-black text-white px-6 py-3 rounded-xl font-semibold text-sm hover:bg-gray-800 transition-colors mb-6">
+          <Link
+            href={`/invite/${invite.slug}`}
+            target="_blank"
+            className="inline-flex items-center gap-2 bg-black text-white px-6 py-3 rounded-xl font-semibold text-sm hover:bg-gray-800 transition-colors mb-6"
+          >
             <ExternalLink size={15} /> Open Your Invitation
           </Link>
           <div className="mt-6 bg-blue-50 rounded-2xl p-5 border border-blue-100 text-left">
-            <p className="text-sm font-semibold text-blue-900 mb-1">💡 Create an account to manage your invitations</p>
-            <p className="text-xs text-blue-700 mb-3">Sign up free to track RSVPs and manage your invite from a dashboard.</p>
-            <Link href="/auth/signup" className="text-xs font-semibold text-blue-900 underline">Create free account →</Link>
+            <p className="text-sm font-semibold text-blue-900 mb-1">
+              💡 Create an account to manage your invitations
+            </p>
+            <p className="text-xs text-blue-700 mb-3">
+              Sign up free to track RSVPs and manage your invite from a
+              dashboard.
+            </p>
+            <Link
+              href="/auth/signup"
+              className="text-xs font-semibold text-blue-900 underline"
+            >
+              Create free account →
+            </Link>
           </div>
         </div>
       ) : (
         <div>
           <div className="text-5xl mb-4">🔐</div>
-          <h2 className="text-xl font-bold text-gray-900 mb-2">Sign in to view your dashboard</h2>
-          <p className="text-gray-500 mb-6 text-sm">All your invitations will appear here once you log in.</p>
+          <h2 className="text-xl font-bold text-gray-900 mb-2">
+            Sign in to view your dashboard
+          </h2>
+          <p className="text-gray-500 mb-6 text-sm">
+            All your invitations will appear here once you log in.
+          </p>
           <div className="flex items-center justify-center gap-3">
-            <Link href="/auth/login" className="flex items-center gap-2 border border-gray-300 px-5 py-2.5 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors">
+            <Link
+              href="/auth/login"
+              className="flex items-center gap-2 border border-gray-300 px-5 py-2.5 rounded-xl text-sm font-medium hover:bg-gray-50 transition-colors"
+            >
               <LogIn size={15} /> Login
             </Link>
-            <Link href="/auth/signup" className="bg-black text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-gray-800 transition-colors">
+            <Link
+              href="/auth/signup"
+              className="bg-black text-white px-5 py-2.5 rounded-xl text-sm font-semibold hover:bg-gray-800 transition-colors"
+            >
               Sign Up Free
             </Link>
           </div>
@@ -422,17 +546,24 @@ function GuestDashboard() {
 
 function DashboardContent() {
   const { user, loading } = useAuth();
-  if (loading) return (
-    <div className="min-h-[60vh] flex items-center justify-center">
-      <Loader2 size={28} className="animate-spin text-gray-400" />
-    </div>
-  );
+  if (loading)
+    return (
+      <div className="min-h-[60vh] flex items-center justify-center">
+        <Loader2 size={28} className="animate-spin text-gray-400" />
+      </div>
+    );
   return user ? <LoggedInDashboard /> : <GuestDashboard />;
 }
 
 export default function DashboardPage() {
   return (
-    <Suspense fallback={<div className="min-h-[60vh] flex items-center justify-center"><Loader2 size={28} className="animate-spin text-gray-400" /></div>}>
+    <Suspense
+      fallback={
+        <div className="min-h-[60vh] flex items-center justify-center">
+          <Loader2 size={28} className="animate-spin text-gray-400" />
+        </div>
+      }
+    >
       <DashboardContent />
     </Suspense>
   );

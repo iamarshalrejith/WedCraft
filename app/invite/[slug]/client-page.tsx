@@ -69,6 +69,7 @@ export default function InvitePage({ params }: InvitePageProps) {
       .then((r) => r.json())
       .then((data) => {
         if (data.id) {
+          data.coupleDetails.slug = data.slug;
           setInvite(data);
           // Track this view (fire and forget)
           fetch("/api/analytics", {

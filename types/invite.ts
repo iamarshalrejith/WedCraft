@@ -15,6 +15,7 @@ export const TIER_MAX_EDITS: Record<string, number> = {
 };
 
 export interface CoupleDetails {
+  slug?: string; 
   groomName: string;
   brideName: string;
   weddingDate: string;       // ISO date string
