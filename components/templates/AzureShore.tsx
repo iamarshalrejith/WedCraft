@@ -512,7 +512,10 @@ export default function AzureShore({ couple }: AzureShoreProps) {
 
             <div style={{ textAlign: "left", marginBottom: 20, width: "100%" }}>
               <RSVPForm
-                inviteSlug={couple.groomName.toLowerCase().replace(/\s+/g,"-") + "-weds-" + couple.brideName.toLowerCase().replace(/\s+/g,"-")}
+                inviteSlug={
+  couple.slug ??
+  `${couple.groomName.toLowerCase().replace(/\s+/g,"-")}-weds-${couple.brideName.toLowerCase().replace(/\s+/g,"-")}`
+}
                 coupleName={`${couple.groomName} & ${couple.brideName}`}
                 accentColor="#0D9488"
                 theme="dark"

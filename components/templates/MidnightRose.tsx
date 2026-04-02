@@ -250,7 +250,10 @@ export default function MidnightRose({ couple }: MidnightRoseProps) {
               Your presence will make our night truly complete
             </p>
             <div style={{ textAlign:"left", marginBottom:16 }}>
-              <RSVPForm inviteSlug={`${couple.groomName.toLowerCase().replace(/\s+/g,"-")}-weds-${couple.brideName.toLowerCase().replace(/\s+/g,"-")}`} coupleName={`${couple.groomName} & ${couple.brideName}`} accentColor="#B8860B" theme="dark"/>
+              <RSVPForm  inviteSlug={
+    couple.slug ??
+    `${couple.groomName.toLowerCase().replace(/\s+/g,"-")}-weds-${couple.brideName.toLowerCase().replace(/\s+/g,"-")}`
+  } coupleName={`${couple.groomName} & ${couple.brideName}`} accentColor="#B8860B" theme="dark"/>
             </div>
             {couple.phone && (
               <button onClick={()=>{const p=couple.phone?.replace(/\D/g,"");window.open(`https://wa.me/${p}?text=${encodeURIComponent(`Hello! We would love to celebrate with ${couple.groomName} & ${couple.brideName}.`)}`,"_blank");}}

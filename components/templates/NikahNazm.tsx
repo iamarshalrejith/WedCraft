@@ -285,7 +285,10 @@ export default function NikahNazm({ couple }: NikahNazmProps) {
             </p>
             <div style={{ textAlign:"left", marginBottom:20 }}>
               <RSVPForm
-                inviteSlug={`${couple.groomName.toLowerCase().replace(/\s+/g,"-")}-weds-${couple.brideName.toLowerCase().replace(/\s+/g,"-")}`}
+                inviteSlug={
+  couple.slug ??
+  `${couple.groomName.toLowerCase().replace(/\s+/g,"-")}-weds-${couple.brideName.toLowerCase().replace(/\s+/g,"-")}`
+}
                 coupleName={`${couple.groomName} & ${couple.brideName}`}
                 accentColor="#D4AF37"
                 theme="dark"

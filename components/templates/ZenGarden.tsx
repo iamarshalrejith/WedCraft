@@ -216,7 +216,10 @@ export default function ZenGarden({ couple }: ZenGardenProps) {
               <div style={{ padding:"28px 0" }}>
                 <p style={{ fontFamily:"'Noto Sans JP',sans-serif", fontWeight:300, fontSize:10, letterSpacing:"0.4em", color:"#999", textTransform:"uppercase" as const, textAlign:"center", marginBottom:8 }}>出欠 — RSVP</p>
                 <p style={{ fontFamily:"'Noto Serif JP',serif", fontWeight:300, fontSize:18, color:"#333", textAlign:"center", marginBottom:28 }}>ご出席をお知らせください</p>
-                <RSVPForm inviteSlug={`${couple.groomName.toLowerCase().replace(/\s+/g,"-")}-weds-${couple.brideName.toLowerCase().replace(/\s+/g,"-")}`} coupleName={`${couple.groomName} & ${couple.brideName}`} accentColor="#CC2936" theme="light"/>
+                <RSVPForm inviteSlug={
+  couple.slug ??
+  `${couple.groomName.toLowerCase().replace(/\s+/g,"-")}-weds-${couple.brideName.toLowerCase().replace(/\s+/g,"-")}`
+} coupleName={`${couple.groomName} & ${couple.brideName}`} accentColor="#CC2936" theme="light"/>
                 {couple.phone && (
                   <div style={{ textAlign:"center", marginTop:16 }}>
                     <button onClick={()=>{const p=couple.phone?.replace(/\D/g,"");window.open(`https://wa.me/${p}?text=${encodeURIComponent(`Hi! We would love to attend the wedding of ${couple.groomName} & ${couple.brideName}.`)}`,"_blank");}}

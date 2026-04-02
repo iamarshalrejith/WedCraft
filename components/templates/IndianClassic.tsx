@@ -70,7 +70,9 @@ const GopuramSilhouette = ({opacity=0.1}:{opacity?:number}) => (
 
 export default function IndianClassic({couple}:IndianClassicProps) {
   const allEvents = couple.events?.length>0 ? couple.events : [{name:"Thirumanam",date:couple.weddingDate,time:couple.weddingTime,venue:couple.venue}];
-  const slug = `${couple.groomName.toLowerCase().replace(/\s+/g,"-")}-weds-${couple.brideName.toLowerCase().replace(/\s+/g,"-")}`;
+  const slug =
+  couple.slug ??
+  `${couple.groomName.toLowerCase().replace(/\s+/g,"-")}-weds-${couple.brideName.toLowerCase().replace(/\s+/g,"-")}`;
 
   return (
     <>

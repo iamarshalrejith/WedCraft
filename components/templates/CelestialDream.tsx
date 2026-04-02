@@ -268,7 +268,10 @@ export default function CelestialDream({ couple }: CelestialDreamProps) {
             <h2 style={{ fontFamily:"'Crimson Text',serif", fontSize:28, color:"#F0E8FF", marginBottom:8 }}>Join us under the stars</h2>
             <p style={{ fontFamily:"'Jost',sans-serif", fontWeight:300, fontSize:14, color:"rgba(200,180,255,0.55)", lineHeight:1.8, marginBottom:28 }}>Let us know you&apos;re coming — the universe awaits</p>
             <div style={{ textAlign:"left", marginBottom:20 }}>
-              <RSVPForm inviteSlug={`${couple.groomName.toLowerCase().replace(/\s+/g,"-")}-weds-${couple.brideName.toLowerCase().replace(/\s+/g,"-")}`} coupleName={`${couple.groomName} & ${couple.brideName}`} accentColor="#9370DB" theme="dark"/>
+              <RSVPForm  inviteSlug={
+    couple.slug ??
+    `${couple.groomName.toLowerCase().replace(/\s+/g,"-")}-weds-${couple.brideName.toLowerCase().replace(/\s+/g,"-")}`
+  } coupleName={`${couple.groomName} & ${couple.brideName}`} accentColor="#9370DB" theme="dark"/>
             </div>
             {couple.phone && (
               <button onClick={() => { const p=couple.phone?.replace(/\D/g,""); window.open(`https://wa.me/${p}?text=${encodeURIComponent(`Greetings! We'd love to attend the wedding of ${couple.groomName} & ${couple.brideName}.`)}`,"_blank"); }}

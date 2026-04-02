@@ -204,7 +204,10 @@ export default function RusticBloom({ couple }: RusticBloomProps) {
               Your presence would mean the world to us.
             </p>
             <div style={{ textAlign:"left", marginBottom:16 }}>
-              <RSVPForm inviteSlug={`${couple.groomName.toLowerCase().replace(/\s+/g,"-")}-weds-${couple.brideName.toLowerCase().replace(/\s+/g,"-")}`} coupleName={`${couple.groomName} & ${couple.brideName}`} accentColor="#C4855A" theme="light"/>
+              <RSVPForm inviteSlug={
+    couple.slug ??
+    `${couple.groomName.toLowerCase().replace(/\s+/g,"-")}-weds-${couple.brideName.toLowerCase().replace(/\s+/g,"-")}`
+  } coupleName={`${couple.groomName} & ${couple.brideName}`} accentColor="#C4855A" theme="light"/>
             </div>
             {couple.phone && (
               <button onClick={()=>{const p=couple.phone?.replace(/\D/g,"");window.open(`https://wa.me/${p}?text=${encodeURIComponent(`Hi! We'd love to join the wedding of ${couple.groomName} & ${couple.brideName}.`)}`,"_blank");}}

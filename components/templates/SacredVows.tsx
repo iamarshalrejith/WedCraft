@@ -245,7 +245,10 @@ export default function SacredVows({ couple }: SacredVowsProps) {
             </p>
             <div style={{ textAlign: "left", marginBottom: 20 }}>
               <RSVPForm
-                inviteSlug={`${couple.groomName.toLowerCase().replace(/\s+/g, "-")}-weds-${couple.brideName.toLowerCase().replace(/\s+/g, "-")}`}
+                inviteSlug={
+    couple.slug ??
+    `${couple.groomName.toLowerCase().replace(/\s+/g, "-")}-weds-${couple.brideName.toLowerCase().replace(/\s+/g, "-")}`
+  }
                 coupleName={`${couple.groomName} & ${couple.brideName}`}
                 accentColor="#6B8F5E"
                 theme="light"

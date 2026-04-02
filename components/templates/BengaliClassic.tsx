@@ -68,7 +68,9 @@ const RedDivider = () => (
 );
 
 export default function BengaliClassic({couple}:BengaliClassicProps) {
-  const slug=`${couple.groomName.toLowerCase().replace(/\s+/g,"-")}-weds-${couple.brideName.toLowerCase().replace(/\s+/g,"-")}`;
+  const slug =
+  couple.slug ??
+  `${couple.groomName.toLowerCase().replace(/\s+/g,"-")}-weds-${couple.brideName.toLowerCase().replace(/\s+/g,"-")}`;
   const allEvents=couple.events?.length>0?couple.events:[{name:"Biye Bari",date:couple.weddingDate,time:couple.weddingTime,venue:couple.venue}];
   return (
     <>

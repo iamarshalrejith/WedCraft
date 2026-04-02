@@ -225,7 +225,7 @@ export default function NordicFrost({ couple = defaultCouple }: Props) {
     }}
   >
     <RSVPForm
-      inviteSlug="nordic-frost"
+      inviteSlug={c.slug ?? "nordic-frost"}
       coupleName={`${c.groomName} & ${c.brideName}`}
       accentColor="#4682B4"
       theme="light"

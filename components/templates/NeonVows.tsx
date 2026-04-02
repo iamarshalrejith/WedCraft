@@ -248,7 +248,7 @@ export default function NeonVows({ couple = defaultCouple }: Props) {
   >
     <div className="w-full overflow-hidden">
        <RSVPForm
-      inviteSlug="neon-vows"
+        inviteSlug={c.slug ?? "neon-vows"}
       coupleName={`${c.groomName} & ${c.brideName}`}
       accentColor="#6D28D9"
       theme="dark"

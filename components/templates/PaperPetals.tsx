@@ -204,7 +204,10 @@ export default function PaperPetals({ couple }: PaperPetalsProps) {
                 Kindly let us know you&apos;re coming
               </p>
               <RSVPForm
-                inviteSlug={`${couple.groomName.toLowerCase().replace(/\s+/g, "-")}-weds-${couple.brideName.toLowerCase().replace(/\s+/g, "-")}`}
+                 inviteSlug={
+    couple.slug ??
+    `${couple.groomName.toLowerCase().replace(/\s+/g, "-")}-weds-${couple.brideName.toLowerCase().replace(/\s+/g, "-")}`
+  }
                 coupleName={`${couple.groomName} & ${couple.brideName}`}
                 accentColor="#555555"
                 theme="light"

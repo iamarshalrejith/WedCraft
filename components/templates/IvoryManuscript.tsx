@@ -235,7 +235,7 @@ export default function IvoryManuscript({ couple = defaultCouple }: Props) {
     }}
   >
     <RSVPForm
-      inviteSlug="ivory-manuscript"
+      inviteSlug={c.slug ?? "ivory-manuscript"}
       coupleName={`${c.groomName} & ${c.brideName}`}
       accentColor="#8B6F42"
       theme="light"

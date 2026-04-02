@@ -423,7 +423,10 @@ export default function EternalBloom({ couple }: EternalBloomProps) {
 
             <div style={{ textAlign: "left", marginBottom: 20 }}>
               <RSVPForm
-                inviteSlug={couple.groomName.toLowerCase().replace(/\s+/g,"-") + "-weds-" + couple.brideName.toLowerCase().replace(/\s+/g,"-")}
+                inviteSlug={
+    couple.slug ??
+    `${couple.groomName.toLowerCase().replace(/\s+/g, "-")}-weds-${couple.brideName.toLowerCase().replace(/\s+/g, "-")}`
+  }
                 coupleName={`${couple.groomName} & ${couple.brideName}`}
                 accentColor="#C47860"
                 theme="light"

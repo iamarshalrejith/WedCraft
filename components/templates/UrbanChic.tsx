@@ -38,7 +38,9 @@ function Reveal({children,delay=0,direction="up"}:{children:React.ReactNode;dela
 
 export default function UrbanChic({couple}:UrbanChicProps) {
   const allEvents = couple.events?.length>0 ? couple.events : [{name:"Wedding Ceremony",date:couple.weddingDate,time:couple.weddingTime,venue:couple.venue}];
-  const slug = `${couple.groomName.toLowerCase().replace(/\s+/g,"-")}-weds-${couple.brideName.toLowerCase().replace(/\s+/g,"-")}`;
+  const slug =
+  couple.slug ??
+  `${couple.groomName.toLowerCase().replace(/\s+/g,"-")}-weds-${couple.brideName.toLowerCase().replace(/\s+/g,"-")}`;
   const year = new Date(couple.weddingDate).getFullYear();
 
   return (

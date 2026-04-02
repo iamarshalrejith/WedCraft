@@ -64,8 +64,7 @@ export default function TropicalParadise({couple}:TropicalParadiseProps) {
   const [mounted, setMounted] = useState(false);
   useEffect(()=>setMounted(true),[]);
   const allEvents = couple.events?.length>0 ? couple.events : [{name:"Wedding Ceremony",date:couple.weddingDate,time:couple.weddingTime,venue:couple.venue}];
-  const slug = `${couple.groomName.toLowerCase().replace(/\s+/g,"-")}-weds-${couple.brideName.toLowerCase().replace(/\s+/g,"-")}`;
-
+  const slug = couple.slug ?? `${couple.groomName.toLowerCase().replace(/\s+/g,"-")}-weds-${couple.brideName.toLowerCase().replace(/\s+/g,"-")}`;
   return (
     <>
       <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:ital,wght@0,300;0,400;0,600;1,300&display=swap" rel="stylesheet"/>

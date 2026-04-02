@@ -675,10 +675,9 @@ export default function MangalUtsav({ couple }: MangalUtsavProps) {
         <div className="w-full max-w-md mx-auto mb-6">
           <RSVPForm
             inviteSlug={
-              couple.groomName.toLowerCase().replace(/\s+/g, "-") +
-              "-weds-" +
-              couple.brideName.toLowerCase().replace(/\s+/g, "-")
-            }
+  couple.slug ??
+  `${couple.groomName.toLowerCase().replace(/\s+/g, "-")}-weds-${couple.brideName.toLowerCase().replace(/\s+/g, "-")}`
+}
             coupleName={`${couple.groomName} & ${couple.brideName}`}
             accentColor="#D4AF37"
             theme="dark"

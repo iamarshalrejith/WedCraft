@@ -248,7 +248,7 @@ export default function VelvetHaveli({ couple = defaultCouple }: Props) {
     }}
   >
     <RSVPForm
-      inviteSlug="velvet-haveli"
+      inviteSlug={c.slug ?? "velvet-haveli"}
       coupleName={`${c.groomName} & ${c.brideName}`}
       accentColor="#D4AF37"
       theme="dark"
