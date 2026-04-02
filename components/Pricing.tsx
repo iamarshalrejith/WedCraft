@@ -10,7 +10,7 @@ import { motion } from "framer-motion";
 // Premium  ₹999 — 12 months · 2 edits · everything Standard + photo + music + countdown + schedule
 // Luxury   ₹1999 — 24 months · 2 edits · everything Premium + exclusive templates + RSVP dashboard + priority support
 
-const SUPPORT_WHATSAPP = "https://wa.me/919876543210?text=Hi%20WedCraft%20support%2C%20I%20need%20help%20with%20my%20Luxury%20invite.";
+const SUPPORT_WHATSAPP = "https://wa.me/919489845123?text=Hi%20WedCraft%20support%2C%20I%20need%20help%20with%20my%20Luxury%20invite.";
 
 const plans = [
   {
@@ -41,7 +41,6 @@ const plans = [
       "Animated entrance & transitions",
       "Event schedule timeline",
       "Countdown timer",
-      "2 edits included",
       "Active for 9 months",
     ],
     cta: "Choose Standard",
@@ -57,7 +56,6 @@ const plans = [
       "Everything in Standard",
       "Couple photo in invite",
       "Background music",
-      "2 edits included",
       "Active for 12 months",
     ],
     cta: "Choose Premium",
@@ -74,7 +72,6 @@ const plans = [
       "Exclusive luxury templates",
       "Live RSVP dashboard",
       "Priority WhatsApp support",
-      "2 edits included",
       "Active for 24 months",
     ],
     cta: "Go Luxury",
