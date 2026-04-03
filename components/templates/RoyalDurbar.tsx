@@ -57,6 +57,158 @@ const FloralBorder = () => (
   </div>
 );
 
+// ── Family Section ─────────────────────────────────────────────────────────────
+function FamilySection({ couple }: { couple: CoupleDetails }) {
+  const hasParents =
+    couple.groomFatherName || couple.groomMotherName ||
+    couple.brideFatherName || couple.brideMotherName;
+  const hasRelatives = couple.relatives && couple.relatives.length > 0;
+
+  if (!hasParents && !hasRelatives) return null;
+
+  const groomRelatives = couple.relatives?.filter((r) => r.side === "groom") ?? [];
+  const brideRelatives = couple.relatives?.filter((r) => r.side === "bride") ?? [];
+
+  const gold = "#D4AF37";
+  const dimGold = "rgba(212,175,55,0.45)";
+  const dimBorder = "rgba(212,175,55,0.18)";
+  const cream = "#F5E6C8";
+  const dimCream = "rgba(245,230,200,0.7)";
+
+  // Parents box — parents only, no relatives
+  const ParentsCard = ({
+    sideLabel, fatherName, motherName, delay,
+  }: { sideLabel: string; fatherName?: string; motherName?: string; delay: number }) => (
+    <Reveal delay={delay}>
+      <div style={{ background:"rgba(212,175,55,0.04)", border:`1px solid ${dimBorder}`, borderRadius:4, padding:"22px 18px", textAlign:"center" }}>
+        <p style={{ fontFamily:"'Cinzel',serif", fontSize:9, letterSpacing:"0.3em", color:dimGold, textTransform:"uppercase" as const, marginBottom:16 }}>
+          {sideLabel}
+        </p>
+        {fatherName && (
+          <div style={{ marginBottom: motherName ? 12 : 0 }}>
+            <p style={{ fontFamily:"'IM Fell English',serif", fontSize:15, color:cream, lineHeight:1.3 }}>{fatherName}</p>
+            <p style={{ fontSize:10, color:dimGold, letterSpacing:"0.15em", textTransform:"uppercase" as const, marginTop:2 }}>Father</p>
+          </div>
+        )}
+        {fatherName && motherName && (
+          <div style={{ height:"0.5px", background:dimBorder, margin:"10px auto", width:36 }} />
+        )}
+        {motherName && (
+          <div>
+            <p style={{ fontFamily:"'IM Fell English',serif", fontSize:15, color:cream, lineHeight:1.3 }}>{motherName}</p>
+            <p style={{ fontSize:10, color:dimGold, letterSpacing:"0.15em", textTransform:"uppercase" as const, marginTop:2 }}>Mother</p>
+          </div>
+        )}
+      </div>
+    </Reveal>
+  );
+
+  // Single relative-family card (uncle + wife)
+  const RelativeCard = ({
+    rel, delay,
+  }: { rel: { name: string; relation: string; spouseName?: string }; delay: number }) => (
+    <Reveal delay={delay}>
+      <div style={{ background:"rgba(212,175,55,0.03)", border:`1px solid rgba(212,175,55,0.12)`, borderRadius:3, padding:"12px 12px", textAlign:"center" }}>
+        <p style={{ fontSize:8, letterSpacing:"0.22em", color:"rgba(212,175,55,0.35)", textTransform:"uppercase" as const, marginBottom:8 }}>
+          {rel.relation}
+        </p>
+        <p style={{ fontFamily:"'IM Fell English',serif", fontSize:14, color:cream, lineHeight:1.3 }}>
+          {rel.name}
+        </p>
+        {rel.spouseName && (
+          <>
+            <div style={{ display:"flex", alignItems:"center", gap:5, justifyContent:"center", margin:"6px 0" }}>
+              <div style={{ height:"0.5px", flex:1, background:dimBorder }} />
+              <span style={{ fontSize:9, color:`rgba(212,175,55,0.5)` }}>&amp;</span>
+              <div style={{ height:"0.5px", flex:1, background:dimBorder }} />
+            </div>
+            <p style={{ fontFamily:"'IM Fell English',serif", fontSize:13, color:dimCream, lineHeight:1.3 }}>
+              {rel.spouseName}
+            </p>
+          </>
+        )}
+      </div>
+    </Reveal>
+  );
+
+  return (
+    <section style={{ padding: "20px 16px 60px", maxWidth: 660, margin: "0 auto" }}>
+      <Reveal>
+        <p style={{
+          fontFamily: "'Cinzel',serif", fontSize: 10, letterSpacing: "0.4em",
+          color: "rgba(212,175,55,0.55)", textTransform: "uppercase" as const,
+          textAlign: "center", marginBottom: 32,
+        }}>
+          Two Families, One Celebration
+        </p>
+      </Reveal>
+
+      {/* Three-column: groom relatives | parents center | bride relatives */}
+      <div style={{ display:"grid", gridTemplateColumns:"1fr auto 1fr", gap:12, alignItems:"start" }}>
+
+        {/* LEFT — Groom relatives */}
+        <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
+          {groomRelatives.length > 0 && (
+            <>
+              <Reveal delay={0.05}>
+                <p style={{ fontFamily:"'Cinzel',serif", fontSize:8, letterSpacing:"0.25em", color:"rgba(212,175,55,0.4)", textTransform:"uppercase" as const, textAlign:"center", marginBottom:4 }}>
+                  {couple.groomName}&apos;s Relatives
+                </p>
+              </Reveal>
+              {groomRelatives.map((rel, i) => (
+                <RelativeCard key={i} rel={rel} delay={0.1 + i * 0.08} />
+              ))}
+            </>
+          )}
+        </div>
+
+        {/* CENTER — Parents */}
+        <div style={{ display:"flex", flexDirection:"column", gap:10, minWidth:138, maxWidth:175 }}>
+          {(couple.groomFatherName || couple.groomMotherName) && (
+            <ParentsCard
+              sideLabel={`${couple.groomName}'s Parents`}
+              fatherName={couple.groomFatherName}
+              motherName={couple.groomMotherName}
+              delay={0.1}
+            />
+          )}
+          {(couple.groomFatherName || couple.groomMotherName) && (couple.brideFatherName || couple.brideMotherName) && (
+            <div style={{ display:"flex", justifyContent:"center" }}>
+              <div style={{ display:"flex", flexDirection:"column", alignItems:"center", gap:4 }}>
+                {[0,1,2].map(i=><div key={i} style={{ width:3, height:3, borderRadius:"50%", background:gold, opacity:0.25 }} />)}
+              </div>
+            </div>
+          )}
+          {(couple.brideFatherName || couple.brideMotherName) && (
+            <ParentsCard
+              sideLabel={`${couple.brideName}'s Parents`}
+              fatherName={couple.brideFatherName}
+              motherName={couple.brideMotherName}
+              delay={0.2}
+            />
+          )}
+        </div>
+
+        {/* RIGHT — Bride relatives */}
+        <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
+          {brideRelatives.length > 0 && (
+            <>
+              <Reveal delay={0.05}>
+                <p style={{ fontFamily:"'Cinzel',serif", fontSize:8, letterSpacing:"0.25em", color:"rgba(212,175,55,0.4)", textTransform:"uppercase" as const, textAlign:"center", marginBottom:4 }}>
+                  {couple.brideName}&apos;s Relatives
+                </p>
+              </Reveal>
+              {brideRelatives.map((rel, i) => (
+                <RelativeCard key={i} rel={rel} delay={0.1 + i * 0.08} />
+              ))}
+            </>
+          )}
+        </div>
+
+      </div>
+    </section>
+  );
+}
 export default function RoyalDurbar({couple}:RoyalDurbarProps) {
   const allEvents = couple.events?.length>0 ? couple.events : [{name:"Wedding Ceremony",date:couple.weddingDate,time:couple.weddingTime,venue:couple.venue}];
   const slug =
@@ -70,8 +222,8 @@ export default function RoyalDurbar({couple}:RoyalDurbarProps) {
       <div style={{minHeight:"100vh",background:"linear-gradient(170deg,#1A0005 0%,#2D000A 35%,#1A0005 70%,#0D0003 100%)",fontFamily:"'Lato',sans-serif",overflowX:"hidden"}} onContextMenu={e=>e.preventDefault()}>
 
         {/* Mughal arch top decoration */}
-        <div style={{display:"flex",justifyContent:"center",paddingTop:20,opacity:0.3}}>
-          <MughalArch width={300} color="#D4AF37" opacity={1}/>
+        <div style={{display:"flex",justifyContent:"center",paddingTop:60,opacity:0.3}}>
+          <MughalArch width={300} color="#D4AF37" opacity={1} />
         </div>
 
         {/* Hanging diyas */}
@@ -117,38 +269,24 @@ export default function RoyalDurbar({couple}:RoyalDurbarProps) {
           </Reveal>
 
           {couple.couplePhotoUrl && (
-  <Reveal delay={0.3}>
-    <div style={{ marginBottom: 28 }}>
-      <div
-        style={{
-          display: "inline-block",
-          padding: "8px",
-          background: "linear-gradient(135deg,#D4AF37,#8B7340,#D4AF37)",
-          boxShadow: "0 10px 40px rgba(0,0,0,0.6)",
-        }}
-      >
-        <div
-          style={{
-            padding: "6px",
-            background: "#1A0005",
-            border: "1px solid rgba(212,175,55,0.4)",
-          }}
-        >
-          <Image
-            src={couple.couplePhotoUrl}
-            alt="Couple"
-            width={200}
-            height={260}
-            style={{
-              objectFit: "cover",
-              filter: "contrast(1.05) saturate(1.05)",
-            }}
-          />
-        </div>
-      </div>
-    </div>
-  </Reveal>
-)}
+            <Reveal delay={0.3}>
+              <div style={{ marginBottom: 28 }}>
+                <div style={{
+                  display: "inline-block", padding: "8px",
+                  background: "linear-gradient(135deg,#D4AF37,#8B7340,#D4AF37)",
+                  boxShadow: "0 10px 40px rgba(0,0,0,0.6)",
+                }}>
+                  <div style={{ padding: "6px", background: "#1A0005", border: "1px solid rgba(212,175,55,0.4)" }}>
+                    <Image
+                      src={couple.couplePhotoUrl} alt="Couple"
+                      width={200} height={260}
+                      style={{ objectFit: "cover", filter: "contrast(1.05) saturate(1.05)" }}
+                    />
+                  </div>
+                </div>
+              </div>
+            </Reveal>
+          )}
 
           <Reveal delay={0.35}>
             <div style={{display:"inline-flex",alignItems:"center",gap:10,padding:"12px 28px",background:"rgba(212,175,55,0.08)",border:"1px solid rgba(212,175,55,0.35)",borderRadius:4}}>
@@ -179,7 +317,14 @@ export default function RoyalDurbar({couple}:RoyalDurbarProps) {
 
         <FloralBorder/>
 
-        {/* ── SECTION 3 — Events ── */}
+        {/* ── SECTION 3 — Family ── */}
+        <FamilySection couple={couple} />
+
+        {(couple.groomFatherName || couple.groomMotherName || couple.brideFatherName || couple.brideMotherName || (couple.relatives && couple.relatives.length > 0)) && (
+          <FloralBorder/>
+        )}
+
+        {/* ── SECTION 4 — Events ── */}
         <section style={{padding:"20px 24px 60px",maxWidth:560,margin:"0 auto"}}>
           <Reveal><p style={{fontFamily:"'Cinzel',serif",fontSize:10,letterSpacing:"0.4em",color:"rgba(212,175,55,0.55)",textTransform:"uppercase" as const,textAlign:"center",marginBottom:28}}>Ceremonies</p></Reveal>
           <div style={{display:"flex",flexDirection:"column",gap:12}}>
@@ -201,7 +346,7 @@ export default function RoyalDurbar({couple}:RoyalDurbarProps) {
           </div>
         </section>
 
-        {/* ── SECTION 4 — Venue ── */}
+        {/* ── SECTION 5 — Venue ── */}
         <section style={{padding:"20px 24px 60px",maxWidth:520,margin:"0 auto",textAlign:"center"}}>
           <Reveal>
             <div style={{position:"relative",display:"flex",justifyContent:"center",marginBottom:16,opacity:0.2}}>
@@ -216,7 +361,7 @@ export default function RoyalDurbar({couple}:RoyalDurbarProps) {
           </Reveal>
         </section>
 
-        {/* ── SECTION 5 — Countdown ── */}
+        {/* ── SECTION 6 — Countdown ── */}
         <section style={{padding:"20px 24px 60px",textAlign:"center"}}>
           <Reveal>
             <p style={{fontFamily:"'IM Fell English',serif",fontStyle:"italic",fontSize:18,color:"rgba(245,230,200,0.4)",marginBottom:28}}>Counting down to the grand celebration</p>
@@ -226,7 +371,7 @@ export default function RoyalDurbar({couple}:RoyalDurbarProps) {
 
         <FloralBorder/>
 
-        {/* ── SECTION 6 — RSVP ── */}
+        {/* ── SECTION 7 — RSVP ── */}
         <section style={{padding:"20px 24px 80px",maxWidth:520,margin:"0 auto",textAlign:"center"}}>
           <Reveal>
             <div style={{display:"flex",gap:12,justifyContent:"center",marginBottom:16}}>
@@ -237,7 +382,7 @@ export default function RoyalDurbar({couple}:RoyalDurbarProps) {
             <div style={{textAlign:"left",marginBottom:16}}>
               <RSVPForm inviteSlug={slug} coupleName={`${couple.groomName} & ${couple.brideName}`} accentColor="#D4AF37" theme="dark"/>
             </div>
-            {couple.phone&&<button onClick={()=>{const p=couple.phone?.replace(/\D/g,"");window.open(`https://wa.me/${p}?text=${encodeURIComponent(`Adaab! We are honoured to attend the wedding of ${couple.groomName} & ${couple.brideName}.`)}`,"_blank");}} style={{display:"inline-flex",alignItems:"center",gap:8,padding:"9px 22px",background:"transparent",border:"1px solid rgba(212,175,55,0.3)",borderRadius:2,color:"rgba(212,175,55,0.6)",fontFamily:"'Cinzel',serif",fontSize:11,cursor:"pointer",letterSpacing:"0.15em",textTransform:"uppercase" as const}}><Phone size={11}/> Also WhatsApp us</button>}
+            {couple.phone&&<button onClick={()=>{const p=couple.phone?.replace(/\D/g,"");window.open(`https://wa.me/${p}?text=${encodeURIComponent(`Adaab! We are honoured to attend the wedding of ${couple.groomName} & ${couple.brideName}.`)}`,`_blank`);}} style={{display:"inline-flex",alignItems:"center",gap:8,padding:"9px 22px",background:"transparent",border:"1px solid rgba(212,175,55,0.3)",borderRadius:2,color:"rgba(212,175,55,0.6)",fontFamily:"'Cinzel',serif",fontSize:11,cursor:"pointer",letterSpacing:"0.15em",textTransform:"uppercase" as const}}><Phone size={11}/> Also WhatsApp us</button>}
             <FloralBorder/>
             <p style={{fontFamily:"'IM Fell English',serif",fontStyle:"italic",fontSize:18,color:"rgba(212,175,55,0.35)"}}>{couple.groomName} & {couple.brideName}</p>
             <p style={{fontSize:10,color:"rgba(212,175,55,0.15)",letterSpacing:"0.25em",textTransform:"uppercase" as const,marginTop:8}}>Made with WedCraft</p>
@@ -250,12 +395,8 @@ export default function RoyalDurbar({couple}:RoyalDurbarProps) {
       </div>
 
       {couple.bgMusicUrl && (
-  <MusicPlayer
-    src={couple.bgMusicUrl}
-    dark
-    accentColor="#D4AF37"
-  />
-)}
+        <MusicPlayer src={couple.bgMusicUrl} dark accentColor="#D4AF37" />
+      )}
     </>
   );
 }

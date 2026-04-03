@@ -537,6 +537,33 @@ export const templates: Template[] = [
     previewBg: "from-pink-50 via-purple-50 to-rose-50",
     colors: ["#9B59B6", "#F9A8D4"],
   },
+  {
+    id: "t024",
+    name: "Sunset Mandap",
+    slug: "sunset-mandap",
+    price: 999,
+    tier: "Premium",
+    religion: "Hindu",
+    themes: ["Traditional", "Royal", "Floral"],
+    description:
+      "A warm terracotta and marigold South Indian mandap design with kolam rangoli dividers, floating diya animations, and a prominent family blessings section. Deeply cultural and visually stunning.",
+    features: [
+      "Family blessings section",
+      "Kolam rangoli dividers",
+      "Floating diya animations",
+      "Couple photo frame",
+      "RSVP system",
+      "Countdown timer",
+      "Background music",
+    ],
+    rating: 4.9,
+    reviewCount: 0,
+    isFeatured: true,
+    isNew: true,
+    thumbnail: "/templates/sunset-mandap.jpg",
+    previewBg: "from-orange-950 via-red-950 to-orange-950",
+    colors: ["#E8961E", "#C15A1B", "#FAF0DC"],
+  },
 ];
 
 export const allReligions: Religion[] = [

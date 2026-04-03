@@ -27,6 +27,7 @@ import IvoryManuscript from "@/components/templates/IvoryManuscript";
 import NeonVows from "@/components/templates/NeonVows";
 import VelvetHaveli from "@/components/templates/VelvetHaveli";
 import NordicFrost from "@/components/templates/NordicFrost";
+import SunsetMandap from "@/components/templates/SunsetMandap";
 
 interface InvitePageProps { params: Promise<{ slug: string }>; }
 
@@ -55,6 +56,7 @@ function renderTemplate(templateSlug: string, couple: CoupleDetails) {
     case "neon-vows":         return <NeonVows couple={couple} />;
     case "velvet-haveli":     return <VelvetHaveli couple={couple} />;
     case "nordic-frost":      return <NordicFrost couple={couple} />;
+    case "sunset-mandap":     return <SunsetMandap couple={couple} />;
     default:                  return <MangalUtsav couple={couple} />;
   }
 }
@@ -71,7 +73,6 @@ export default function InvitePage({ params }: InvitePageProps) {
         if (data.id) {
           data.coupleDetails.slug = data.slug;
           setInvite(data);
-          // Track this view (fire and forget)
           fetch("/api/analytics", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -93,7 +94,6 @@ export default function InvitePage({ params }: InvitePageProps) {
 
   if (!invite) notFound();
 
-  // ── Expiry check — show expired screen if past expiresAt date ───────────────
   if (invite.expiresAt && new Date(invite.expiresAt) < new Date()) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
