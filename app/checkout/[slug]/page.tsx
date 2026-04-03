@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTemplateBySlug } from "@/data/templates";
-import { WeddingEvent } from "@/types/invite";
+import { WeddingEvent, FamilyMember } from "@/types/invite";
 import { useAuth } from "@/context/AuthContext";
 import AuthModal from "@/components/AuthModal";
 import FileUpload from "@/components/FileUpload";
@@ -157,6 +157,11 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
     personalMessage: "",
     couplePhotoUrl: "",
     bgMusicUrl: "",
+    groomFatherName: "",
+    groomMotherName: "",
+    brideFatherName: "",
+    brideMotherName: "",
+    relatives: [] as FamilyMember[],
   });
 
   const [events, setEvents] = useState<WeddingEvent[]>([
@@ -414,6 +419,123 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
                   onChange={(e) => update("phone", e.target.value)}
                 />
               </Field>
+
+              {/* ── RELATIVES ── */}
+<div className="space-y-4">
+  <div className="flex items-center justify-between">
+    <p className="text-sm font-semibold text-gray-900">
+      Relatives & Family
+    </p>
+    <button
+      type="button"
+      onClick={() =>
+        setForm((prev) => ({
+          ...prev,
+          relatives: [
+            ...prev.relatives,
+            { name: "", relation: "", side: "groom", spouseName: "" },
+          ],
+        }))
+      }
+      className="flex items-center gap-1 text-xs border border-gray-200 px-2.5 py-1 rounded-lg hover:bg-gray-50"
+    >
+      <Plus size={12} /> Add
+    </button>
+  </div>
+
+  {form.relatives.length === 0 && (
+    <p className="text-sm text-gray-400">
+      Add relatives like Uncle, Aunt, Brother...
+    </p>
+  )}
+
+  <div className="space-y-2">
+    {form.relatives.map((rel, i) => (
+      <div
+        key={i}
+        className="grid grid-cols-12 gap-2 items-center bg-gray-50 p-3 rounded-xl"
+      >
+        {/* Name */}
+        <input
+          className={`${inputCls} col-span-3`}
+          placeholder="Name"
+          value={rel.name}
+          onChange={(e) =>
+            setForm((prev) => ({
+              ...prev,
+              relatives: prev.relatives.map((r, idx) =>
+                idx === i ? { ...r, name: e.target.value } : r
+              ),
+            }))
+          }
+        />
+
+        {/* Relation */}
+        <input
+          className={`${inputCls} col-span-3`}
+          placeholder="Relation"
+          value={rel.relation}
+          onChange={(e) =>
+            setForm((prev) => ({
+              ...prev,
+              relatives: prev.relatives.map((r, idx) =>
+                idx === i ? { ...r, relation: e.target.value } : r
+              ),
+            }))
+          }
+        />
+
+        {/* Spouse */}
+        <input
+          className={`${inputCls} col-span-3`}
+          placeholder="Spouse (optional)"
+          value={rel.spouseName || ""}
+          onChange={(e) =>
+            setForm((prev) => ({
+              ...prev,
+              relatives: prev.relatives.map((r, idx) =>
+                idx === i ? { ...r, spouseName: e.target.value } : r
+              ),
+            }))
+          }
+        />
+
+        {/* Side */}
+        <select
+          className={`${inputCls} col-span-2`}
+          value={rel.side}
+          onChange={(e) =>
+            setForm((prev) => ({
+              ...prev,
+              relatives: prev.relatives.map((r, idx) =>
+                idx === i
+                  ? { ...r, side: e.target.value as "groom" | "bride" }
+                  : r
+              ),
+            }))
+          }
+        >
+          <option value="groom">Groom</option>
+          <option value="bride">Bride</option>
+        </select>
+
+        {/* Delete */}
+        <button
+          type="button"
+          onClick={() =>
+            setForm((prev) => ({
+              ...prev,
+              relatives: prev.relatives.filter((_, idx) => idx !== i),
+            }))
+          }
+          className="col-span-1 text-gray-400 hover:text-red-500"
+        >
+          <Trash2 size={14} />
+        </button>
+      </div>
+    ))}
+  </div>
+</div>
 
               {/* Events */}
               <div>

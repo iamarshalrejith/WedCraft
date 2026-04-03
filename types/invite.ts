@@ -14,6 +14,13 @@ export const TIER_MAX_EDITS: Record<string, number> = {
   Luxury:   2,  // same for now — Luxury gets "30 days" which is handled by expiry
 };
 
+export interface FamilyMember {
+  name: string;
+  relation: string;          // e.g. "Uncle", "Aunt", "Brother"
+  side: "groom" | "bride";   // which family this person belongs to
+  spouseName?: string;       // e.g. wife/husband name shown alongside — for uncle-family cards
+}
+
 export interface CoupleDetails {
   slug?: string; 
   groomName: string;
@@ -28,6 +35,12 @@ export interface CoupleDetails {
   bgMusicUrl?: string;       // direct audio URL (Premium+)
   events: WeddingEvent[];
   personalMessage?: string;
+  // ── Family section ──────────────────────────────────────────────────────
+  groomFatherName?: string;
+  groomMotherName?: string;
+  brideFatherName?: string;
+  brideMotherName?: string;
+  relatives?: FamilyMember[];  // additional relatives beyond parents
 }
 
 export interface WeddingEvent {

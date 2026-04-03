@@ -4,8 +4,8 @@ import { use, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { useAuth } from "@/context/AuthContext";
-import { InviteRecord, WeddingEvent } from "@/types/invite";
-import { ArrowLeft, Save, Loader2, Plus, Trash2, Check, AlertTriangle, Lock } from "lucide-react";
+import { InviteRecord, WeddingEvent, FamilyMember } from "@/types/invite";
+import { ArrowLeft, Save, Loader2, Plus, Trash2, Check, AlertTriangle, Lock, Users } from "lucide-react";
 import FileUpload from "@/components/FileUpload";
 
 interface EditPageProps {
@@ -103,8 +103,12 @@ export default function EditInvitePage({ params }: EditPageProps) {
     groomName: "", brideName: "", weddingDate: "", weddingTime: "",
     venue: "", venueAddress: "", mapLink: "", phone: "", personalMessage: "",
     couplePhotoUrl: "", bgMusicUrl: "",
+    // Family fields
+    groomFatherName: "", groomMotherName: "",
+    brideFatherName: "", brideMotherName: "",
   });
   const [events, setEvents] = useState<WeddingEvent[]>([]);
+  const [relatives, setRelatives] = useState<FamilyMember[]>([]);
 
   useEffect(() => {
     if (!authLoading && !user) router.replace("/auth/login");
@@ -129,8 +133,13 @@ export default function EditInvitePage({ params }: EditPageProps) {
           personalMessage: c.personalMessage || "",
           couplePhotoUrl: c.couplePhotoUrl || "",
           bgMusicUrl: c.bgMusicUrl || "",
+          groomFatherName: c.groomFatherName || "",
+          groomMotherName: c.groomMotherName || "",
+          brideFatherName: c.brideFatherName || "",
+          brideMotherName: c.brideMotherName || "",
         });
         setEvents(c.events || []);
+        setRelatives(c.relatives || []);
 
         // Set edit count from DB
         const currentEdits = data.editCount ?? 0;
@@ -161,6 +170,17 @@ export default function EditInvitePage({ params }: EditPageProps) {
   const updateEvent = (i: number, field: keyof WeddingEvent, value: string) =>
     setEvents((prev) => prev.map((e, idx) => idx === i ? { ...e, [field]: value } : e));
 
+  const addRelative = () =>
+    setRelatives((prev) => [...prev, { name: "", relation: "", side: "groom" }]);
+
+  const updateRelative = (i: number, field: keyof FamilyMember, value: string) =>
+    setRelatives((prev) =>
+      prev.map((r, idx) => idx === i ? { ...r, [field]: value } : r)
+    );
+
+  const removeRelative = (i: number) =>
+    setRelatives((prev) => prev.filter((_, idx) => idx !== i));
+
   const handleSave = async () => {
     if (locked) return;
     setSaving(true);
@@ -169,12 +189,18 @@ export default function EditInvitePage({ params }: EditPageProps) {
       const res = await fetch("/api/invite/update", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ slug, coupleDetails: { ...form, events } }),
+        body: JSON.stringify({
+          slug,
+          coupleDetails: {
+            ...form,
+            events,
+            relatives,
+          },
+        }),
       });
       const data = await res.json();
 
       if (!res.ok) {
-        // Handle specific error codes
         if (data.code === "EDIT_LIMIT_REACHED") {
           setLocked(true);
           setLockReason(data.error);
@@ -189,7 +215,6 @@ export default function EditInvitePage({ params }: EditPageProps) {
         return;
       }
 
-      // Update edit count
       setEditCount(data.editCount);
       if (data.editsLeft === 0) {
         setLocked(true);
@@ -277,6 +302,125 @@ export default function EditInvitePage({ params }: EditPageProps) {
               <input className={inputCls} value={form.weddingTime}
                 onChange={(e) => update("weddingTime", e.target.value)} placeholder="e.g. 7:00 PM" />
             </Field>
+          </div>
+        </div>
+
+        {/* ── FAMILY SECTION ── */}
+        <div className={`bg-white rounded-2xl border border-gray-200 p-6 space-y-5 ${locked ? "opacity-60 pointer-events-none" : ""}`}>
+          <div className="flex items-center gap-2">
+            <Users size={16} className="text-gray-500" />
+            <h2 className="font-semibold text-gray-900">Family</h2>
+          </div>
+
+          {/* Groom's Parents */}
+          <div>
+            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">
+              Groom&apos;s Parents
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Field label="Father's Name">
+                <input
+                  className={inputCls}
+                  value={form.groomFatherName}
+                  onChange={(e) => update("groomFatherName", e.target.value)}
+                  placeholder="e.g. Ramesh Kumar"
+                />
+              </Field>
+              <Field label="Mother's Name">
+                <input
+                  className={inputCls}
+                  value={form.groomMotherName}
+                  onChange={(e) => update("groomMotherName", e.target.value)}
+                  placeholder="e.g. Sunita Kumar"
+                />
+              </Field>
+            </div>
+          </div>
+
+          {/* Bride's Parents */}
+          <div>
+            <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide mb-3">
+              Bride&apos;s Parents
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <Field label="Father's Name">
+                <input
+                  className={inputCls}
+                  value={form.brideFatherName}
+                  onChange={(e) => update("brideFatherName", e.target.value)}
+                  placeholder="e.g. Vijay Sharma"
+                />
+              </Field>
+              <Field label="Mother's Name">
+                <input
+                  className={inputCls}
+                  value={form.brideMotherName}
+                  onChange={(e) => update("brideMotherName", e.target.value)}
+                  placeholder="e.g. Meena Sharma"
+                />
+              </Field>
+            </div>
+          </div>
+
+          {/* Relatives */}
+          <div>
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 mb-3">
+              <p className="text-xs font-semibold text-gray-500 uppercase tracking-wide">
+                Relatives &amp; Extended Family
+              </p>
+              <button
+                onClick={addRelative}
+                className="flex items-center justify-center sm:justify-start gap-1 text-xs font-medium border border-gray-200 px-2.5 py-1 rounded-lg hover:bg-gray-50"
+              >
+                <Plus size={12} /> Add Relative
+              </button>
+            </div>
+
+            {relatives.length === 0 && (
+              <p className="text-sm text-gray-400">
+                No relatives added yet. Click &quot;Add Relative&quot; to include family members.
+              </p>
+            )}
+
+            <div className="space-y-2">
+              {relatives.map((rel, i) => (
+                <div
+                  key={i}
+                  className="grid grid-cols-1 md:grid-cols-12 gap-2 items-start bg-gray-50 p-3 rounded-xl"
+                >
+                  {/* Name */}
+                  <input
+                    className={`${inputCls} md:col-span-4`}
+                    placeholder="Full name"
+                    value={rel.name}
+                    onChange={(e) => updateRelative(i, "name", e.target.value)}
+                  />
+                  {/* Relation */}
+                  <input
+                    className={`${inputCls} md:col-span-4`}
+                    placeholder="Relation (e.g. Uncle, Aunt)"
+                    value={rel.relation}
+                    onChange={(e) => updateRelative(i, "relation", e.target.value)}
+                  />
+                  {/* Side */}
+                  <select
+                    className={`${inputCls} md:col-span-3`}
+                    value={rel.side}
+                    onChange={(e) => updateRelative(i, "side", e.target.value as "groom" | "bride")}
+                  >
+                    <option value="groom">Groom&apos;s side</option>
+                    <option value="bride">Bride&apos;s side</option>
+                  </select>
+                  {/* Remove */}
+                  <button
+                    onClick={() => removeRelative(i)}
+                    className="md:col-span-1 p-2.5 text-gray-400 hover:text-red-500 transition-colors"
+                  >
+                    <Trash2 size={14} />
+                  </button>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
 
