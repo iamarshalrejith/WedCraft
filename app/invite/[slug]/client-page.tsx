@@ -28,6 +28,7 @@ import NeonVows from "@/components/templates/NeonVows";
 import VelvetHaveli from "@/components/templates/VelvetHaveli";
 import NordicFrost from "@/components/templates/NordicFrost";
 import SunsetMandap from "@/components/templates/SunsetMandap";
+import KasiYatra from "@/components/templates/KasiYatra";
 
 interface InvitePageProps { params: Promise<{ slug: string }>; }
 
@@ -57,6 +58,7 @@ function renderTemplate(templateSlug: string, couple: CoupleDetails) {
     case "velvet-haveli":     return <VelvetHaveli couple={couple} />;
     case "nordic-frost":      return <NordicFrost couple={couple} />;
     case "sunset-mandap":     return <SunsetMandap couple={couple} />;
+    case "kasi-yatra":        return <KasiYatra couple={couple} />;
     default:                  return <MangalUtsav couple={couple} />;
   }
 }

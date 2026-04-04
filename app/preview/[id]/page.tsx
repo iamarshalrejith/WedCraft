@@ -34,6 +34,7 @@ import NeonVows from "@/components/templates/NeonVows";
 import VelvetHaveli from "@/components/templates/VelvetHaveli";
 import NordicFrost from "@/components/templates/NordicFrost";
 import SunsetMandap from "@/components/templates/SunsetMandap";
+import KasiYatra from "@/components/templates/KasiYatra";
 
 interface PreviewPageProps {
   params: Promise<{ id: string }>;
@@ -50,6 +51,7 @@ const LIGHT_BG = [
   "ivory-manuscript",
   "nordic-frost",
   "sunset-mandap",
+  "kasi-yatra",
 ];
 
 const WatermarkOverlay = ({ lightBg = false }: { lightBg?: boolean }) => (
@@ -112,6 +114,19 @@ const hinduDemo: CoupleDetails = {
   mapLink: "https://maps.google.com",
   phone: "+919876543210",
   personalMessage: "Two souls, one heartbeat.",
+
+  groomFatherName: "Ramesh Kumar",
+  groomMotherName: "Savitha Devi",
+  brideFatherName: "Suresh Babu",
+  brideMotherName: "Padmavathi",
+
+  relatives: [
+    { name: "Vikram", relation: "Uncle", side: "groom", spouseName: "Kavitha" },
+    { name: "Mohan", relation: "Mama", side: "groom", spouseName: "Sudha" },
+    { name: "Rajan", relation: "Uncle", side: "bride", spouseName: "Meena" },
+    { name: "Suresh", relation: "Chithappa", side: "bride", spouseName: "Usha" },
+  ],
+
   events: [
     {
       name: "Mehendi & Haldi",
@@ -689,6 +704,36 @@ const sunsetMandapDemo: CoupleDetails = {
   ],
 };
 
+const kasiYatraDemo: CoupleDetails = {
+  groomName: "Karthik",
+  brideName: "Kavitha",
+  weddingDate: "2026-11-22",
+  weddingTime: "7:30 AM",
+  venue: "Sri Parthasarathy Sabha Mandapam",
+  venueAddress: "Triplicane, Chennai, Tamil Nadu",
+  mapLink: "https://maps.google.com",
+  phone: "+919876543210",
+  personalMessage: "இரு குடும்பங்கள் இணையும் இந்த திருநாளில் உங்கள் வருகை எங்களுக்கு மிகவும் மகிழ்ச்சி.",
+
+  groomFatherName: "Venkataraman",
+  groomMotherName: "Saradha",
+  brideFatherName: "Krishnaswamy",
+  brideMotherName: "Vijayalakshmi",
+
+  relatives: [
+    { name: "Suresh", relation: "மாமா", side: "groom", spouseName: "Anitha" },
+    { name: "Balaji", relation: "சித்தப்பா", side: "groom", spouseName: "Revathi" },
+    { name: "Mohan", relation: "மாமா", side: "bride", spouseName: "Usha" },
+    { name: "Ramesh", relation: "சித்தப்பா", side: "bride", spouseName: "Meena" },
+  ],
+
+  events: [
+    { name: "நிச்சயதார்த்தம்", date: "2026-11-20", time: "10:00 AM", venue: "வீட்டில்" },
+    { name: "கல்யாண வரவேற்பு", date: "2026-11-21", time: "7:00 PM", venue: "கல்யாண மண்டபம்" },
+    { name: "முகூர்த்தம்", date: "2026-11-22", time: "7:30 AM", venue: "Sri Parthasarathy Sabha Mandapam" },
+  ],
+};
+
 function getPreview(slug: string) {
   switch (slug) {
     case "mangal-utsav":
@@ -844,6 +889,8 @@ function getPreview(slug: string) {
       return <NordicFrost couple={nordicDemo} />;
     case "sunset-mandap":
       return <SunsetMandap couple={sunsetMandapDemo}/>;
+    case "kasi-yatra":
+      return <KasiYatra couple={kasiYatraDemo} />;
     default:
       return <MangalUtsav couple={hinduDemo} />;
   }
