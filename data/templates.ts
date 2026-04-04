@@ -564,6 +564,35 @@ export const templates: Template[] = [
     previewBg: "from-orange-950 via-red-950 to-orange-950",
     colors: ["#E8961E", "#C15A1B", "#FAF0DC"],
   },
+  {
+    id: "t025",
+    name: "Kasi Yatra",
+    slug: "kasi-yatra",
+    price: 999,
+    tier: "Premium",
+    religion: "Hindu",
+    themes: ["Traditional", "Royal"],
+    description:
+      "A deeply traditional South Indian Iyer wedding design — saffron and ivory on midnight, temple arch motifs, kolam rangoli dividers, Tamil script typography, and a floating diya ambience. For the timeless Tamil wedding.",
+    features: [
+      "Temple arch motifs",
+      "Kolam rangoli dividers",
+      "Tamil typography",
+      "Family blessings section",
+      "Floating diya animations",
+      "Couple photo frame",
+      "RSVP system",
+      "Countdown timer",
+      "Background music",
+    ],
+    rating: 4.9,
+    reviewCount: 0,
+    isFeatured: true,
+    isNew: true,
+    thumbnail: "/templates/kasi-yatra.jpg",
+    previewBg: "from-yellow-50 via-amber-100 to-yellow-50",
+    colors: ["#1B5E20", "#A31515", "#E0B84C"]
+  },
 ];
 
 export const allReligions: Religion[] = [

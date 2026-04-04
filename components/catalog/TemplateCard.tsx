@@ -31,6 +31,7 @@ const LIGHT_BG_SLUGS = [
   "garden-party",
   "nordic-frost",
   "ivory-manuscript",
+  "kasi-yatra",
 ];
 
 export const TemplateCard = ({ template, index = 0 }: TemplateCardProps) => {
@@ -91,7 +92,7 @@ export const TemplateCard = ({ template, index = 0 }: TemplateCardProps) => {
             className={`relative h-52 bg-gradient-to-br ${template.previewBg} flex items-center justify-center overflow-hidden`}
           >
             {/* Color dots */}
-            <div className="absolute top-3 left-3 flex gap-1.5">
+            <div className="absolute top-3 left-3 flex gap-1.5 z-20">
               {template.colors.map((color, i) => (
                 <div
                   key={i}
@@ -107,7 +108,7 @@ export const TemplateCard = ({ template, index = 0 }: TemplateCardProps) => {
             </div>
 
             {/* Tier + New badges */}
-            <div className="absolute top-3 right-3 flex flex-col gap-1.5 items-end">
+            <div className="absolute top-3 right-3 flex flex-col gap-1.5 items-end z-20">
               <span
                 className={`text-xs font-semibold px-2.5 py-1 rounded-full ${tierColors[template.tier]}`}
               >
@@ -125,11 +126,13 @@ export const TemplateCard = ({ template, index = 0 }: TemplateCardProps) => {
               className="
     absolute 
     w-32 h-44
+    md:w-28 md:h-36
+    lg:w-32 lg:h-40
     rounded-xl
     flex flex-col items-center justify-center gap-2
-    opacity-40
-    scale-95
+    opacity-70 scale-100
     z-0
+    
   "
               style={mockCard}
             >
