@@ -23,7 +23,6 @@ interface CheckoutPageProps {
   params: Promise<{ slug: string }>;
 }
 
-// Razorpay types
 declare global {
   interface Window {
     Razorpay: new (options: RazorpayOptions) => RazorpayInstance;
@@ -50,7 +49,6 @@ interface RazorpayInstance {
   open(): void;
 }
 
-// Input component
 const Field = ({
   label,
   required,
@@ -83,11 +81,9 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
   const [error, setError] = useState("");
   const [showAuthModal, setShowAuthModal] = useState(false);
 
-  // First-time buyer discount
   const [isFirstTime, setIsFirstTime] = useState(false);
   const [firstTimeBanner, setFirstTimeBanner] = useState("");
 
-  // Coupon state
   const [couponCode, setCouponCode] = useState("");
   const [couponLoading, setCouponLoading] = useState(false);
   const [couponError, setCouponError] = useState("");
@@ -96,10 +92,9 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
   const finalPrice = Math.max(1, template.price - discount);
 
   useEffect(() => {
-  window.scrollTo({ top: 0, behavior: "smooth" });
-}, [step]);
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [step]);
 
-  // Auto-check first-time buyer status when user is known
   useEffect(() => {
     if (!user) return;
     fetch(`/api/coupon/firsttime?price=${template.price}`)
@@ -118,7 +113,6 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
 
   const applyCoupon = async () => {
     if (!couponCode.trim()) return;
-    // If the auto-applied first-time coupon is already active, don't re-apply
     if (isFirstTime && couponCode === "WELCOME10") return;
     setCouponLoading(true);
     setCouponError("");
@@ -144,7 +138,6 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
     }
   };
 
-  // Form state
   const [form, setForm] = useState({
     groomName: "",
     brideName: "",
@@ -188,7 +181,6 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
     form.weddingDate &&
     form.venue.trim();
 
-  // Load Razorpay script dynamically
   const loadRazorpay = (): Promise<boolean> => {
     return new Promise((resolve) => {
       if (window.Razorpay) return resolve(true);
@@ -203,9 +195,7 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
   const handlePayment = async () => {
     setLoading(true);
     setError("");
-
     try {
-      // 1. Create Razorpay order
       const orderRes = await fetch("/api/create-order", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -219,11 +209,9 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
       const orderData = await orderRes.json();
       if (!orderRes.ok) throw new Error(orderData.error || "Order creation failed");
 
-      // 2. Load Razorpay
       const loaded = await loadRazorpay();
       if (!loaded) throw new Error("Failed to load payment gateway");
 
-      // 3. Open Razorpay checkout
       const options: RazorpayOptions = {
         key: process.env.NEXT_PUBLIC_RAZORPAY_KEY_ID || "",
         amount: orderData.amount,
@@ -237,7 +225,6 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
         },
         theme: { color: "#000000" },
         handler: async (response: RazorpayResponse) => {
-          // 4. Verify payment
           const verifyRes = await fetch("/api/verify-payment", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -246,17 +233,13 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
           const verifyData = await verifyRes.json();
           if (!verifyRes.ok) throw new Error("Payment verification failed");
 
-          // 5. Save invite
           const saveRes = await fetch("/api/save-invite", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               templateId: template.id,
               templateSlug: template.slug,
-              coupleDetails: {
-                ...form,
-                events,
-              },
+              coupleDetails: { ...form, events },
               razorpayOrderId: response.razorpay_order_id,
               razorpayPaymentId: verifyData.paymentId,
               userId: user?.id || null,
@@ -265,7 +248,6 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
           const saveData = await saveRes.json();
           if (!saveRes.ok) throw new Error("Failed to create invite");
 
-          // 6. Send email notification (fire and forget — don't block redirect)
           const inviteUrl = `${window.location.origin}/invite/${saveData.slug}`;
           fetch("/api/email", {
             method: "POST",
@@ -278,14 +260,11 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
               buyerEmail: user?.email ?? null,
               templateName: template.name,
             }),
-          }).catch(() => {}); // silently ignore email errors
+          }).catch(() => {});
 
-          // 7. Redirect to dashboard
           router.push(`/dashboard?slug=${saveData.slug}`);
         },
-        modal: {
-          ondismiss: () => setLoading(false),
-        },
+        modal: { ondismiss: () => setLoading(false) },
       };
 
       const rzp = new window.Razorpay(options);
@@ -296,6 +275,13 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
       setLoading(false);
     }
   };
+
+  // Which templates support the family section
+  const hasFamilySection =
+    template.slug === "mangal-utsav" ||
+    template.slug === "royal-durbar" ||
+    template.slug === "sunset-mandap" ||
+    template.slug === "kasi-yatra";
 
   return (
     <div className="max-w-5xl mx-auto px-4 md:px-8 py-8 mt-10">
@@ -327,9 +313,7 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
             >
               {n}
             </div>
-            <span
-              className={`text-sm font-medium ${step >= n ? "text-gray-900" : "text-gray-400"}`}
-            >
+            <span className={`text-sm font-medium ${step >= n ? "text-gray-900" : "text-gray-400"}`}>
               {label}
             </span>
             {n < 2 && <div className="w-8 h-px bg-gray-300 ml-1" />}
@@ -342,207 +326,174 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
         <div className="lg:col-span-2">
           {step === 1 && (
             <div className="bg-white rounded-2xl border border-gray-200 p-6 space-y-6">
-              <h2 className="font-semibold text-gray-900 text-lg">
-                Couple Details
-              </h2>
+              <h2 className="font-semibold text-gray-900 text-lg">Couple Details</h2>
 
               <div className="grid grid-cols-2 gap-4">
                 <Field label="Groom's Name" required>
-                  <input
-                    className={inputCls}
-                    placeholder="e.g. Rahul"
-                    value={form.groomName}
-                    onChange={(e) => update("groomName", e.target.value)}
-                  />
+                  <input className={inputCls} placeholder="e.g. Rahul" value={form.groomName} onChange={(e) => update("groomName", e.target.value)} />
                 </Field>
                 <Field label="Bride's Name" required>
-                  <input
-                    className={inputCls}
-                    placeholder="e.g. Priya"
-                    value={form.brideName}
-                    onChange={(e) => update("brideName", e.target.value)}
-                  />
+                  <input className={inputCls} placeholder="e.g. Priya" value={form.brideName} onChange={(e) => update("brideName", e.target.value)} />
                 </Field>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <Field label="Wedding Date" required>
-                  <input
-                    type="date"
-                    className={inputCls}
-                    value={form.weddingDate}
-                    onChange={(e) => update("weddingDate", e.target.value)}
-                  />
+                  <input type="date" className={inputCls} value={form.weddingDate} onChange={(e) => update("weddingDate", e.target.value)} />
                 </Field>
                 <Field label="Wedding Time" required>
-                  <input
-                    className={inputCls}
-                    placeholder="e.g. 7:00 PM"
-                    value={form.weddingTime}
-                    onChange={(e) => update("weddingTime", e.target.value)}
-                  />
+                  <input className={inputCls} placeholder="e.g. 7:00 PM" value={form.weddingTime} onChange={(e) => update("weddingTime", e.target.value)} />
                 </Field>
               </div>
 
               <Field label="Venue Name" required>
-                <input
-                  className={inputCls}
-                  placeholder="e.g. Grand Palace Banquet Hall"
-                  value={form.venue}
-                  onChange={(e) => update("venue", e.target.value)}
-                />
+                <input className={inputCls} placeholder="e.g. Grand Palace Banquet Hall" value={form.venue} onChange={(e) => update("venue", e.target.value)} />
               </Field>
 
               <Field label="Venue Address">
-                <input
-                  className={inputCls}
-                  placeholder="e.g. 123 MG Road, Mumbai, Maharashtra"
-                  value={form.venueAddress}
-                  onChange={(e) => update("venueAddress", e.target.value)}
-                />
+                <input className={inputCls} placeholder="e.g. 123 MG Road, Mumbai, Maharashtra" value={form.venueAddress} onChange={(e) => update("venueAddress", e.target.value)} />
               </Field>
 
               <Field label="Google Maps Link">
-                <input
-                  className={inputCls}
-                  placeholder="https://maps.google.com/..."
-                  value={form.mapLink}
-                  onChange={(e) => update("mapLink", e.target.value)}
-                />
+                <input className={inputCls} placeholder="https://maps.google.com/..." value={form.mapLink} onChange={(e) => update("mapLink", e.target.value)} />
               </Field>
 
               <Field label="WhatsApp / Phone for RSVP">
-                <input
-                  className={inputCls}
-                  placeholder="+91 98765 43210"
-                  value={form.phone}
-                  onChange={(e) => update("phone", e.target.value)}
-                />
+                <input className={inputCls} placeholder="+91 98765 43210" value={form.phone} onChange={(e) => update("phone", e.target.value)} />
               </Field>
 
-              {/* ── RELATIVES ── */}
-<div className="space-y-4">
-  <div className="flex items-center justify-between">
-    <p className="text-sm font-semibold text-gray-900">
-      Relatives & Family
-    </p>
-    <button
-      type="button"
-      onClick={() =>
-        setForm((prev) => ({
-          ...prev,
-          relatives: [
-            ...prev.relatives,
-            { name: "", relation: "", side: "groom", spouseName: "" },
-          ],
-        }))
-      }
-      className="flex items-center gap-1 text-xs border border-gray-200 px-2.5 py-1 rounded-lg hover:bg-gray-50"
-    >
-      <Plus size={12} /> Add
-    </button>
-  </div>
+              {/* ── PARENTS — shown only for templates with family section ── */}
+              {hasFamilySection && (
+                <div className="space-y-4">
+                  <div>
+                    <p className="text-sm font-semibold text-gray-900">Parents&apos; Names</p>
+                    <p className="text-xs text-gray-400 mt-0.5">Shown in the family blessings section of your invite</p>
+                  </div>
+                  <div className="grid grid-cols-2 gap-4">
+                    <Field label="Groom's Father">
+                      <input className={inputCls} placeholder="e.g. Ramasamy" value={form.groomFatherName} onChange={(e) => update("groomFatherName", e.target.value)} />
+                    </Field>
+                    <Field label="Groom's Mother">
+                      <input className={inputCls} placeholder="e.g. Lakshmi" value={form.groomMotherName} onChange={(e) => update("groomMotherName", e.target.value)} />
+                    </Field>
+                    <Field label="Bride's Father">
+                      <input className={inputCls} placeholder="e.g. Subramanian" value={form.brideFatherName} onChange={(e) => update("brideFatherName", e.target.value)} />
+                    </Field>
+                    <Field label="Bride's Mother">
+                      <input className={inputCls} placeholder="e.g. Kalyani" value={form.brideMotherName} onChange={(e) => update("brideMotherName", e.target.value)} />
+                    </Field>
+                  </div>
+                </div>
+              )}
 
-  {form.relatives.length === 0 && (
-    <p className="text-sm text-gray-400">
-      Add relatives like Uncle, Aunt, Brother...
-    </p>
-  )}
+              {/* ── RELATIVES — shown only for templates with family section ── */}
+              {hasFamilySection && (
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <p className="text-sm font-semibold text-gray-900">Relatives &amp; Family</p>
+                      <p className="text-xs text-gray-400 mt-0.5">Shown on the sides of the family section</p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        setForm((prev) => ({
+                          ...prev,
+                          relatives: [
+                            ...prev.relatives,
+                            { name: "", relation: "", side: "groom", spouseName: "" },
+                          ],
+                        }))
+                      }
+                      className="flex items-center gap-1 text-xs border border-gray-200 px-2.5 py-1 rounded-lg hover:bg-gray-50"
+                    >
+                      <Plus size={12} /> Add
+                    </button>
+                  </div>
 
-  <div className="space-y-2">
-    {form.relatives.map((rel, i) => (
-      <div
-        key={i}
-        className="grid grid-cols-12 gap-2 items-center bg-gray-50 p-3 rounded-xl"
-      >
-        {/* Name */}
-        <input
-          className={`${inputCls} col-span-3`}
-          placeholder="Name"
-          value={rel.name}
-          onChange={(e) =>
-            setForm((prev) => ({
-              ...prev,
-              relatives: prev.relatives.map((r, idx) =>
-                idx === i ? { ...r, name: e.target.value } : r
-              ),
-            }))
-          }
-        />
+                  {form.relatives.length === 0 && (
+                    <p className="text-sm text-gray-400">Add relatives like Uncle, Mama, Chithappa...</p>
+                  )}
 
-        {/* Relation */}
-        <input
-          className={`${inputCls} col-span-3`}
-          placeholder="Relation"
-          value={rel.relation}
-          onChange={(e) =>
-            setForm((prev) => ({
-              ...prev,
-              relatives: prev.relatives.map((r, idx) =>
-                idx === i ? { ...r, relation: e.target.value } : r
-              ),
-            }))
-          }
-        />
-
-        {/* Spouse */}
-        <input
-          className={`${inputCls} col-span-3`}
-          placeholder="Spouse (optional)"
-          value={rel.spouseName || ""}
-          onChange={(e) =>
-            setForm((prev) => ({
-              ...prev,
-              relatives: prev.relatives.map((r, idx) =>
-                idx === i ? { ...r, spouseName: e.target.value } : r
-              ),
-            }))
-          }
-        />
-
-        {/* Side */}
-        <select
-          className={`${inputCls} col-span-2`}
-          value={rel.side}
-          onChange={(e) =>
-            setForm((prev) => ({
-              ...prev,
-              relatives: prev.relatives.map((r, idx) =>
-                idx === i
-                  ? { ...r, side: e.target.value as "groom" | "bride" }
-                  : r
-              ),
-            }))
-          }
-        >
-          <option value="groom">Groom</option>
-          <option value="bride">Bride</option>
-        </select>
-
-        {/* Delete */}
-        <button
-          type="button"
-          onClick={() =>
-            setForm((prev) => ({
-              ...prev,
-              relatives: prev.relatives.filter((_, idx) => idx !== i),
-            }))
-          }
-          className="col-span-1 text-gray-400 hover:text-red-500"
-        >
-          <Trash2 size={14} />
-        </button>
-      </div>
-    ))}
-  </div>
-</div>
+                  <div className="space-y-2">
+                    {form.relatives.map((rel, i) => (
+                      <div key={i} className="grid grid-cols-12 gap-2 items-center bg-gray-50 p-3 rounded-xl">
+                        <input
+                          className={`${inputCls} col-span-3`}
+                          placeholder="Name"
+                          value={rel.name}
+                          onChange={(e) =>
+                            setForm((prev) => ({
+                              ...prev,
+                              relatives: prev.relatives.map((r, idx) =>
+                                idx === i ? { ...r, name: e.target.value } : r
+                              ),
+                            }))
+                          }
+                        />
+                        <input
+                          className={`${inputCls} col-span-3`}
+                          placeholder="Relation"
+                          value={rel.relation}
+                          onChange={(e) =>
+                            setForm((prev) => ({
+                              ...prev,
+                              relatives: prev.relatives.map((r, idx) =>
+                                idx === i ? { ...r, relation: e.target.value } : r
+                              ),
+                            }))
+                          }
+                        />
+                        <input
+                          className={`${inputCls} col-span-3`}
+                          placeholder="Spouse (optional)"
+                          value={rel.spouseName || ""}
+                          onChange={(e) =>
+                            setForm((prev) => ({
+                              ...prev,
+                              relatives: prev.relatives.map((r, idx) =>
+                                idx === i ? { ...r, spouseName: e.target.value } : r
+                              ),
+                            }))
+                          }
+                        />
+                        <select
+                          className={`${inputCls} col-span-2`}
+                          value={rel.side}
+                          onChange={(e) =>
+                            setForm((prev) => ({
+                              ...prev,
+                              relatives: prev.relatives.map((r, idx) =>
+                                idx === i ? { ...r, side: e.target.value as "groom" | "bride" } : r
+                              ),
+                            }))
+                          }
+                        >
+                          <option value="groom">Groom</option>
+                          <option value="bride">Bride</option>
+                        </select>
+                        <button
+                          type="button"
+                          onClick={() =>
+                            setForm((prev) => ({
+                              ...prev,
+                              relatives: prev.relatives.filter((_, idx) => idx !== i),
+                            }))
+                          }
+                          className="col-span-1 text-gray-400 hover:text-red-500"
+                        >
+                          <Trash2 size={14} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
 
               {/* Events */}
               <div>
                 <div className="flex items-center justify-between mb-3">
-                  <label className="text-sm font-medium text-gray-700">
-                    Wedding Events
-                  </label>
+                  <label className="text-sm font-medium text-gray-700">Wedding Events</label>
                   <button
                     onClick={addEvent}
                     className="flex items-center gap-1 text-xs font-medium text-gray-600 hover:text-black border border-gray-200 px-2.5 py-1 rounded-lg transition-colors"
@@ -552,38 +503,12 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
                 </div>
                 <div className="space-y-3">
                   {events.map((event, i) => (
-                    <div
-                      key={i}
-                      className="grid grid-cols-12 gap-2 items-start p-3 bg-gray-50 rounded-xl"
-                    >
-                      <input
-                        className={`${inputCls} col-span-3`}
-                        placeholder="Event name"
-                        value={event.name}
-                        onChange={(e) => updateEvent(i, "name", e.target.value)}
-                      />
-                      <input
-                        type="date"
-                        className={`${inputCls} col-span-3`}
-                        value={event.date}
-                        onChange={(e) => updateEvent(i, "date", e.target.value)}
-                      />
-                      <input
-                        className={`${inputCls} col-span-2`}
-                        placeholder="Time"
-                        value={event.time}
-                        onChange={(e) => updateEvent(i, "time", e.target.value)}
-                      />
-                      <input
-                        className={`${inputCls} col-span-3`}
-                        placeholder="Venue (optional)"
-                        value={event.venue || ""}
-                        onChange={(e) => updateEvent(i, "venue", e.target.value)}
-                      />
-                      <button
-                        onClick={() => removeEvent(i)}
-                        className="col-span-1 p-2.5 text-gray-400 hover:text-red-500 transition-colors"
-                      >
+                    <div key={i} className="grid grid-cols-12 gap-2 items-start p-3 bg-gray-50 rounded-xl">
+                      <input className={`${inputCls} col-span-3`} placeholder="Event name" value={event.name} onChange={(e) => updateEvent(i, "name", e.target.value)} />
+                      <input type="date" className={`${inputCls} col-span-3`} value={event.date} onChange={(e) => updateEvent(i, "date", e.target.value)} />
+                      <input className={`${inputCls} col-span-2`} placeholder="Time" value={event.time} onChange={(e) => updateEvent(i, "time", e.target.value)} />
+                      <input className={`${inputCls} col-span-3`} placeholder="Venue (optional)" value={event.venue || ""} onChange={(e) => updateEvent(i, "venue", e.target.value)} />
+                      <button onClick={() => removeEvent(i)} className="col-span-1 p-2.5 text-gray-400 hover:text-red-500 transition-colors">
                         <Trash2 size={14} />
                       </button>
                     </div>
@@ -601,7 +526,7 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
                 />
               </Field>
 
-              {/* Premium & Luxury only — Couple photo + Background music */}
+              {/* Premium & Luxury — Couple photo + Background music */}
               {(template.tier === "Premium" || template.tier === "Luxury") && (
                 <div className="space-y-5 pt-2">
                   <div className="flex items-center gap-2">
@@ -609,42 +534,28 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
                       {template.tier} feature
                     </span>
                   </div>
-
                   <Field label="Couple Photo (optional)">
-                    <FileUpload
-                      type="photo"
-                      value={form.couplePhotoUrl}
-                      onChange={(url) => update("couplePhotoUrl", url)}
-                    />
+                    <FileUpload type="photo" value={form.couplePhotoUrl} onChange={(url) => update("couplePhotoUrl", url)} />
                   </Field>
-
                   <Field label="Background Music (optional)">
-                    <FileUpload
-                      type="music"
-                      value={form.bgMusicUrl}
-                      onChange={(url) => update("bgMusicUrl", url)}
-                    />
+                    <FileUpload type="music" value={form.bgMusicUrl} onChange={(url) => update("bgMusicUrl", url)} />
                   </Field>
                 </div>
               )}
 
-              {/* First-time buyer banner — shows automatically when eligible */}
+              {/* First-time buyer banner */}
               {isFirstTime && (
                 <div className="flex items-start gap-3 bg-emerald-50 border border-emerald-200 rounded-xl px-4 py-3.5">
                   <span className="text-lg leading-none mt-0.5">🎁</span>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-semibold text-emerald-800">First order discount applied!</p>
-                    <p className="text-xs text-emerald-600 mt-0.5">
-                      10% off has been automatically applied to your order. Welcome to WedCraft!
-                    </p>
+                    <p className="text-xs text-emerald-600 mt-0.5">10% off has been automatically applied to your order. Welcome to WedCraft!</p>
                   </div>
-                  <span className="text-xs font-bold text-emerald-700 bg-emerald-100 px-2 py-1 rounded-lg shrink-0">
-                    −10%
-                  </span>
+                  <span className="text-xs font-bold text-emerald-700 bg-emerald-100 px-2 py-1 rounded-lg shrink-0">−10%</span>
                 </div>
               )}
 
-              {/* Coupon Code — hidden when first-time discount is active */}
+              {/* Coupon Code */}
               {!isFirstTime && (
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-1.5">Coupon Code</label>
@@ -692,29 +603,18 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
           {step === 2 && (
             <div className="bg-white rounded-2xl border border-gray-200 p-6 space-y-6">
               <div className="flex items-center justify-between">
-                <h2 className="font-semibold text-gray-900 text-lg">
-                  Review Your Details
-                </h2>
-                <button
-                  onClick={() => setStep(1)}
-                  className="text-sm text-gray-500 hover:text-black underline"
-                >
-                  Edit
-                </button>
+                <h2 className="font-semibold text-gray-900 text-lg">Review Your Details</h2>
+                <button onClick={() => setStep(1)} className="text-sm text-gray-500 hover:text-black underline">Edit</button>
               </div>
 
               <div className="bg-gray-50 rounded-xl p-4 space-y-2 text-sm">
                 <div className="flex justify-between">
                   <span className="text-gray-500">Couple</span>
-                  <span className="font-medium">
-                    {form.groomName} & {form.brideName}
-                  </span>
+                  <span className="font-medium">{form.groomName} & {form.brideName}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-500">Date</span>
-                  <span className="font-medium">
-                    {form.weddingDate} at {form.weddingTime}
-                  </span>
+                  <span className="font-medium">{form.weddingDate} at {form.weddingTime}</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-500">Venue</span>
@@ -726,21 +626,31 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
                     <span className="font-medium">{form.phone}</span>
                   </div>
                 )}
+                {hasFamilySection && (form.groomFatherName || form.brideFatherName) && (
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">Family section</span>
+                    <span className="font-medium text-emerald-600">✓ Filled</span>
+                  </div>
+                )}
+                {hasFamilySection && form.relatives.length > 0 && (
+                  <div className="flex justify-between">
+                    <span className="text-gray-500">Relatives</span>
+                    <span className="font-medium">{form.relatives.length} added</span>
+                  </div>
+                )}
                 <div className="flex justify-between">
                   <span className="text-gray-500">Events</span>
                   <span className="font-medium">{events.length} event(s)</span>
                 </div>
               </div>
 
-              <div className="flex items-center gap-2 text-xs text-gray-500 bg-emerald-50 text-emerald-800 px-4 py-3 rounded-xl">
+              <div className="flex items-center gap-2 text-xs text-emerald-800 bg-emerald-50 px-4 py-3 rounded-xl">
                 <ShieldCheck size={16} className="shrink-0" />
                 Your payment is secured by Razorpay. We never store card details.
               </div>
 
               {error && (
-                <div className="text-sm text-red-600 bg-red-50 px-4 py-3 rounded-xl">
-                  {error}
-                </div>
+                <div className="text-sm text-red-600 bg-red-50 px-4 py-3 rounded-xl">{error}</div>
               )}
 
               <button
@@ -749,14 +659,9 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
                 className="w-full py-3.5 bg-black text-white rounded-xl font-semibold text-sm flex items-center justify-center gap-2 hover:bg-gray-800 disabled:opacity-60 transition-colors"
               >
                 {loading ? (
-                  <>
-                    <Loader2 size={16} className="animate-spin" /> Processing...
-                  </>
+                  <><Loader2 size={16} className="animate-spin" /> Processing...</>
                 ) : (
-                  <>
-                    <CreditCard size={16} />
-                    Pay ₹{finalPrice.toLocaleString("en-IN")} via Razorpay
-                  </>
+                  <><CreditCard size={16} /> Pay ₹{finalPrice.toLocaleString("en-IN")} via Razorpay</>
                 )}
               </button>
             </div>
@@ -768,9 +673,7 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
           <div className="sticky top-36 bg-white rounded-2xl border border-gray-200 p-5">
             <h3 className="font-semibold text-gray-900 mb-4">Order Summary</h3>
 
-            <div
-              className={`h-28 rounded-xl bg-gradient-to-br ${template.previewBg} mb-4 flex items-center justify-center`}
-            >
+            <div className={`h-28 rounded-xl bg-gradient-to-br ${template.previewBg} mb-4 flex items-center justify-center`}>
               <div className="w-16 h-20 bg-white/40 rounded-lg backdrop-blur-sm border border-white/50" />
             </div>
 
@@ -779,9 +682,7 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
 
             <div className="flex items-center gap-1 mb-4">
               <Star size={12} className="fill-amber-400 text-amber-400" />
-              <span className="text-xs text-gray-600">
-                {template.rating} ({template.reviewCount} reviews)
-              </span>
+              <span className="text-xs text-gray-600">{template.rating} ({template.reviewCount} reviews)</span>
             </div>
 
             <div className="border-t pt-4 space-y-2">
