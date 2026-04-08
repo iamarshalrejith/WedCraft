@@ -129,13 +129,11 @@ function FamilySection({ couple }: { couple: CoupleDetails }) {
     couple.groomFatherName || couple.groomMotherName ||
     couple.brideFatherName || couple.brideMotherName;
   const hasRelatives = couple.relatives && couple.relatives.length > 0;
-
   if (!hasParents && !hasRelatives) return null;
 
   const groomRelatives = couple.relatives?.filter((r) => r.side === "groom") ?? [];
   const brideRelatives = couple.relatives?.filter((r) => r.side === "bride") ?? [];
 
-  // Corner bracket decoration reused in cards
   const Corners = () => (
     <>
       <div style={{ position:"absolute", top:8, left:8, width:10, height:10, borderTop:`1px solid ${C.marigold}`, borderLeft:`1px solid ${C.marigold}`, opacity:0.5 }} />
@@ -145,146 +143,98 @@ function FamilySection({ couple }: { couple: CoupleDetails }) {
     </>
   );
 
-  // Parents-only box (center column)
-  const ParentsCard = ({
-    sideLabel, fatherName, motherName, delay,
-  }: { sideLabel: string; fatherName?: string; motherName?: string; delay: number }) => (
+  const ParentsCard = ({ sideLabel, fatherName, motherName, delay }: { sideLabel: string; fatherName?: string; motherName?: string; delay: number }) => (
     <Reveal delay={delay}>
-      <div style={{ background:"rgba(193,90,27,0.09)", border:`1px solid ${C.borderBright}`, borderRadius:6, padding:"22px 18px", position:"relative", overflow:"hidden", textAlign:"center" }}>
+      <div style={{ background:"rgba(193,90,27,0.09)", border:`1px solid ${C.borderBright}`, borderRadius:6, padding:"22px 18px", position:"relative", overflow:"hidden", textAlign:"center", height:"100%" }}>
         <Corners />
-        <p style={{ fontFamily:"'Philosopher',serif", fontSize:9, letterSpacing:"0.35em", color:C.dimOrange, textTransform:"uppercase" as const, marginBottom:16 }}>
-          {sideLabel}
-        </p>
-        {fatherName && (
-          <div style={{ marginBottom: motherName ? 14 : 0 }}>
-            <p style={{ fontFamily:"'Philosopher',serif", fontSize:17, color:C.cream, fontWeight:700, lineHeight:1.2 }}>{fatherName}</p>
-            <p style={{ fontSize:9, color:C.dimOrange, letterSpacing:"0.15em", textTransform:"uppercase" as const, marginTop:2 }}>Father</p>
-          </div>
-        )}
-        {fatherName && motherName && (
-          <div style={{ height:"0.5px", background:C.border, margin:"10px auto", width:40 }} />
-        )}
-        {motherName && (
-          <div>
-            <p style={{ fontFamily:"'Philosopher',serif", fontSize:17, color:C.cream, fontWeight:700, lineHeight:1.2 }}>{motherName}</p>
-            <p style={{ fontSize:9, color:C.dimOrange, letterSpacing:"0.15em", textTransform:"uppercase" as const, marginTop:2 }}>Mother</p>
-          </div>
-        )}
+        <p style={{ fontFamily:"'Philosopher',serif", fontSize:9, letterSpacing:"0.35em", color:C.dimOrange, textTransform:"uppercase" as const, marginBottom:16 }}>{sideLabel}</p>
+        {fatherName && (<div style={{ marginBottom: motherName ? 14 : 0 }}>
+          <p style={{ fontFamily:"'Philosopher',serif", fontSize:17, color:C.cream, fontWeight:700, lineHeight:1.2 }}>{fatherName}</p>
+          <p style={{ fontSize:9, color:C.dimOrange, letterSpacing:"0.15em", textTransform:"uppercase" as const, marginTop:2 }}>Father</p>
+        </div>)}
+        {fatherName && motherName && <div style={{ height:"0.5px", background:C.border, margin:"10px auto", width:40 }} />}
+        {motherName && (<div>
+          <p style={{ fontFamily:"'Philosopher',serif", fontSize:17, color:C.cream, fontWeight:700, lineHeight:1.2 }}>{motherName}</p>
+          <p style={{ fontSize:9, color:C.dimOrange, letterSpacing:"0.15em", textTransform:"uppercase" as const, marginTop:2 }}>Mother</p>
+        </div>)}
       </div>
     </Reveal>
   );
 
-  // Individual relative-family card (uncle + wife)
-  const RelativeCard = ({
-    rel, delay,
-  }: { rel: { name: string; relation: string; spouseName?: string }; delay: number }) => (
+  const RelativeCard = ({ rel, delay }: { rel: { name: string; relation: string; spouseName?: string }; delay: number }) => (
     <Reveal delay={delay}>
-      <div style={{ background:"rgba(193,90,27,0.05)", border:`1px solid ${C.border}`, borderRadius:5, padding:"14px 14px", position:"relative", overflow:"hidden", textAlign:"center" }}>
-        <p style={{ fontSize:8, letterSpacing:"0.25em", color:C.dimOrange, textTransform:"uppercase" as const, marginBottom:10 }}>
-          {rel.relation}
-        </p>
-        <p style={{ fontFamily:"'Philosopher',serif", fontSize:14, color:C.cream, fontWeight:700, lineHeight:1.2 }}>
-          {rel.name}
-        </p>
-        {rel.spouseName && (
-          <>
-            <div style={{ display:"flex", alignItems:"center", gap:6, justifyContent:"center", margin:"6px 0" }}>
-              <div style={{ height:"0.5px", flex:1, background:C.border }} />
-              <span style={{ fontSize:9, color:C.terracotta, opacity:0.7 }}>& </span>
-              <div style={{ height:"0.5px", flex:1, background:C.border }} />
-            </div>
-            <p style={{ fontFamily:"'Philosopher',serif", fontSize:14, color:C.dimCream, lineHeight:1.2 }}>
-              {rel.spouseName}
-            </p>
-          </>
-        )}
+      <div style={{ background:"rgba(193,90,27,0.05)", border:`1px solid ${C.border}`, borderRadius:5, padding:"14px", textAlign:"center" }}>
+        <p style={{ fontSize:8, letterSpacing:"0.25em", color:C.dimOrange, textTransform:"uppercase" as const, marginBottom:10 }}>{rel.relation}</p>
+        <p style={{ fontFamily:"'Philosopher',serif", fontSize:14, color:C.cream, fontWeight:700, lineHeight:1.2 }}>{rel.name}</p>
+        {rel.spouseName && (<>
+          <div style={{ display:"flex", alignItems:"center", gap:6, justifyContent:"center", margin:"6px 0" }}>
+            <div style={{ height:"0.5px", flex:1, background:C.border }} />
+            <span style={{ fontSize:9, color:C.terracotta, opacity:0.7 }}>&amp;</span>
+            <div style={{ height:"0.5px", flex:1, background:C.border }} />
+          </div>
+          <p style={{ fontFamily:"'Philosopher',serif", fontSize:14, color:C.dimCream, lineHeight:1.2 }}>{rel.spouseName}</p>
+        </>)}
       </div>
     </Reveal>
   );
 
   return (
-    <section style={{ padding:"20px 14px 48px", maxWidth:700, margin:"0 auto" }}>
-      {/* Heading */}
+    <section style={{ padding:"20px 14px 48px", maxWidth:620, margin:"0 auto" }}>
       <Reveal>
         <div style={{ textAlign:"center", marginBottom:28 }}>
-          <p style={{ fontFamily:"'Philosopher',serif", fontSize:10, letterSpacing:"0.45em", color:C.dimOrange, textTransform:"uppercase" as const, marginBottom:8 }}>
-            With the blessings of
-          </p>
-          <p style={{ fontFamily:"'Philosopher',serif", fontSize:22, color:C.cream, fontWeight:700 }}>
-            Our Beloved Families
-          </p>
+          <p style={{ fontFamily:"'Philosopher',serif", fontSize:10, letterSpacing:"0.45em", color:C.dimOrange, textTransform:"uppercase" as const, marginBottom:8 }}>With the blessings of</p>
+          <p style={{ fontFamily:"'Philosopher',serif", fontSize:22, color:C.cream, fontWeight:700 }}>Our Beloved Families</p>
         </div>
       </Reveal>
 
-      {/* Three-column layout: groom relatives | parents | bride relatives */}
-      <div style={{ display:"grid", gridTemplateColumns:"1fr auto 1fr", gap:12, alignItems:"start" }}>
-
-        {/* LEFT — Groom's relatives */}
-        <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
-          {groomRelatives.length > 0 && (
-            <>
-              <Reveal delay={0.05}>
-                <p style={{ fontFamily:"'Philosopher',serif", fontSize:9, letterSpacing:"0.3em", color:C.dimOrange, textTransform:"uppercase" as const, textAlign:"center", marginBottom:4 }}>
-                  {couple.groomName}&apos;s Relatives
-                </p>
-              </Reveal>
-              {groomRelatives.map((rel, i) => (
-                <RelativeCard key={i} rel={rel} delay={0.1 + i * 0.08} />
-              ))}
-            </>
-          )}
-        </div>
-
-        {/* CENTER — Parents (groom above, bride below) */}
-        <div style={{ display:"flex", flexDirection:"column", gap:12, minWidth:140, maxWidth:180 }}>
+      {/* ── PARENTS — 2-col, full width ── */}
+      {hasParents && (
+        <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:12, marginBottom: hasRelatives ? 28 : 0 }}>
           {(couple.groomFatherName || couple.groomMotherName) && (
-            <ParentsCard
-              sideLabel={`${couple.groomName}'s Parents`}
-              fatherName={couple.groomFatherName}
-              motherName={couple.groomMotherName}
-              delay={0.1}
-            />
-          )}
-          {/* vertical connector dot */}
-          {(couple.groomFatherName || couple.groomMotherName) && (couple.brideFatherName || couple.brideMotherName) && (
-            <div style={{ display:"flex", justifyContent:"center" }}>
-              <div style={{ display:"flex", flexDirection:"column", alignItems:"center", gap:4 }}>
-                {[0,1,2].map(i=><div key={i} style={{ width:3, height:3, borderRadius:"50%", background:C.terracotta, opacity:0.4 }} />)}
-              </div>
-            </div>
+            <ParentsCard sideLabel={`${couple.groomName}'s Parents`} fatherName={couple.groomFatherName} motherName={couple.groomMotherName} delay={0.1} />
           )}
           {(couple.brideFatherName || couple.brideMotherName) && (
-            <ParentsCard
-              sideLabel={`${couple.brideName}'s Parents`}
-              fatherName={couple.brideFatherName}
-              motherName={couple.brideMotherName}
-              delay={0.2}
-            />
+            <ParentsCard sideLabel={`${couple.brideName}'s Parents`} fatherName={couple.brideFatherName} motherName={couple.brideMotherName} delay={0.2} />
           )}
         </div>
+      )}
 
-        {/* RIGHT — Bride's relatives */}
-        <div style={{ display:"flex", flexDirection:"column", gap:10 }}>
-          {brideRelatives.length > 0 && (
-            <>
-              <Reveal delay={0.05}>
-                <p style={{ fontFamily:"'Philosopher',serif", fontSize:9, letterSpacing:"0.3em", color:C.dimOrange, textTransform:"uppercase" as const, textAlign:"center", marginBottom:4 }}>
-                  {couple.brideName}&apos;s Relatives
-                </p>
-              </Reveal>
-              {brideRelatives.map((rel, i) => (
-                <RelativeCard key={i} rel={rel} delay={0.1 + i * 0.08} />
-              ))}
-            </>
-          )}
-        </div>
-
-      </div>
+      {/* ── RELATIVES — own section below, 2-col ── */}
+      {hasRelatives && (
+        <>
+          <Reveal delay={0.25}>
+            <div style={{ display:"flex", alignItems:"center", gap:10, margin:"4px 0 20px" }}>
+              <div style={{ flex:1, height:"0.5px", background:C.border }} />
+              <p style={{ fontFamily:"'Philosopher',serif", fontSize:9, letterSpacing:"0.3em", color:C.dimOrange, textTransform:"uppercase" as const, whiteSpace:"nowrap" as const }}>Extended Family</p>
+              <div style={{ flex:1, height:"0.5px", background:C.border }} />
+            </div>
+          </Reveal>
+          <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:16 }}>
+            <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
+              {groomRelatives.length > 0 && (<>
+                <Reveal delay={0.28}>
+                  <p style={{ fontFamily:"'Philosopher',serif", fontSize:9, letterSpacing:"0.3em", color:C.dimOrange, textTransform:"uppercase" as const, textAlign:"center", marginBottom:4 }}>{couple.groomName}&apos;s Side</p>
+                </Reveal>
+                {groomRelatives.map((rel, i) => <RelativeCard key={i} rel={rel} delay={0.3 + i * 0.07} />)}
+              </>)}
+            </div>
+            <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
+              {brideRelatives.length > 0 && (<>
+                <Reveal delay={0.28}>
+                  <p style={{ fontFamily:"'Philosopher',serif", fontSize:9, letterSpacing:"0.3em", color:C.dimOrange, textTransform:"uppercase" as const, textAlign:"center", marginBottom:4 }}>{couple.brideName}&apos;s Side</p>
+                </Reveal>
+                {brideRelatives.map((rel, i) => <RelativeCard key={i} rel={rel} delay={0.3 + i * 0.07} />)}
+              </>)}
+            </div>
+          </div>
+        </>
+      )}
     </section>
   );
 }
 
 // ─── Main Template ───────────────────────────────────────────────────────────
+
 export default function SunsetMandap({ couple }: SunsetMandapProps) {
   const allEvents =
     couple.events?.length > 0
