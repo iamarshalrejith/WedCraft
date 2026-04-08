@@ -418,7 +418,7 @@ export default function MangalUtsav({ couple }: MangalUtsavProps) {
 
     const ParentsCard = ({ sideLabel, fatherName, motherName, delay }: { sideLabel: string; fatherName?: string; motherName?: string; delay: number }) => (
       <FadeIn delay={delay}>
-        <div style={{ background: "rgba(212,175,55,0.04)", border: "1px solid rgba(212,175,55,0.2)", borderRadius: 12, padding: "20px 16px", textAlign: "center", position: "relative" }}>
+        <div style={{ background: "rgba(212,175,55,0.04)", border: "1px solid rgba(212,175,55,0.2)", borderRadius: 12, padding: "20px 16px", textAlign: "center", position: "relative", height: "100%" }}>
           <div style={{ position: "absolute", top: -1, left: "50%", transform: "translateX(-50%)", width: 36, height: 2, background: "linear-gradient(90deg, transparent, #D4AF37, transparent)", opacity: 0.7 }} />
           <p style={{ fontFamily: "'Cinzel', serif", fontSize: 8, letterSpacing: "0.35em", color: "rgba(212,175,55,0.5)", textTransform: "uppercase" as const, marginBottom: 14 }}>
             {sideLabel}
@@ -442,7 +442,7 @@ export default function MangalUtsav({ couple }: MangalUtsavProps) {
 
     const RelativeCard = ({ rel, delay }: { rel: { name: string; relation: string; spouseName?: string }; delay: number }) => (
       <FadeIn delay={delay}>
-        <div style={{ background: "rgba(212,175,55,0.03)", border: "1px solid rgba(212,175,55,0.12)", borderRadius: 8, padding: "12px 12px", textAlign: "center" }}>
+        <div style={{ background: "rgba(212,175,55,0.03)", border: "1px solid rgba(212,175,55,0.12)", borderRadius: 8, padding: "12px", textAlign: "center" }}>
           <p style={{ fontSize: 8, letterSpacing: "0.22em", color: "rgba(212,175,55,0.35)", textTransform: "uppercase" as const, marginBottom: 7 }}>{rel.relation}</p>
           <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 15, color: "#F5E6C8", fontWeight: 500, lineHeight: 1.3 }}>{rel.name}</p>
           {rel.spouseName && (
@@ -460,7 +460,7 @@ export default function MangalUtsav({ couple }: MangalUtsavProps) {
     );
 
     return (
-      <section className="py-12 px-4 max-w-2xl mx-auto">
+      <section className="py-12 px-4 max-w-xl mx-auto">
         <FadeIn>
           <div className="text-center mb-7">
             <p style={{ fontFamily: "'Cinzel', serif", fontSize: 10, letterSpacing: "0.45em", color: "rgba(212,175,55,0.5)", textTransform: "uppercase" as const, marginBottom: 6 }}>
@@ -472,52 +472,58 @@ export default function MangalUtsav({ couple }: MangalUtsavProps) {
           </div>
         </FadeIn>
 
-        <div style={{ display: "grid", gridTemplateColumns: "1fr auto 1fr", gap: 10, alignItems: "start" }}>
-          {/* LEFT — Groom relatives */}
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {groomRelatives.length > 0 && (
-              <>
-                <FadeIn delay={0.05}>
-                  <p style={{ fontFamily: "'Cinzel', serif", fontSize: 7, letterSpacing: "0.25em", color: "rgba(212,175,55,0.35)", textTransform: "uppercase" as const, textAlign: "center", marginBottom: 4 }}>
-                    {couple.groomName}&apos;s Relatives
-                  </p>
-                </FadeIn>
-                {groomRelatives.map((rel, i) => <RelativeCard key={i} rel={rel} delay={0.1 + i * 0.08} />)}
-              </>
-            )}
-          </div>
-
-          {/* CENTER — Parents */}
-          <div style={{ display: "flex", flexDirection: "column", gap: 10, minWidth: 136, maxWidth: 172 }}>
+        {/* ── PARENTS — 2-col, full width ── */}
+        {hasParents && (
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: hasRelatives ? 28 : 0 }}>
             {(couple.groomFatherName || couple.groomMotherName) && (
               <ParentsCard sideLabel={`${couple.groomName}'s Parents`} fatherName={couple.groomFatherName} motherName={couple.groomMotherName} delay={0.1} />
-            )}
-            {(couple.groomFatherName || couple.groomMotherName) && (couple.brideFatherName || couple.brideMotherName) && (
-              <div style={{ display: "flex", justifyContent: "center" }}>
-                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 4 }}>
-                  {[0, 1, 2].map(i => <div key={i} style={{ width: 3, height: 3, borderRadius: "50%", background: "#D4AF37", opacity: 0.25 }} />)}
-                </div>
-              </div>
             )}
             {(couple.brideFatherName || couple.brideMotherName) && (
               <ParentsCard sideLabel={`${couple.brideName}'s Parents`} fatherName={couple.brideFatherName} motherName={couple.brideMotherName} delay={0.2} />
             )}
           </div>
+        )}
 
-          {/* RIGHT — Bride relatives */}
-          <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            {brideRelatives.length > 0 && (
-              <>
-                <FadeIn delay={0.05}>
-                  <p style={{ fontFamily: "'Cinzel', serif", fontSize: 7, letterSpacing: "0.25em", color: "rgba(212,175,55,0.35)", textTransform: "uppercase" as const, textAlign: "center", marginBottom: 4 }}>
-                    {couple.brideName}&apos;s Relatives
-                  </p>
-                </FadeIn>
-                {brideRelatives.map((rel, i) => <RelativeCard key={i} rel={rel} delay={0.1 + i * 0.08} />)}
-              </>
-            )}
-          </div>
-        </div>
+        {/* ── RELATIVES — separate section below, 2-col groom|bride ── */}
+        {hasRelatives && (
+          <>
+            <FadeIn delay={0.25}>
+              <div style={{ display: "flex", alignItems: "center", gap: 10, margin: "4px 0 20px" }}>
+                <div style={{ flex: 1, height: "0.5px", background: "rgba(212,175,55,0.15)" }} />
+                <p style={{ fontFamily: "'Cinzel', serif", fontSize: 9, letterSpacing: "0.3em", color: "rgba(212,175,55,0.4)", textTransform: "uppercase" as const, whiteSpace: "nowrap" as const }}>
+                  Extended Family
+                </p>
+                <div style={{ flex: 1, height: "0.5px", background: "rgba(212,175,55,0.15)" }} />
+              </div>
+            </FadeIn>
+            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                {groomRelatives.length > 0 && (
+                  <>
+                    <FadeIn delay={0.28}>
+                      <p style={{ fontFamily: "'Cinzel', serif", fontSize: 7, letterSpacing: "0.25em", color: "rgba(212,175,55,0.35)", textTransform: "uppercase" as const, textAlign: "center", marginBottom: 4 }}>
+                        {couple.groomName}&apos;s Side
+                      </p>
+                    </FadeIn>
+                    {groomRelatives.map((rel, i) => <RelativeCard key={i} rel={rel} delay={0.3 + i * 0.07} />)}
+                  </>
+                )}
+              </div>
+              <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                {brideRelatives.length > 0 && (
+                  <>
+                    <FadeIn delay={0.28}>
+                      <p style={{ fontFamily: "'Cinzel', serif", fontSize: 7, letterSpacing: "0.25em", color: "rgba(212,175,55,0.35)", textTransform: "uppercase" as const, textAlign: "center", marginBottom: 4 }}>
+                        {couple.brideName}&apos;s Side
+                      </p>
+                    </FadeIn>
+                    {brideRelatives.map((rel, i) => <RelativeCard key={i} rel={rel} delay={0.3 + i * 0.07} />)}
+                  </>
+                )}
+              </div>
+            </div>
+          </>
+        )}
       </section>
     );
   };
