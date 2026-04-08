@@ -180,38 +180,52 @@ function FamilySection({ couple }: { couple: CoupleDetails }) {
   );
 
   return (
-    <section style={{ padding: "16px 14px 44px", maxWidth: 680, margin: "0 auto" }}>
+    <section style={{ padding: "16px 14px 44px", maxWidth: 620, margin: "0 auto" }}>
       <Reveal>
         <div style={{ textAlign: "center", marginBottom: 26 }}>
           <p style={{ fontFamily: "'Lato',sans-serif", fontSize: 9, letterSpacing: "0.5em", color: K.textDim, textTransform: "uppercase" as const, marginBottom: 6 }}>குடும்பத்தினர் ஆசியுடன்</p>
           <p style={{ fontFamily: "'Noto Serif Tamil',serif", fontSize: 21, color: K.green, fontWeight: 700 }}>நம் இரு குடும்பங்கள்</p>
         </div>
       </Reveal>
-      <div style={{ display: "grid", gridTemplateColumns: "1fr auto 1fr", gap: 10, alignItems: "start" }}>
-        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          {groomRelatives.length > 0 && (<>
-            <Reveal delay={0.05}><p style={{ fontFamily: "'Lato',sans-serif", fontSize: 8, letterSpacing: "0.25em", color: K.textDim, textTransform: "uppercase" as const, textAlign: "center", marginBottom: 4 }}>{couple.groomName}&apos;s Side</p></Reveal>
-            {groomRelatives.map((rel, i) => <RelativeCard key={i} rel={rel} delay={0.1 + i * 0.07} />)}
-          </>)}
-        </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 10, minWidth: 136, maxWidth: 172 }}>
-          {(couple.groomFatherName || couple.groomMotherName) && <ParentsCard sideLabel={`${couple.groomName}'s Parents`} fatherName={couple.groomFatherName} motherName={couple.groomMotherName} delay={0.1} />}
-          {(couple.groomFatherName || couple.groomMotherName) && (couple.brideFatherName || couple.brideMotherName) && (
-            <div style={{ display: "flex", justifyContent: "center" }}>
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: 3 }}>
-                {[0,1,2].map(i => <div key={i} style={{ width: 3, height: 3, borderRadius: "50%", background: K.kumkum, opacity: 0.35 }} />)}
-              </div>
-            </div>
+
+      {/* ── PARENTS — 2-col, full width ── */}
+      {hasParents && (
+        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 12, marginBottom: hasRelatives ? 28 : 0 }}>
+          {(couple.groomFatherName || couple.groomMotherName) && (
+            <ParentsCard sideLabel={`${couple.groomName}'s Parents`} fatherName={couple.groomFatherName} motherName={couple.groomMotherName} delay={0.1} />
           )}
-          {(couple.brideFatherName || couple.brideMotherName) && <ParentsCard sideLabel={`${couple.brideName}'s Parents`} fatherName={couple.brideFatherName} motherName={couple.brideMotherName} delay={0.2} />}
+          {(couple.brideFatherName || couple.brideMotherName) && (
+            <ParentsCard sideLabel={`${couple.brideName}'s Parents`} fatherName={couple.brideFatherName} motherName={couple.brideMotherName} delay={0.2} />
+          )}
         </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-          {brideRelatives.length > 0 && (<>
-            <Reveal delay={0.05}><p style={{ fontFamily: "'Lato',sans-serif", fontSize: 8, letterSpacing: "0.25em", color: K.textDim, textTransform: "uppercase" as const, textAlign: "center", marginBottom: 4 }}>{couple.brideName}&apos;s Side</p></Reveal>
-            {brideRelatives.map((rel, i) => <RelativeCard key={i} rel={rel} delay={0.1 + i * 0.07} />)}
-          </>)}
-        </div>
-      </div>
+      )}
+
+      {/* ── RELATIVES — own section below, 2-col groom|bride ── */}
+      {hasRelatives && (
+        <>
+          <Reveal delay={0.25}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, margin: "4px 0 20px" }}>
+              <div style={{ flex: 1, height: 1, background: K.border }} />
+              <p style={{ fontFamily: "'Lato',sans-serif", fontSize: 8, letterSpacing: "0.3em", color: K.textDim, textTransform: "uppercase" as const, whiteSpace: "nowrap" as const }}>உறவினர்கள்</p>
+              <div style={{ flex: 1, height: 1, background: K.border }} />
+            </div>
+          </Reveal>
+          <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 16 }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              {groomRelatives.length > 0 && (<>
+                <Reveal delay={0.28}><p style={{ fontFamily: "'Lato',sans-serif", fontSize: 8, letterSpacing: "0.25em", color: K.textDim, textTransform: "uppercase" as const, textAlign: "center", marginBottom: 4 }}>{couple.groomName}&apos;s Side</p></Reveal>
+                {groomRelatives.map((rel, i) => <RelativeCard key={i} rel={rel} delay={0.3 + i * 0.07} />)}
+              </>)}
+            </div>
+            <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+              {brideRelatives.length > 0 && (<>
+                <Reveal delay={0.28}><p style={{ fontFamily: "'Lato',sans-serif", fontSize: 8, letterSpacing: "0.25em", color: K.textDim, textTransform: "uppercase" as const, textAlign: "center", marginBottom: 4 }}>{couple.brideName}&apos;s Side</p></Reveal>
+                {brideRelatives.map((rel, i) => <RelativeCard key={i} rel={rel} delay={0.3 + i * 0.07} />)}
+              </>)}
+            </div>
+          </div>
+        </>
+      )}
     </section>
   );
 }
