@@ -390,21 +390,28 @@ export default function EditInvitePage({ params }: EditPageProps) {
                 >
                   {/* Name */}
                   <input
-                    className={`${inputCls} md:col-span-4`}
+                    className={`${inputCls} md:col-span-3`}
                     placeholder="Full name"
                     value={rel.name}
                     onChange={(e) => updateRelative(i, "name", e.target.value)}
                   />
                   {/* Relation */}
                   <input
-                    className={`${inputCls} md:col-span-4`}
-                    placeholder="Relation (e.g. Uncle, Aunt)"
+                    className={`${inputCls} md:col-span-3`}
+                    placeholder="Relation (e.g. Uncle)"
                     value={rel.relation}
                     onChange={(e) => updateRelative(i, "relation", e.target.value)}
                   />
+                  {/* Spouse name */}
+                  <input
+                    className={`${inputCls} md:col-span-3`}
+                    placeholder="Spouse name (optional)"
+                    value={rel.spouseName || ""}
+                    onChange={(e) => updateRelative(i, "spouseName", e.target.value)}
+                  />
                   {/* Side */}
                   <select
-                    className={`${inputCls} md:col-span-3`}
+                    className={`${inputCls} md:col-span-2`}
                     value={rel.side}
                     onChange={(e) => updateRelative(i, "side", e.target.value as "groom" | "bride")}
                   >
