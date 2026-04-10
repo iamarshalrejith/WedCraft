@@ -35,6 +35,7 @@ import VelvetHaveli from "@/components/templates/VelvetHaveli";
 import NordicFrost from "@/components/templates/NordicFrost";
 import SunsetMandap from "@/components/templates/SunsetMandap";
 import KasiYatra from "@/components/templates/KasiYatra";
+import BoldUnion from "@/components/templates/BoldUnion";
 
 interface PreviewPageProps {
   params: Promise<{ id: string }>;
@@ -734,6 +735,36 @@ const kasiYatraDemo: CoupleDetails = {
   ],
 };
 
+const brutalLoveDemo: CoupleDetails = {
+  groomName: "Rohan",
+  brideName: "Zara",
+  weddingDate: "2027-02-14",
+  weddingTime: "6:00 PM",
+  venue: "The Foundry, Bandra",
+  venueAddress: "Chapel Road, Bandra West, Mumbai",
+  mapLink: "https://maps.google.com",
+  phone: "+919876543210",
+  personalMessage: "We're doing this our way. Come celebrate with us.",
+
+  groomFatherName: "Sunil Kapoor",
+  groomMotherName: "Anjali Kapoor",
+  brideFatherName: "Arif Khan",
+  brideMotherName: "Nadia Khan",
+
+  relatives: [
+    { name: "Dev Kapoor", relation: "Uncle", side: "groom", spouseName: "Priya Kapoor" },
+    { name: "Sam Mehta", relation: "Mama", side: "groom", spouseName: "Rita Mehta" },
+    { name: "Imran Khan", relation: "Uncle", side: "bride", spouseName: "Sara Khan" },
+    { name: "Raza Mirza", relation: "Chacha", side: "bride", spouseName: "Hina Mirza" },
+  ],
+
+  events: [
+    { name: "Pre-Party", date: "2027-02-13", time: "8:00 PM", venue: "Rooftop, The Foundry" },
+    { name: "Wedding", date: "2027-02-14", time: "6:00 PM", venue: "The Foundry Main Hall" },
+    { name: "After Party", date: "2027-02-14", time: "10:00 PM", venue: "The Foundry Terrace" },
+  ],
+};
+
 function getPreview(slug: string) {
   switch (slug) {
     case "mangal-utsav":
@@ -891,6 +922,8 @@ function getPreview(slug: string) {
       return <SunsetMandap couple={sunsetMandapDemo}/>;
     case "kasi-yatra":
       return <KasiYatra couple={kasiYatraDemo} />;
+    case "bold-union":
+      return <BoldUnion couple={brutalLoveDemo} />;
     default:
       return <MangalUtsav couple={hinduDemo} />;
   }
