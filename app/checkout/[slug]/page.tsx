@@ -281,7 +281,8 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
     template.slug === "mangal-utsav" ||
     template.slug === "royal-durbar" ||
     template.slug === "sunset-mandap" ||
-    template.slug === "kasi-yatra";
+    template.slug === "kasi-yatra" ||
+    template.slug === "bold-union";
 
   return (
     <div className="max-w-5xl mx-auto px-4 md:px-8 py-8 mt-10">
