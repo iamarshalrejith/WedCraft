@@ -593,6 +593,33 @@ export const templates: Template[] = [
     previewBg: "from-yellow-50 via-amber-100 to-yellow-50",
     colors: ["#1B5E20", "#A31515", "#E0B84C"]
   },
+  {
+    id: "t026",
+    name: "Bold Union",
+    slug: "bold-union",
+    price: 1199,
+    tier: "Premium",
+    religion: "Universal",
+    themes: ["Modern"],
+    description: "Neo-Brutalist wedding invitation — thick black borders, electric yellow, hot pink and bold blue flat colors, heavy sans-serif type, and zero compromise on personality. For couples who refuse to be boring.",
+    features: [
+      "Neo-Brutalist design",
+      "Bold flat color system",
+      "Family blessings section",
+      "Animated countdown",
+      "RSVP form",
+      "WhatsApp share",
+      "Couple photo frame",
+      "Background music",
+    ],
+    rating: 4.9,
+    reviewCount: 0,
+    isFeatured: true,
+    isNew: true,
+    thumbnail: "/templates/bold-union.jpg",
+    previewBg: "from-yellow-300 via-pink-300 to-yellow-300",
+    colors: ["#FFE600", "#FF2D78", "#0057FF"],
+  },
 ];
 
 export const allReligions: Religion[] = [
