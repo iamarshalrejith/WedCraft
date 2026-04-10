@@ -29,6 +29,7 @@ import VelvetHaveli from "@/components/templates/VelvetHaveli";
 import NordicFrost from "@/components/templates/NordicFrost";
 import SunsetMandap from "@/components/templates/SunsetMandap";
 import KasiYatra from "@/components/templates/KasiYatra";
+import BoldUnion from "@/components/templates/BoldUnion";
 
 interface InvitePageProps { params: Promise<{ slug: string }>; }
 
@@ -59,6 +60,7 @@ function renderTemplate(templateSlug: string, couple: CoupleDetails) {
     case "nordic-frost":      return <NordicFrost couple={couple} />;
     case "sunset-mandap":     return <SunsetMandap couple={couple} />;
     case "kasi-yatra":        return <KasiYatra couple={couple} />;
+    case "bold-union":        return <BoldUnion couple={couple} />;
     default:                  return <MangalUtsav couple={couple} />;
   }
 }
