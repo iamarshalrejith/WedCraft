@@ -27,6 +27,125 @@ function formatDate(dateStr: string) {
   return d.toLocaleDateString("en-IN", { day: "numeric", month: "long", year: "numeric" });
 }
 
+
+// ─── Family Section ───────────────────────────────────────────────────────────
+function FamilySection({ c }: { c: CoupleDetails }) {
+  const hasParents = c.groomFatherName || c.groomMotherName || c.brideFatherName || c.brideMotherName;
+  const hasRelatives = c.relatives && c.relatives.length > 0;
+  if (!hasParents && !hasRelatives) return null;
+
+  const groomRelatives = c.relatives?.filter((r) => r.side === "groom") ?? [];
+  const brideRelatives = c.relatives?.filter((r) => r.side === "bride") ?? [];
+
+  return (
+    <section className="max-w-3xl mx-auto px-6 py-10">
+      <h2 className="haveli-title text-xl text-center mb-2" style={{ color:"#D4AF37" }}>
+        परिवार का आशीर्वाद
+      </h2>
+      <p className="haveli-body text-center italic mb-8 text-sm" style={{ color:"#D4AF3799" }}>Family Blessings</p>
+
+      {/* ── PARENTS — 2 col ── */}
+      {hasParents && (
+        <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:12, marginBottom: hasRelatives ? 28 : 0 }}>
+          {(c.groomFatherName || c.groomMotherName) && (
+            <div className="p-5 rounded-2xl relative" style={{ background:"rgba(212,175,55,0.06)", border:"1px solid rgba(212,175,55,0.22)" }}>
+              {["top-2 left-2","top-2 right-2","bottom-2 left-2","bottom-2 right-2"].map((pos,i)=>(
+                <span key={i} className={`absolute ${pos} text-sm`} style={{ color:"#FF8C0055" }}>✿</span>
+              ))}
+              <p className="haveli-body text-xs text-center uppercase tracking-widest mb-3" style={{ color:"#D4AF3799" }}>{c.groomName}&apos;s Parents</p>
+              {c.groomFatherName && (
+                <div className="text-center mb-2">
+                  <p className="haveli-body text-base font-semibold" style={{ color:"#F5DEB3" }}>{c.groomFatherName}</p>
+                  <p className="text-xs uppercase tracking-widest" style={{ color:"#D4AF3766" }}>Father</p>
+                </div>
+              )}
+              {c.groomFatherName && c.groomMotherName && <div style={{ height:1, background:"rgba(212,175,55,0.15)", margin:"8px auto", width:32 }} />}
+              {c.groomMotherName && (
+                <div className="text-center">
+                  <p className="haveli-body text-base font-semibold" style={{ color:"#F5DEB3" }}>{c.groomMotherName}</p>
+                  <p className="text-xs uppercase tracking-widest" style={{ color:"#D4AF3766" }}>Mother</p>
+                </div>
+              )}
+            </div>
+          )}
+          {(c.brideFatherName || c.brideMotherName) && (
+            <div className="p-5 rounded-2xl relative" style={{ background:"rgba(255,140,0,0.06)", border:"1px solid rgba(212,175,55,0.22)" }}>
+              {["top-2 left-2","top-2 right-2","bottom-2 left-2","bottom-2 right-2"].map((pos,i)=>(
+                <span key={i} className={`absolute ${pos} text-sm`} style={{ color:"#FF8C0055" }}>✿</span>
+              ))}
+              <p className="haveli-body text-xs text-center uppercase tracking-widest mb-3" style={{ color:"#D4AF3799" }}>{c.brideName}&apos;s Parents</p>
+              {c.brideFatherName && (
+                <div className="text-center mb-2">
+                  <p className="haveli-body text-base font-semibold" style={{ color:"#F5DEB3" }}>{c.brideFatherName}</p>
+                  <p className="text-xs uppercase tracking-widest" style={{ color:"#D4AF3766" }}>Father</p>
+                </div>
+              )}
+              {c.brideFatherName && c.brideMotherName && <div style={{ height:1, background:"rgba(212,175,55,0.15)", margin:"8px auto", width:32 }} />}
+              {c.brideMotherName && (
+                <div className="text-center">
+                  <p className="haveli-body text-base font-semibold" style={{ color:"#F5DEB3" }}>{c.brideMotherName}</p>
+                  <p className="text-xs uppercase tracking-widest" style={{ color:"#D4AF3766" }}>Mother</p>
+                </div>
+              )}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ── RELATIVES — section below ── */}
+      {hasRelatives && (
+        <>
+          <div className="flex items-center gap-3 mb-5" style={{ margin:"4px 0 18px" }}>
+            <div style={{ flex:1, height:1, background:"rgba(212,175,55,0.18)" }} />
+            <p className="haveli-body text-xs uppercase tracking-widest" style={{ color:"#D4AF3766", whiteSpace:"nowrap" }}>Extended Family</p>
+            <div style={{ flex:1, height:1, background:"rgba(212,175,55,0.18)" }} />
+          </div>
+          <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:16 }}>
+            <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
+              {groomRelatives.length > 0 && (
+                <>
+                  <p className="haveli-body text-xs text-center uppercase tracking-widest mb-1" style={{ color:"#D4AF3766" }}>{c.groomName}&apos;s Side</p>
+                  {groomRelatives.map((rel, i) => (
+                    <div key={i} className="p-3 rounded-xl" style={{ background:"rgba(212,175,55,0.04)", border:"1px solid rgba(212,175,55,0.14)", borderLeft:"3px solid rgba(212,175,55,0.4)" }}>
+                      <p className="haveli-body text-xs uppercase tracking-widest mb-1" style={{ color:"#FF8C0099" }}>{rel.relation}</p>
+                      <p className="haveli-body text-sm font-semibold" style={{ color:"#F5DEB3" }}>{rel.name}</p>
+                      {rel.spouseName && (
+                        <>
+                          <p className="haveli-body text-xs" style={{ color:"#D4AF3766", margin:"2px 0" }}>&amp;</p>
+                          <p className="haveli-body text-sm" style={{ color:"#F5DEB399" }}>{rel.spouseName}</p>
+                        </>
+                      )}
+                    </div>
+                  ))}
+                </>
+              )}
+            </div>
+            <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
+              {brideRelatives.length > 0 && (
+                <>
+                  <p className="haveli-body text-xs text-center uppercase tracking-widest mb-1" style={{ color:"#D4AF3766" }}>{c.brideName}&apos;s Side</p>
+                  {brideRelatives.map((rel, i) => (
+                    <div key={i} className="p-3 rounded-xl" style={{ background:"rgba(255,140,0,0.04)", border:"1px solid rgba(212,175,55,0.14)", borderLeft:"3px solid rgba(255,140,0,0.4)" }}>
+                      <p className="haveli-body text-xs uppercase tracking-widest mb-1" style={{ color:"#FF8C0099" }}>{rel.relation}</p>
+                      <p className="haveli-body text-sm font-semibold" style={{ color:"#F5DEB3" }}>{rel.name}</p>
+                      {rel.spouseName && (
+                        <>
+                          <p className="haveli-body text-xs" style={{ color:"#D4AF3766", margin:"2px 0" }}>&amp;</p>
+                          <p className="haveli-body text-sm" style={{ color:"#F5DEB399" }}>{rel.spouseName}</p>
+                        </>
+                      )}
+                    </div>
+                  ))}
+                </>
+              )}
+            </div>
+          </div>
+        </>
+      )}
+    </section>
+  );
+}
+
 export default function VelvetHaveli({ couple = defaultCouple }: Props) {
   const c = couple;
   const [visible, setVisible] = useState(false);
@@ -187,6 +306,16 @@ export default function VelvetHaveli({ couple = defaultCouple }: Props) {
           </p>
         </div>
       </section>
+
+      {/* ── Family ── */}
+      <FamilySection c={c} />
+      {(c.groomFatherName || c.groomMotherName || c.brideFatherName || c.brideMotherName || (c.relatives && c.relatives.length > 0)) && (
+        <div className="flex items-center justify-center py-4">
+          <div style={{ flex:1, height:1, background:"linear-gradient(90deg, transparent, #D4AF3744, #D4AF37)" }}/>
+          <span className="mx-6 text-2xl" style={{ color:"#FF8C00" }}>🌼</span>
+          <div style={{ flex:1, height:1, background:"linear-gradient(90deg, #D4AF37, #D4AF3744, transparent)" }}/>
+        </div>
+      )}
 
       {/* ── Events ── */}
       <section className="max-w-3xl mx-auto px-8 py-16">
