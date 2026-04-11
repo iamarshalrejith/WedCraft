@@ -221,6 +221,19 @@ const nikahDemo: CoupleDetails = {
   mapLink: "https://maps.google.com",
   phone: "+919876543210",
   personalMessage: "And of His signs is that He created for you mates.",
+
+  groomFatherName: "Ibrahim Khan",
+  groomMotherName: "Fatima Khan",
+  brideFatherName: "Rashid Ahmed",
+  brideMotherName: "Zubeda Ahmed",
+
+  relatives: [
+    { name: "Tariq Khan", relation: "Chacha", side: "groom", spouseName: "Nasreen Khan" },
+    { name: "Salman Mirza", relation: "Mamoo", side: "groom", spouseName: "Hina Mirza" },
+    { name: "Farooq Ahmed", relation: "Chacha", side: "bride", spouseName: "Rukhsar Ahmed" },
+    { name: "Imran Siddiqui", relation: "Mamoo", side: "bride", spouseName: "Zara Siddiqui" },
+  ],
+
   events: [
     {
       name: "Nikah Ceremony",
@@ -624,6 +637,19 @@ const haveliDemo: CoupleDetails = {
   mapLink: "https://maps.google.com",
   phone: "+919876543210",
   personalMessage: "Like the blue city, our love is ancient and everlasting.",
+
+  groomFatherName: "Thakur Vikram Singh",
+  groomMotherName: "Rani Sunita Singh",
+  brideFatherName: "Seth Govardhan Lal",
+  brideMotherName: "Smt. Kamla Devi",
+
+  relatives: [
+    { name: "Ranbir Singh", relation: "Chacha", side: "groom", spouseName: "Saroj Singh" },
+    { name: "Pratap Singh", relation: "Mama", side: "groom", spouseName: "Geeta Singh" },
+    { name: "Mahesh Lal", relation: "Chacha", side: "bride", spouseName: "Pushpa Lal" },
+    { name: "Dinesh Sharma", relation: "Mama", side: "bride", spouseName: "Rekha Sharma" },
+  ],
+
   events: [
     {
       name: "Haldi & Chooda",
