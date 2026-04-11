@@ -76,6 +76,118 @@ const ArabicDivider = () => (
   </div>
 );
 
+// ─── Family Section ───────────────────────────────────────────────────────────
+function FamilySection({ couple }: { couple: CoupleDetails }) {
+  const hasParents = couple.groomFatherName || couple.groomMotherName || couple.brideFatherName || couple.brideMotherName;
+  const hasRelatives = couple.relatives && couple.relatives.length > 0;
+  if (!hasParents && !hasRelatives) return null;
+
+  const groomRelatives = couple.relatives?.filter((r) => r.side === "groom") ?? [];
+  const brideRelatives = couple.relatives?.filter((r) => r.side === "bride") ?? [];
+
+  const gold = "#D4AF37";
+  const dimGold = "rgba(212,175,55,0.45)";
+  const dimBorder = "rgba(212,175,55,0.18)";
+  const cream = "#F5E6C8";
+  const dimCream = "rgba(245,230,200,0.7)";
+
+  const ParentsCard = ({ sideLabel, fatherName, motherName, delay }: { sideLabel: string; fatherName?: string; motherName?: string; delay: number }) => (
+    <Reveal delay={delay}>
+      <div style={{ background:"rgba(212,175,55,0.04)", border:`1px solid ${dimBorder}`, borderRadius:16, padding:"22px 18px", textAlign:"center", height:"100%", position:"relative", overflow:"hidden" }}>
+        {/* Geometric corner motif */}
+        <div style={{ position:"absolute", top:8, left:8, width:16, height:16, borderTop:`1px solid ${gold}`, borderLeft:`1px solid ${gold}`, opacity:0.35 }} />
+        <div style={{ position:"absolute", top:8, right:8, width:16, height:16, borderTop:`1px solid ${gold}`, borderRight:`1px solid ${gold}`, opacity:0.35 }} />
+        <div style={{ position:"absolute", bottom:8, left:8, width:16, height:16, borderBottom:`1px solid ${gold}`, borderLeft:`1px solid ${gold}`, opacity:0.35 }} />
+        <div style={{ position:"absolute", bottom:8, right:8, width:16, height:16, borderBottom:`1px solid ${gold}`, borderRight:`1px solid ${gold}`, opacity:0.35 }} />
+        <p style={{ fontFamily:"'Cinzel',serif", fontSize:8, letterSpacing:"0.3em", color:dimGold, textTransform:"uppercase" as const, marginBottom:16 }}>{sideLabel}</p>
+        {fatherName && (<div style={{ marginBottom: motherName ? 12 : 0 }}>
+          <p style={{ fontFamily:"'Amiri',serif", fontSize:17, color:cream, lineHeight:1.3 }}>{fatherName}</p>
+          <p style={{ fontSize:9, color:dimGold, letterSpacing:"0.15em", textTransform:"uppercase" as const, marginTop:2 }}>Father</p>
+        </div>)}
+        {fatherName && motherName && <div style={{ height:"0.5px", background:dimBorder, margin:"10px auto", width:36 }} />}
+        {motherName && (<div>
+          <p style={{ fontFamily:"'Amiri',serif", fontSize:17, color:cream, lineHeight:1.3 }}>{motherName}</p>
+          <p style={{ fontSize:9, color:dimGold, letterSpacing:"0.15em", textTransform:"uppercase" as const, marginTop:2 }}>Mother</p>
+        </div>)}
+      </div>
+    </Reveal>
+  );
+
+  const RelativeCard = ({ rel, delay }: { rel: { name: string; relation: string; spouseName?: string }; delay: number }) => (
+    <Reveal delay={delay}>
+      <div style={{ background:"rgba(212,175,55,0.03)", border:`1px solid rgba(212,175,55,0.12)`, borderRadius:10, padding:"12px", textAlign:"center" }}>
+        <p style={{ fontSize:8, letterSpacing:"0.2em", color:"rgba(212,175,55,0.38)", textTransform:"uppercase" as const, marginBottom:7 }}>{rel.relation}</p>
+        <p style={{ fontFamily:"'Amiri',serif", fontSize:15, color:cream, lineHeight:1.3 }}>{rel.name}</p>
+        {rel.spouseName && (<>
+          <div style={{ display:"flex", alignItems:"center", gap:5, justifyContent:"center", margin:"5px 0" }}>
+            <div style={{ height:"0.5px", flex:1, background:dimBorder }} />
+            <span style={{ fontSize:9, color:dimGold }}>&amp;</span>
+            <div style={{ height:"0.5px", flex:1, background:dimBorder }} />
+          </div>
+          <p style={{ fontFamily:"'Amiri',serif", fontSize:14, color:dimCream, lineHeight:1.3 }}>{rel.spouseName}</p>
+        </>)}
+      </div>
+    </Reveal>
+  );
+
+  return (
+    <section style={{ padding:"20px 20px 52px", maxWidth:580, margin:"0 auto" }}>
+      <Reveal>
+        <div style={{ textAlign:"center", marginBottom:28 }}>
+          <p style={{ fontFamily:"'Cinzel',serif", fontSize:10, letterSpacing:"0.4em", color:"rgba(212,175,55,0.55)", textTransform:"uppercase" as const, marginBottom:8 }}>
+            With Family Blessings
+          </p>
+          <p style={{ fontFamily:"'Amiri',serif", fontSize:22, color:"#F5E6C8" }}>كِلَا الْعَائِلَتَيْنِ</p>
+          <p style={{ fontFamily:"'Cormorant Garamond',serif", fontSize:13, color:"rgba(212,175,55,0.5)", fontStyle:"italic", marginTop:4 }}>Both Families</p>
+        </div>
+      </Reveal>
+
+      {/* ── PARENTS — 2-col, full width ── */}
+      {hasParents && (
+        <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:12, marginBottom: hasRelatives ? 28 : 0 }}>
+          {(couple.groomFatherName || couple.groomMotherName) && (
+            <ParentsCard sideLabel={`${couple.groomName}'s Family`} fatherName={couple.groomFatherName} motherName={couple.groomMotherName} delay={0.1} />
+          )}
+          {(couple.brideFatherName || couple.brideMotherName) && (
+            <ParentsCard sideLabel={`${couple.brideName}'s Family`} fatherName={couple.brideFatherName} motherName={couple.brideMotherName} delay={0.2} />
+          )}
+        </div>
+      )}
+
+      {/* ── RELATIVES — own section below ── */}
+      {hasRelatives && (
+        <>
+          <Reveal delay={0.25}>
+            <div style={{ display:"flex", alignItems:"center", gap:10, margin:"4px 0 20px" }}>
+              <div style={{ flex:1, height:"0.5px", background:"rgba(212,175,55,0.18)" }} />
+              <p style={{ fontFamily:"'Cinzel',serif", fontSize:8, letterSpacing:"0.3em", color:"rgba(212,175,55,0.4)", textTransform:"uppercase" as const, whiteSpace:"nowrap" as const }}>Extended Family</p>
+              <div style={{ flex:1, height:"0.5px", background:"rgba(212,175,55,0.18)" }} />
+            </div>
+          </Reveal>
+          <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:16 }}>
+            <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
+              {groomRelatives.length > 0 && (<>
+                <Reveal delay={0.28}>
+                  <p style={{ fontFamily:"'Cinzel',serif", fontSize:7, letterSpacing:"0.22em", color:"rgba(212,175,55,0.35)", textTransform:"uppercase" as const, textAlign:"center", marginBottom:4 }}>{couple.groomName}&apos;s Side</p>
+                </Reveal>
+                {groomRelatives.map((rel, i) => <RelativeCard key={i} rel={rel} delay={0.3 + i * 0.07} />)}
+              </>)}
+            </div>
+            <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
+              {brideRelatives.length > 0 && (<>
+                <Reveal delay={0.28}>
+                  <p style={{ fontFamily:"'Cinzel',serif", fontSize:7, letterSpacing:"0.22em", color:"rgba(212,175,55,0.35)", textTransform:"uppercase" as const, textAlign:"center", marginBottom:4 }}>{couple.brideName}&apos;s Side</p>
+                </Reveal>
+                {brideRelatives.map((rel, i) => <RelativeCard key={i} rel={rel} delay={0.3 + i * 0.07} />)}
+              </>)}
+            </div>
+          </div>
+        </>
+      )}
+    </section>
+  );
+}
+
 export default function NikahNazm({ couple }: NikahNazmProps) {
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
@@ -220,6 +332,12 @@ export default function NikahNazm({ couple }: NikahNazmProps) {
             <ArabicDivider/>
           </Reveal>
         </section>
+
+        {/* ── SECTION 2.5 — Family ─────────────────────────────── */}
+        <FamilySection couple={couple} />
+        {(couple.groomFatherName || couple.groomMotherName || couple.brideFatherName || couple.brideMotherName || (couple.relatives && couple.relatives.length > 0)) && (
+          <div style={{ padding:"0 24px" }}><ArabicDivider/></div>
+        )}
 
         {/* ── SECTION 3 — Events ───────────────────────────────── */}
         <section style={{ padding:"20px 24px 60px", maxWidth:560, margin:"0 auto" }}>
