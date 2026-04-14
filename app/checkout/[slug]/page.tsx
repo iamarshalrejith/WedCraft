@@ -284,7 +284,11 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
     template.slug === "kasi-yatra" ||
     template.slug === "bold-union" ||
     template.slug === "nikah-nazm" ||
-    template.slug === "velvet-haveli";
+    template.slug === "velvet-haveli" ||
+    template.slug === "anand-karaj" ||
+    template.slug === "bengali-classic" ||
+    template.slug === "indian-classic" ||
+    template.slug === "sacred-vows";
 
   return (
     <div className="max-w-5xl mx-auto px-4 md:px-8 py-8 mt-10">

@@ -284,6 +284,19 @@ const sikhDemo: CoupleDetails = {
   mapLink: "https://maps.google.com",
   phone: "+919876543210",
   personalMessage: "With Waheguru's blessings.",
+
+  groomFatherName: "Gurjeet Singh",
+  groomMotherName: "Manpreet Kaur",
+  brideFatherName: "Balwinder Singh",
+  brideMotherName: "Ravinder Kaur",
+
+  relatives: [
+    { name: "Kulwant Singh", relation: "Chacha", side: "groom", spouseName: "Parminder Kaur" },
+    { name: "Amrinder Singh", relation: "Mama", side: "groom", spouseName: "Navjot Kaur" },
+    { name: "Sukhwinder Singh", relation: "Chacha", side: "bride", spouseName: "Gurdeep Kaur" },
+    { name: "Jatinder Singh", relation: "Mama", side: "bride", spouseName: "Harleen Kaur" },
+  ],
+
   events: [
     {
       name: "Vatna Ceremony",
@@ -315,6 +328,19 @@ const christianDemo: CoupleDetails = {
   mapLink: "https://maps.google.com",
   phone: "+919876543210",
   personalMessage: "In God's grace, two hearts become one.",
+
+  groomFatherName: "George Mathew",
+  groomMotherName: "Mary Mathew",
+  brideFatherName: "Philip Abraham",
+  brideMotherName: "Sara Abraham",
+
+  relatives: [
+    { name: "John Mathew", relation: "Uncle", side: "groom", spouseName: "Lilly Mathew" },
+    { name: "Jacob Thomas", relation: "Uncle", side: "groom", spouseName: "Beena Thomas" },
+    { name: "Samuel Abraham", relation: "Uncle", side: "bride", spouseName: "Mercy Samuel" },
+    { name: "Peter Philip", relation: "Uncle", side: "bride", spouseName: "Sheela Peter" },
+  ],
+
   events: [
     {
       name: "Holy Matrimony",
@@ -556,6 +582,19 @@ const classicDemo: CoupleDetails = {
   mapLink: "https://maps.google.com",
   phone: "+919876543210",
   personalMessage: "மங்கள நிகழ்வில் கலந்து கொள்ளுமாறு அன்புடன் அழைக்கிறோம்.",
+
+  groomFatherName: "Ramasamy",
+  groomMotherName: "Kamala",
+  brideFatherName: "Subramanian",
+  brideMotherName: "Saradha",
+
+  relatives: [
+    { name: "Kannan", relation: "சித்தப்பா", side: "groom", spouseName: "Vijaya" },
+    { name: "Senthil", relation: "மாமா", side: "groom", spouseName: "Priya" },
+    { name: "Rajan", relation: "சித்தப்பா", side: "bride", spouseName: "Usha" },
+    { name: "Mohan", relation: "மாமா", side: "bride", spouseName: "Geetha" },
+  ],
+
   events: [
     {
       name: "Naandi & Puja",
@@ -839,6 +878,16 @@ function getPreview(slug: string) {
             phone: "+919876543210",
             personalMessage:
               "দুটি মন, একটি স্বপ্ন — আপনার উপস্থিতি আমাদের বিশেষ দিনটিকে আরও সুন্দর করবে।",
+            groomFatherName: "Suresh Banerjee",
+            groomMotherName: "Rekha Banerjee",
+            brideFatherName: "Arun Chakraborty",
+            brideMotherName: "Mita Chakraborty",
+            relatives: [
+              { name: "Dipak Banerjee", relation: "Kaka", side: "groom", spouseName: "Swapna Banerjee" },
+              { name: "Biswajit Bose", relation: "Mama", side: "groom", spouseName: "Tumpa Bose" },
+              { name: "Nikhil Chakraborty", relation: "Kaka", side: "bride", spouseName: "Piya Chakraborty" },
+              { name: "Debashis Sen", relation: "Mama", side: "bride", spouseName: "Kaberi Sen" },
+            ],
             events: [
               {
                 name: "Aiburo Bhaat",
