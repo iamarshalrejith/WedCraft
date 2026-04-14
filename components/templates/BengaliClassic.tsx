@@ -67,6 +67,99 @@ const RedDivider = () => (
   </div>
 );
 
+
+// ─── Family Section ───────────────────────────────────────────────────────────
+function FamilySection({ couple }: { couple: CoupleDetails }) {
+  const hasParents = couple.groomFatherName || couple.groomMotherName || couple.brideFatherName || couple.brideMotherName;
+  const hasRelatives = couple.relatives && couple.relatives.length > 0;
+  if (!hasParents && !hasRelatives) return null;
+
+  const groomRelatives = couple.relatives?.filter((r) => r.side === "groom") ?? [];
+  const brideRelatives = couple.relatives?.filter((r) => r.side === "bride") ?? [];
+
+  const ParentsCard = ({ sideLabel, fatherName, motherName, delay }: { sideLabel: string; fatherName?: string; motherName?: string; delay: number }) => (
+    <Reveal delay={delay}>
+      <div style={{background:"rgba(255,255,255,0.07)", border:"1px solid rgba(255,255,255,0.18)", borderRadius:6, padding:"22px 16px", textAlign:"center", height:"100%"}}>
+        <p style={{fontFamily:"'Hind Siliguri',sans-serif", fontSize:8, letterSpacing:"0.3em", color:"rgba(255,255,255,0.4)", textTransform:"uppercase" as const, marginBottom:14}}>{sideLabel}</p>
+        {fatherName && (<div style={{marginBottom: motherName ? 12 : 0}}>
+          <p style={{fontFamily:"'Hind Siliguri',sans-serif", fontSize:16, color:"rgba(255,255,255,0.9)", lineHeight:1.3, fontWeight:600}}>{fatherName}</p>
+          <p style={{fontSize:9, color:"rgba(255,255,255,0.35)", letterSpacing:"0.15em", textTransform:"uppercase" as const, marginTop:2}}>Father</p>
+        </div>)}
+        {fatherName && motherName && <div style={{height:"0.5px", background:"rgba(255,255,255,0.15)", margin:"10px auto", width:36}} />}
+        {motherName && (<div>
+          <p style={{fontFamily:"'Hind Siliguri',sans-serif", fontSize:16, color:"rgba(255,255,255,0.9)", lineHeight:1.3, fontWeight:600}}>{motherName}</p>
+          <p style={{fontSize:9, color:"rgba(255,255,255,0.35)", letterSpacing:"0.15em", textTransform:"uppercase" as const, marginTop:2}}>Mother</p>
+        </div>)}
+      </div>
+    </Reveal>
+  );
+
+  const RelativeCard = ({ rel, delay }: { rel: { name: string; relation: string; spouseName?: string }; delay: number }) => (
+    <Reveal delay={delay}>
+      <div style={{background:"rgba(255,255,255,0.04)", border:"1px solid rgba(255,255,255,0.1)", borderRadius:5, padding:"11px", textAlign:"center", borderLeft:"2px solid rgba(255,255,255,0.25)"}}>
+        <p style={{fontSize:8, letterSpacing:"0.2em", color:"rgba(255,255,255,0.35)", textTransform:"uppercase" as const, marginBottom:6, fontFamily:"'Hind Siliguri',sans-serif"}}>{rel.relation}</p>
+        <p style={{fontFamily:"'Hind Siliguri',sans-serif", fontSize:14, color:"rgba(255,255,255,0.88)", lineHeight:1.3, fontWeight:600}}>{rel.name}</p>
+        {rel.spouseName && (<>
+          <div style={{display:"flex", alignItems:"center", gap:5, justifyContent:"center", margin:"4px 0"}}>
+            <div style={{height:"0.5px", flex:1, background:"rgba(255,255,255,0.15)"}} />
+            <span style={{fontSize:9, color:"rgba(255,255,255,0.4)"}}>&amp;</span>
+            <div style={{height:"0.5px", flex:1, background:"rgba(255,255,255,0.15)"}} />
+          </div>
+          <p style={{fontFamily:"'Hind Siliguri',sans-serif", fontSize:13, color:"rgba(255,255,255,0.65)", lineHeight:1.3}}>{rel.spouseName}</p>
+        </>)}
+      </div>
+    </Reveal>
+  );
+
+  return (
+    <section style={{padding:"20px 16px 48px", maxWidth:580, margin:"0 auto"}}>
+      <Reveal>
+        <div style={{textAlign:"center", marginBottom:26}}>
+          <p style={{fontFamily:"'Hind Siliguri',sans-serif", fontSize:9, letterSpacing:"0.4em", color:"rgba(255,255,255,0.4)", textTransform:"uppercase" as const, marginBottom:6}}>পরিবারের আশীর্বাদে</p>
+          <p style={{fontFamily:"'Hind Siliguri',sans-serif", fontSize:22, color:"rgba(255,255,255,0.92)", fontWeight:600}}>আমাদের দুই পরিবার</p>
+        </div>
+      </Reveal>
+
+      {hasParents && (
+        <div style={{display:"grid", gridTemplateColumns:"1fr 1fr", gap:12, marginBottom: hasRelatives ? 26 : 0}}>
+          {(couple.groomFatherName || couple.groomMotherName) && (
+            <ParentsCard sideLabel={`${couple.groomName}'s Parents`} fatherName={couple.groomFatherName} motherName={couple.groomMotherName} delay={0.1} />
+          )}
+          {(couple.brideFatherName || couple.brideMotherName) && (
+            <ParentsCard sideLabel={`${couple.brideName}'s Parents`} fatherName={couple.brideFatherName} motherName={couple.brideMotherName} delay={0.2} />
+          )}
+        </div>
+      )}
+
+      {hasRelatives && (
+        <>
+          <Reveal delay={0.25}>
+            <div style={{display:"flex", alignItems:"center", gap:10, margin:"4px 0 18px"}}>
+              <div style={{flex:1, height:"0.5px", background:"rgba(255,255,255,0.15)"}} />
+              <p style={{fontFamily:"'Hind Siliguri',sans-serif", fontSize:8, letterSpacing:"0.28em", color:"rgba(255,255,255,0.35)", textTransform:"uppercase" as const, whiteSpace:"nowrap" as const}}>Extended Family</p>
+              <div style={{flex:1, height:"0.5px", background:"rgba(255,255,255,0.15)"}} />
+            </div>
+          </Reveal>
+          <div style={{display:"grid", gridTemplateColumns:"1fr 1fr", gap:14}}>
+            <div style={{display:"flex", flexDirection:"column", gap:8}}>
+              {groomRelatives.length > 0 && (<>
+                <Reveal delay={0.28}><p style={{fontFamily:"'Hind Siliguri',sans-serif", fontSize:7, letterSpacing:"0.22em", color:"rgba(255,255,255,0.3)", textTransform:"uppercase" as const, textAlign:"center", marginBottom:4}}>{couple.groomName}&apos;s Side</p></Reveal>
+                {groomRelatives.map((rel, i) => <RelativeCard key={i} rel={rel} delay={0.3 + i * 0.07} />)}
+              </>)}
+            </div>
+            <div style={{display:"flex", flexDirection:"column", gap:8}}>
+              {brideRelatives.length > 0 && (<>
+                <Reveal delay={0.28}><p style={{fontFamily:"'Hind Siliguri',sans-serif", fontSize:7, letterSpacing:"0.22em", color:"rgba(255,255,255,0.3)", textTransform:"uppercase" as const, textAlign:"center", marginBottom:4}}>{couple.brideName}&apos;s Side</p></Reveal>
+                {brideRelatives.map((rel, i) => <RelativeCard key={i} rel={rel} delay={0.3 + i * 0.07} />)}
+              </>)}
+            </div>
+          </div>
+        </>
+      )}
+    </section>
+  );
+}
+
 export default function BengaliClassic({couple}:BengaliClassicProps) {
   const slug =
   couple.slug ??
@@ -131,6 +224,10 @@ export default function BengaliClassic({couple}:BengaliClassicProps) {
         </section>
 
         <div style={{display:"flex",justifyContent:"center",padding:"8px 0"}}><AlponaPattern opacity={0.12}/></div>
+
+        {/* ── Family ── */}
+        <FamilySection couple={couple} />
+        {(couple.groomFatherName || couple.groomMotherName || couple.brideFatherName || couple.brideMotherName || (couple.relatives && couple.relatives.length > 0)) && <RedDivider />}
 
         {/* ── Events ── */}
         <section style={{padding:"20px 24px 60px",maxWidth:560,margin:"0 auto"}}>
