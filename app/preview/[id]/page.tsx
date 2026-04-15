@@ -159,6 +159,13 @@ const modernDemo: CoupleDetails = {
   mapLink: "https://maps.google.com",
   phone: "+919876543210",
   personalMessage: "Two hearts, one love.",
+
+  groomFatherName: "Rajesh Kumar",
+  groomMotherName: "Sunita Kumar",
+  brideFatherName: "Vijay Sharma",
+  brideMotherName: "Meena Sharma",
+  relatives: [{ name: "Suresh Kumar", relation: "Uncle", side: "groom", spouseName: "Rekha Kumar" }, { name: "Anil Sharma", relation: "Mama", side: "bride", spouseName: "Geeta Sharma" }],
+
   events: [
     {
       name: "Bridal Shower",
@@ -190,6 +197,13 @@ const beachDemo: CoupleDetails = {
   mapLink: "https://maps.google.com",
   phone: "+919876543210",
   personalMessage: "With the ocean as our witness.",
+
+  groomFatherName: "Rajan Pillai",
+  groomMotherName: "Kamini Pillai",
+  brideFatherName: "Suresh Nair",
+  brideMotherName: "Rekha Nair",
+  relatives: [{ name: "Vinod Pillai", relation: "Uncle", side: "groom", spouseName: "Shobha Pillai" }, { name: "Mohan Nair", relation: "Mama", side: "bride", spouseName: "Latha Nair" }],
+
   events: [
     {
       name: "Welcome Sundowner",
@@ -259,6 +273,13 @@ const luxuryDemo: CoupleDetails = {
   mapLink: "https://maps.google.com",
   phone: "+919876543210",
   personalMessage: "To love and be loved is everything.",
+
+  groomFatherName: "Ashok Malhotra",
+  groomMotherName: "Priya Malhotra",
+  brideFatherName: "Ramesh Singhania",
+  brideMotherName: "Sudha Singhania",
+  relatives: [{ name: "Vivek Malhotra", relation: "Uncle", side: "groom", spouseName: "Monica Malhotra" }, { name: "Deepak Singhania", relation: "Uncle", side: "bride", spouseName: "Nisha Singhania" }],
+
   events: [
     {
       name: "Cocktail Reception",
@@ -366,6 +387,13 @@ const minimalDemo: CoupleDetails = {
   mapLink: "https://maps.google.com",
   phone: "+919876543210",
   personalMessage: "Simple. Beautiful. Ours.",
+
+  groomFatherName: "Rajesh Mehta",
+  groomMotherName: "Sunita Mehta",
+  brideFatherName: "Sanjay Iyer",
+  brideMotherName: "Kavitha Iyer",
+  relatives: [{ name: "Vinod Mehta", relation: "Uncle", side: "groom", spouseName: "Rekha Mehta" }, { name: "Krishna Iyer", relation: "Mama", side: "bride", spouseName: "Usha Iyer" }],
+
   events: [
     {
       name: "Wedding Ceremony",
@@ -391,6 +419,13 @@ const celestialDemo: CoupleDetails = {
   mapLink: "https://maps.google.com",
   phone: "+919876543210",
   personalMessage: "Two souls, aligned by the universe.",
+
+  groomFatherName: "Arjun Kapoor",
+  groomMotherName: "Sunita Kapoor",
+  brideFatherName: "Vikram Mehta",
+  brideMotherName: "Anita Mehta",
+  relatives: [{ name: "Sanjay Kapoor", relation: "Uncle", side: "groom", spouseName: "Priya Kapoor" }, { name: "Rahul Mehta", relation: "Mama", side: "bride", spouseName: "Neeta Mehta" }],
+
   events: [
     {
       name: "Stargazing Cocktails",
@@ -416,6 +451,13 @@ const rusticDemo: CoupleDetails = {
   mapLink: "https://maps.google.com",
   phone: "+919876543210",
   personalMessage: "Beneath the open sky, two hearts become one.",
+
+  groomFatherName: "James Whitfield",
+  groomMotherName: "Margaret Whitfield",
+  brideFatherName: "Robert Greenfield",
+  brideMotherName: "Emily Greenfield",
+  relatives: [{ name: "William Whitfield", relation: "Uncle", side: "groom", spouseName: "Helen Whitfield" }, { name: "Charles Greenfield", relation: "Uncle", side: "bride", spouseName: "Dorothy Greenfield" }],
+
   events: [
     {
       name: "Phoolon Ki Holi",
@@ -441,6 +483,13 @@ const zenDemo: CoupleDetails = {
   mapLink: "https://maps.google.com",
   phone: "+919876543210",
   personalMessage: "In the stillness of this moment, two paths become one.",
+
+  groomFatherName: "Hiroshi Tanaka",
+  groomMotherName: "Yuki Tanaka",
+  brideFatherName: "Takeshi Yamamoto",
+  brideMotherName: "Akiko Yamamoto",
+  relatives: [{ name: "Kenji Tanaka", relation: "Ojisan", side: "groom", spouseName: "Hana Tanaka" }, { name: "Ryo Yamamoto", relation: "Ojisan", side: "bride", spouseName: "Mika Yamamoto" }],
+
   events: [
     {
       name: "Tea Ceremony",
@@ -466,6 +515,13 @@ const midnightDemo: CoupleDetails = {
   mapLink: "https://maps.google.com",
   phone: "+919876543210",
   personalMessage: "Like a rose that blooms in the darkest night.",
+
+  groomFatherName: "Thomas Sterling",
+  groomMotherName: "Isabella Sterling",
+  brideFatherName: "Richard Delacroix",
+  brideMotherName: "Sophia Delacroix",
+  relatives: [{ name: "Edward Sterling", relation: "Uncle", side: "groom", spouseName: "Charlotte Sterling" }, { name: "Henri Delacroix", relation: "Uncle", side: "bride", spouseName: "Margaux Delacroix" }],
+
   events: [
     {
       name: "Cocktail Evening",
@@ -551,6 +607,13 @@ const tropicalDemo: CoupleDetails = {
   mapLink: "https://maps.google.com",
   phone: "+919876543210",
   personalMessage: "Love found us where the ocean meets the sky.",
+
+  groomFatherName: "Suresh Pillai",
+  groomMotherName: "Lakshmi Pillai",
+  brideFatherName: "Rajan Nair",
+  brideMotherName: "Geetha Nair",
+  relatives: [{ name: "Unni Pillai", relation: "Uncle", side: "groom", spouseName: "Sheela Pillai" }, { name: "Biju Nair", relation: "Mama", side: "bride", spouseName: "Sindhu Nair" }],
+
   events: [
     {
       name: "Welcome Sundowner",
@@ -626,6 +689,13 @@ const ivoryDemo: CoupleDetails = {
   mapLink: "https://maps.google.com",
   phone: "+919876543210",
   personalMessage: "Every love story is beautiful, but ours is my favourite.",
+
+  groomFatherName: "Edmund Sr.",
+  groomMotherName: "Celeste Sr.",
+  brideFatherName: "Henry Beaumont",
+  brideMotherName: "Victoria Beaumont",
+  relatives: [{ name: "Frederick Hamilton", relation: "Uncle", side: "groom", spouseName: "Eleanor Hamilton" }, { name: "Reginald Beaumont", relation: "Uncle", side: "bride", spouseName: "Harriet Beaumont" }],
+
   events: [
     {
       name: "Garden Party",
@@ -720,6 +790,13 @@ const nordicDemo: CoupleDetails = {
   mapLink: "https://maps.google.com",
   phone: "+919876543210",
   personalMessage: "In the quiet of winter, we found forever.",
+
+  groomFatherName: "Lars Eriksson",
+  groomMotherName: "Ingrid Eriksson",
+  brideFatherName: "Bjorn Andersen",
+  brideMotherName: "Astrid Andersen",
+  relatives: [{ name: "Henrik Eriksson", relation: "Uncle", side: "groom", spouseName: "Britta Eriksson" }, { name: "Sven Andersen", relation: "Uncle", side: "bride", spouseName: "Maja Andersen" }],
+
   events: [
     {
       name: "Ice Dinner",

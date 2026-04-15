@@ -288,7 +288,22 @@ export default function CheckoutPage({ params }: CheckoutPageProps) {
     template.slug === "anand-karaj" ||
     template.slug === "bengali-classic" ||
     template.slug === "indian-classic" ||
-    template.slug === "sacred-vows";
+    template.slug === "sacred-vows" ||
+    template.slug === "azure-shore" ||
+    template.slug === "celestial-dream" ||
+    template.slug === "eternal-bloom" ||
+    template.slug === "garden-party" ||
+    template.slug === "ivory-manuscript" ||
+    template.slug === "midnight-rose" ||
+    template.slug === "neon-vows" ||
+    template.slug === "nordic-frost" ||
+    template.slug === "onyx-and-gold" ||
+    template.slug === "paper-and-petals" ||
+    template.slug === "rustic-bloom" ||
+    template.slug === "silver-screen" ||
+    template.slug === "tropical-paradise" ||
+    template.slug === "urban-chic" ||
+    template.slug === "zen-garden";
 
   return (
     <div className="max-w-5xl mx-auto px-4 md:px-8 py-8 mt-10">
