@@ -31,6 +31,92 @@ const SNOWFLAKES = ["❄","❅","❆","✦","✧"];
 
 interface Flake { id: number; x: number; size: number; delay: number; duration: number; symbol: string; }
 
+
+// ─── Family Section ───────────────────────────────────────────────────────────
+function FamilySection({ c }: { c: CoupleDetails }) {
+  const hasParents = c.groomFatherName || c.groomMotherName || c.brideFatherName || c.brideMotherName;
+  const hasRelatives = c.relatives && c.relatives.length > 0;
+  if (!hasParents && !hasRelatives) return null;
+  const groomRelatives = c.relatives?.filter((r) => r.side === "groom") ?? [];
+  const brideRelatives = c.relatives?.filter((r) => r.side === "bride") ?? [];
+
+  return (
+    <section className="max-w-3xl mx-auto px-6 py-10">
+      <div style={{ textAlign:"center", marginBottom:24 }}>
+        <p style={{ fontSize:9, letterSpacing:"0.4em", color:"rgba(70,130,180,0.6)", textTransform:"uppercase" as const, marginBottom:6 }}>With Family Blessings</p>
+        <p style={{ fontFamily:"Georgia,serif", fontSize:22, color:"#1A2744" }}>Our Families</p>
+      </div>
+      {hasParents && (
+        <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:12, marginBottom: hasRelatives ? 24 : 0 }}>
+          {(c.groomFatherName || c.groomMotherName) && (
+            <div style={{ background:"white", border:"1px solid rgba(70,130,180,0.22)", borderRadius:10, padding:"20px 16px", textAlign:"center" }}>
+              <p style={{ fontSize:8, letterSpacing:"0.3em", color:"rgba(70,130,180,0.6)", textTransform:"uppercase" as const, marginBottom:12 }}>{c.groomName}&apos;s Parents</p>
+              {c.groomFatherName && (<div style={{ marginBottom: c.groomMotherName ? 10 : 0 }}>
+                <p style={{ fontFamily:"Georgia,serif", fontSize:15, color:"#1A2744", lineHeight:1.3 }}>{c.groomFatherName}</p>
+                <p style={{ fontSize:9, color:"rgba(70,130,180,0.6)", textTransform:"uppercase" as const, marginTop:2 }}>Father</p>
+              </div>)}
+              {c.groomFatherName && c.groomMotherName && <div style={{ height:"0.5px", background:"rgba(70,130,180,0.22)", margin:"8px auto", width:32 }} />}
+              {c.groomMotherName && (<div>
+                <p style={{ fontFamily:"Georgia,serif", fontSize:15, color:"#1A2744", lineHeight:1.3 }}>{c.groomMotherName}</p>
+                <p style={{ fontSize:9, color:"rgba(70,130,180,0.6)", textTransform:"uppercase" as const, marginTop:2 }}>Mother</p>
+              </div>)}
+            </div>
+          )}
+          {(c.brideFatherName || c.brideMotherName) && (
+            <div style={{ background:"white", border:"1px solid rgba(70,130,180,0.22)", borderRadius:10, padding:"20px 16px", textAlign:"center" }}>
+              <p style={{ fontSize:8, letterSpacing:"0.3em", color:"rgba(70,130,180,0.6)", textTransform:"uppercase" as const, marginBottom:12 }}>{c.brideName}&apos;s Parents</p>
+              {c.brideFatherName && (<div style={{ marginBottom: c.brideMotherName ? 10 : 0 }}>
+                <p style={{ fontFamily:"Georgia,serif", fontSize:15, color:"#1A2744", lineHeight:1.3 }}>{c.brideFatherName}</p>
+                <p style={{ fontSize:9, color:"rgba(70,130,180,0.6)", textTransform:"uppercase" as const, marginTop:2 }}>Father</p>
+              </div>)}
+              {c.brideFatherName && c.brideMotherName && <div style={{ height:"0.5px", background:"rgba(70,130,180,0.22)", margin:"8px auto", width:32 }} />}
+              {c.brideMotherName && (<div>
+                <p style={{ fontFamily:"Georgia,serif", fontSize:15, color:"#1A2744", lineHeight:1.3 }}>{c.brideMotherName}</p>
+                <p style={{ fontSize:9, color:"rgba(70,130,180,0.6)", textTransform:"uppercase" as const, marginTop:2 }}>Mother</p>
+              </div>)}
+            </div>
+          )}
+        </div>
+      )}
+      {hasRelatives && (
+        <>
+          <div style={{ display:"flex", alignItems:"center", gap:10, margin:"4px 0 16px" }}>
+            <div style={{ flex:1, height:"0.5px", background:"rgba(70,130,180,0.22)" }} />
+            <p style={{ fontSize:8, letterSpacing:"0.28em", color:"rgba(70,130,180,0.6)", textTransform:"uppercase" as const, whiteSpace:"nowrap" as const }}>Extended Family</p>
+            <div style={{ flex:1, height:"0.5px", background:"rgba(70,130,180,0.22)" }} />
+          </div>
+          <div style={{ display:"grid", gridTemplateColumns:"1fr 1fr", gap:14 }}>
+            <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
+              {groomRelatives.length > 0 && (<>
+                <p style={{ fontSize:7, letterSpacing:"0.22em", color:"rgba(70,130,180,0.6)", textTransform:"uppercase" as const, textAlign:"center", marginBottom:4 }}>{c.groomName}&apos;s Side</p>
+                {groomRelatives.map((rel, i) => (
+                  <div key={i} style={{ background:"white", border:"1px solid rgba(70,130,180,0.22)", borderRadius:6, padding:"10px", textAlign:"center", borderLeft:"2px solid rgba(70,130,180,0.22)" }}>
+                    <p style={{ fontSize:8, color:"rgba(70,130,180,0.6)", letterSpacing:"0.18em", textTransform:"uppercase" as const, marginBottom:5 }}>{rel.relation}</p>
+                    <p style={{ fontFamily:"Georgia,serif", fontSize:13, color:"#1A2744", lineHeight:1.3 }}>{rel.name}</p>
+                    {rel.spouseName && (<><p style={{ fontSize:9, color:"rgba(70,130,180,0.6)", margin:"3px 0" }}>&amp;</p><p style={{ fontFamily:"Georgia,serif", fontSize:12, color:"#1A2744", opacity:0.75 }}>{rel.spouseName}</p></>)}
+                  </div>
+                ))}
+              </>)}
+            </div>
+            <div style={{ display:"flex", flexDirection:"column", gap:8 }}>
+              {brideRelatives.length > 0 && (<>
+                <p style={{ fontSize:7, letterSpacing:"0.22em", color:"rgba(70,130,180,0.6)", textTransform:"uppercase" as const, textAlign:"center", marginBottom:4 }}>{c.brideName}&apos;s Side</p>
+                {brideRelatives.map((rel, i) => (
+                  <div key={i} style={{ background:"white", border:"1px solid rgba(70,130,180,0.22)", borderRadius:6, padding:"10px", textAlign:"center", borderLeft:"2px solid rgba(70,130,180,0.22)" }}>
+                    <p style={{ fontSize:8, color:"rgba(70,130,180,0.6)", letterSpacing:"0.18em", textTransform:"uppercase" as const, marginBottom:5 }}>{rel.relation}</p>
+                    <p style={{ fontFamily:"Georgia,serif", fontSize:13, color:"#1A2744", lineHeight:1.3 }}>{rel.name}</p>
+                    {rel.spouseName && (<><p style={{ fontSize:9, color:"rgba(70,130,180,0.6)", margin:"3px 0" }}>&amp;</p><p style={{ fontFamily:"Georgia,serif", fontSize:12, color:"#1A2744", opacity:0.75 }}>{rel.spouseName}</p></>)}
+                  </div>
+                ))}
+              </>)}
+            </div>
+          </div>
+        </>
+      )}
+    </section>
+  );
+}
+
 export default function NordicFrost({ couple = defaultCouple }: Props) {
   const c = couple;
   const [visible, setVisible] = useState(false);
@@ -166,6 +252,16 @@ export default function NordicFrost({ couple = defaultCouple }: Props) {
           — {c.groomName} & {c.brideName}
         </p>
       </section>
+
+      {/* ── Family ── */}
+      <FamilySection c={couple} />
+      {(couple.groomFatherName || couple.groomMotherName || couple.brideFatherName || couple.brideMotherName || (couple.relatives && couple.relatives.length > 0)) && (
+        <div style={{ display:"flex", alignItems:"center", gap:12, padding:"0 20px", margin:"0 0 8px" }}>
+          <div style={{ flex:1, height:"0.5px", background:"rgba(180,180,180,0.3)" }} />
+          <span style={{ fontSize:14, opacity:0.35 }}>✦</span>
+          <div style={{ flex:1, height:"0.5px", background:"rgba(180,180,180,0.3)" }} />
+        </div>
+      )}
 
       {/* ── Events ── */}
       <section className="max-w-3xl mx-auto px-8 py-16">
