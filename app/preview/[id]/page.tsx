@@ -576,6 +576,17 @@ const urbanDemo: CoupleDetails = {
   mapLink: "https://maps.google.com",
   phone: "+919876543210",
   personalMessage: "Not a fairy tale. The real thing — and it's better.",
+
+  groomFatherName: "Arjun Kapoor",
+  groomMotherName: "Sunita Kapoor",
+  brideFatherName: "Salim Khan",
+  brideMotherName: "Nadia Khan",
+
+  relatives: [
+    { name: "Vikram Kapoor", relation: "Uncle", side: "groom", spouseName: "Priya Kapoor" },
+    { name: "Imran Khan", relation: "Chacha", side: "bride", spouseName: "Sara Khan" },
+  ],
+
   events: [
     {
       name: "Cocktail Hour",
@@ -721,6 +732,17 @@ const neonDemo: CoupleDetails = {
   mapLink: "https://maps.google.com",
   phone: "+919876543210",
   personalMessage: "Love is the only frequency that matters.",
+
+  groomFatherName: "Mark Sterling",
+  groomMotherName: "Lisa Sterling",
+  brideFatherName: "Raj Patel",
+  brideMotherName: "Meera Patel",
+
+  relatives: [
+    { name: "Jay Sterling", relation: "Uncle", side: "groom", spouseName: "Dana Sterling" },
+    { name: "Dev Patel", relation: "Uncle", side: "bride", spouseName: "Priya Patel" },
+  ],
+
   events: [
     {
       name: "Pre-Party",
@@ -1002,6 +1024,14 @@ function getPreview(slug: string) {
             phone: "+919876543210",
             personalMessage:
               "In the greatest love story ever told — yours — the best scene is yet to come.",
+            groomFatherName: "Yash Malhotra",
+            groomMotherName: "Sharmila Malhotra",
+            brideFatherName: "Sunil Verma",
+            brideMotherName: "Rekha Verma",
+            relatives: [
+              { name: "Arun Malhotra", relation: "Uncle", side: "groom", spouseName: "Nisha Malhotra" },
+              { name: "Ravi Verma", relation: "Uncle", side: "bride", spouseName: "Sudha Verma" },
+            ],
             events: [
               {
                 name: "Cocktail Hour",
@@ -1039,6 +1069,14 @@ function getPreview(slug: string) {
             phone: "+919876543210",
             personalMessage:
               "In every garden, there is a season for everything. Our season of love has arrived.",
+            groomFatherName: "Patrick O'Brien",
+            groomMotherName: "Catherine O'Brien",
+            brideFatherName: "Oliver Whitmore",
+            brideMotherName: "Elizabeth Whitmore",
+            relatives: [
+              { name: "James O'Brien", relation: "Uncle", side: "groom", spouseName: "Margaret O'Brien" },
+              { name: "William Whitmore", relation: "Uncle", side: "bride", spouseName: "Victoria Whitmore" },
+            ],
             events: [
               {
                 name: "Garden Cocktails",
