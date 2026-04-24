@@ -1,36 +1,138 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 💍 WedCraft – Digital Wedding Invitation Platform
 
-## Getting Started
+WedCraft is a modern, full-stack web application that enables users to create, customize, and manage digital wedding invitations. It replaces traditional printed cards with elegant, eco-friendly, and interactive digital experiences.
 
-First, run the development server:
+---
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## ✨ Overview
+
+WedCraft simplifies the wedding invitation process by offering:
+- Beautiful, customizable templates
+- Easy sharing via link
+- RSVP tracking
+- Integrated payments
+- Admin management system
+
+---
+
+## 🚀 Features
+
+### 👤 User Features
+- 🔐 Authentication (Email + Google OAuth)
+- 🎨 Browse wedding invitation templates
+- ✏️ Customize invitation details
+- 📩 Share invitations via link
+- ✅ RSVP tracking system
+- 💳 Secure payment integration
+- 🎟️ Apply discount coupons
+- 📊 Invitation analytics
+
+### 🛠️ Admin Features
+- 📦 Template management
+- 💰 Purchase tracking
+- 🎟️ Coupon management
+- 📊 Analytics dashboard
+
+---
+
+
+## 🏗️ Tech Stack
+
+Frontend:
+- Next.js
+- Tailwind CSS
+- TypeScript
+
+Backend:
+- Next.js API Routes
+- JWT Authentication
+- Google OAuth
+
+Database:
+- MongoDB
+
+---
+
+## 📁 Project Structure
+```
+wedcraft/
+├── app/
+│   ├── admin/          # Admin dashboard
+│   ├── api/            # Backend API routes
+│   ├── auth/           # Login / Signup pages
+│   ├── catalog/        # Template browsing
+│   ├── checkout/       # Payment flow
+│   ├── contact/        # Contact page
+│   └── page.tsx        # Landing page
+│
+├── components/         # Reusable UI components
+├── public/             # Static assets
+├── styles/             # Global styles
+├── lib/                # Utility functions
+├── models/             # Database models
+│
+├── package.json
+├── next.config.ts
+└── README.md
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🔑 API Endpoints
 
-## Learn More
+### 🔐 Authentication
+- `POST /api/auth/signup`
+- `POST /api/auth/login`
+- `GET /api/auth/google`
+- `POST /api/auth/logout`
 
-To learn more about Next.js, take a look at the following resources:
+### 💌 Invitations
+- `POST /api/save-invite`
+- `GET /api/user/invites`
+- `POST /api/rsvp`
+- `PUT /api/invite/update`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### 💳 Payments
+- `POST /api/create-order`
+- `POST /api/verify-payment`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### 🛠️ Admin
+- `GET /api/admin/templates`
+- `POST /api/admin/templates`
+- `GET /api/admin/purchases`
 
-## Deploy on Vercel
+### 📦 Other Services
+- `POST /api/email`
+- `POST /api/upload`
+- `GET /api/analytics`
+- `POST /api/coupon/apply`
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## ⚙️ Installation
+
+```bash
+git clone https://github.com/your-username/wedcraft.git
+cd wedcraft
+npm install
+npm run dev
+```
+
+---
+
+## 📄 License
+
+This project is **not open source**.
+
+Copyright (c) 2026 Arshal Rejith  
+All rights reserved.
+
+This repository is provided for viewing and evaluation purposes only.  
+No permission is granted to use, copy, modify, or distribute this code without explicit written permission.
+
+---
+
+## 👨‍💻 Author
+
+Arshal Rejith
